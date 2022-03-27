@@ -1,5 +1,5 @@
 {
-  "name": "testaxle",
+  "name": "@varlet/axle",
   "version": "0.0.1",
   "description": "A useful axios helper",
   "main": "lib/index.js",
@@ -31,6 +31,14 @@
     "vue": "3.2.16",
     "vue-router": "4.0.12"
   },
+  "homepage": "https://varlet.gitee.io/axle/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varletjs/axle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/varletjs/axle/issues"
+  },
   "browserslist": [
     "Chrome >= 51",
     "iOS >= 10"
@@ -39,6 +47,7 @@
   "files": [
     "lib"
   ],
+  "author": "Joker <13255238145@163.com>",
   "dependencies": {
     "axios": "^0.26.1",
     "qs": "^6.10.3"

@@ -23,7 +23,7 @@ jobs:
           cache: 'pnpm'
 
       - name: Install dependencies
-        run: pnpm bootstrap
+        run: pnpm bootstrap:ci
 
       - name: Build site
         run: pnpm build

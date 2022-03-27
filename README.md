@@ -1,9 +1,8 @@
-<div align="center">
+<div>
   <a href="https://github.com/varletjs/axle">
-    <img src="https://github.com/varletjs/axle/blob/main/public/logo.svg" width="200">
+    <img src="https://github.com/varletjs/axle/blob/main/public/logo.svg" width="400">
   </a>
-  <h1>axle</h1>
-  <p>A tool library based on axios to simplify the development process</p>
+  <h2>A tool library based on axios to simplify the development process</h2>
 </div>
 
 ### Quickstart

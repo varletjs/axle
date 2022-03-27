@@ -65,12 +65,12 @@ export interface AxleHelpers {
     patchJSON: ModifyHelper
     patchMultipart: ModifyHelper
 
-  // 浏览器下载文件
-  download(blob: string | Blob, filename: string): void
+    // 浏览器下载文件
+    download(blob: string | Blob, filename: string): void
 
-  // 设置全局header
-  setHeader(key: string, value: string): void
-  // 删除全局header
-  removeHeader(key: string | string[]): void
+    // 设置全局header
+    setHeader(key: string, value: string): void
+    // 删除全局header
+    removeHeader(key: string | string[]): void  
 }
 ```

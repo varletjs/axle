@@ -1,0 +1,46 @@
+{
+  "name": "testaxle",
+  "version": "0.0.1",
+  "description": "A useful axios helper",
+  "main": "lib/index.js",
+  "module": "es/index.js",
+  "keywords": [
+    "axle",
+    "axios",
+    "helpers"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "bootstrap": "pnpm i && pnpm --filter ./playground i",
+    "dev": "varlet-cli dev",
+    "build": "varlet-cli build",
+    "preview": "varlet-cli preview",
+    "compile": "rm -rf lib es && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
+    "release": "pnpm compile && varlet-cli release"
+  },
+  "devDependencies": {
+    "@types/qs": "^6.9.7",
+    "@varlet/cli": "^1.26.7",
+    "@varlet/icons": "^1.26.7",
+    "@varlet/touch-emulator": "^1.26.7",
+    "clipboard": "^2.0.6",
+    "live-server": "^1.2.1",
+    "lodash-es": "^4.17.21",
+    "typescript": "^4.4.4",
+    "vue": "3.2.16",
+    "vue-router": "4.0.12"
+  },
+  "browserslist": [
+    "Chrome >= 51",
+    "iOS >= 10"
+  ],
+  "packageManager": "pnpm@6.24.3",
+  "files": [
+    "lib"
+  ],
+  "dependencies": {
+    "axios": "^0.26.1",
+    "qs": "^6.10.3"
+  }
+}

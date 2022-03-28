@@ -12,7 +12,7 @@ import{_ as t}from"./elevation.22442860.js";import{e as c,o,c as r,a as s,i as l
 }
 
 `),s("span",{class:"hljs-comment"},"// \u9ED8\u8BA4\u60C5\u51B5\u4E0B\uFF0Caxios\u5C06 JavaScript \u5BF9\u8C61\u5E8F\u5217\u5316\u4E3A JSON \u3002 \u8981\u4EE5 application/x-www-form-urlencoded \u683C\u5F0F\u53D1\u9001\u6570\u636E\uFF0C\u60A8\u53EF\u4EE5\u4F7F\u7528\u4EE5\u4E0B\u9009\u9879\u4E4B\u4E00\u3002"),a(`
-`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(")")]),a(`{
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(") ")]),a(`{
     `),s("span",{class:"hljs-keyword"},"const"),a(" params = "),s("span",{class:"hljs-keyword"},"new"),a(` URLSearchParams();
     params.append(`),s("span",{class:"hljs-string"},"'name'"),a(", "),s("span",{class:"hljs-string"},"'axios'"),a(`);
     `),s("span",{class:"hljs-keyword"},"return"),a("  axios.post("),s("span",{class:"hljs-string"},"'/foo'"),a(`, params);
@@ -49,7 +49,7 @@ axios.defaults.headers.common[`),s("span",{class:"hljs-string"},"'Authorization'
 }
 
 `),s("span",{class:"hljs-comment"},"// axle\u52A0\u5F3A\u4E86\u4EE5 application/x-www-form-urlencoded \u683C\u5F0F\u53D1\u9001\u6570\u636E\u7684\u65B9\u6CD5"),a(`
-`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(")")]),a(`{
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(") ")]),a(`{
     `),s("span",{class:"hljs-keyword"},"return"),a(" axleHelpers.post("),s("span",{class:"hljs-string"},"'/foo'"),a(", { "),s("span",{class:"hljs-attr"},"name"),a(": "),s("span",{class:"hljs-string"},"'axle'"),a(`});
 }
 

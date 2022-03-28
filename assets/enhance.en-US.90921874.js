@@ -12,7 +12,7 @@ import{_ as t}from"./elevation.22442860.js";import{e as o,o as c,c as r,a as s,i
 }
 
 `),s("span",{class:"hljs-comment"},"// By default, axios serializes JavaScript objects to JSON. To send data in the application/x-www-form-urlencoded format instead, you can use one of the following options."),a(`
-`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(")")]),a(`{
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(") ")]),a(`{
     `),s("span",{class:"hljs-keyword"},"const"),a(" params = "),s("span",{class:"hljs-keyword"},"new"),a(` URLSearchParams();
     params.append(`),s("span",{class:"hljs-string"},"'name'"),a(", "),s("span",{class:"hljs-string"},"'axios'"),a(`);
     `),s("span",{class:"hljs-keyword"},"return"),a("  axios.post("),s("span",{class:"hljs-string"},"'/foo'"),a(`, params);
@@ -48,7 +48,7 @@ axios.defaults.headers.common[`),s("span",{class:"hljs-string"},"'Authorization'
 }
 
 `),s("span",{class:"hljs-comment"},"// axle enhances the way to send data in application/x-www-form-urlencoded format"),a(`
-`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(")")]),a(`{
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"postURLSearchParams"),a("("),s("span",{class:"hljs-params"}),a(") ")]),a(`{
     `),s("span",{class:"hljs-keyword"},"return"),a(" axleHelpers.post("),s("span",{class:"hljs-string"},"'/foo'"),a(", { "),s("span",{class:"hljs-attr"},"name"),a(": "),s("span",{class:"hljs-string"},"'axle'"),a(`});
 }
 

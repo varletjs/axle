@@ -3,7 +3,7 @@ import{_ as e}from"./elevation.22442860.js";import{e as n,o as t,c,a as s,i as o
 `),s("span",{class:"hljs-keyword"},"const"),a(" axle = createAxle("),s("span",{class:"hljs-comment"},[a("/** "),s("span",{class:"hljs-doctag"},"@see "),a("http://www.axios-js.com/zh-cn/docs/#axios-create-config **/")]),a(`)
 `),s("span",{class:"hljs-keyword"},"const"),a(` axleHelpers = axle.helpers
 
-`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"post"),a("("),s("span",{class:"hljs-params"}),a(")")]),a(`{
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),a(),s("span",{class:"hljs-title"},"post"),a("("),s("span",{class:"hljs-params"}),a(") ")]),a(`{
   `),s("span",{class:"hljs-keyword"},"return"),a(" axleHelpers.post("),s("span",{class:"hljs-string"},"'/url'"),a(", { "),s("span",{class:"hljs-attr"},"name"),a(": "),s("span",{class:"hljs-string"},"'axle'"),a(` })
 }
 

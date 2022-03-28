@@ -20,7 +20,7 @@ function getUser() {
 }
 
 // By default, axios serializes JavaScript objects to JSON. To send data in the application/x-www-form-urlencoded format instead, you can use one of the following options.
-function postURLSearchParams(){
+function postURLSearchParams() {
     const params = new URLSearchParams();
     params.append('name', 'axios');
     return  axios.post('/foo', params);
@@ -59,7 +59,7 @@ function getUser() {
 }
 
 // axle enhances the way to send data in application/x-www-form-urlencoded format
-function postURLSearchParams(){
+function postURLSearchParams() {
     return axleHelpers.post('/foo', { name: 'axle'});
 }
 

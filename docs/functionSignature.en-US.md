@@ -2,14 +2,14 @@
 
 ```typescript
 // 'get' | 'head' | 'options' | 'delete'
-export type FetchHelper = <T = any, R = AxiosResponse<T>>(
+export type FetchHelper = < T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,
   config?: AxiosRequestConfig
 ) => Promise<R>
 
 // 'post' | 'put' | 'patch'
-export type ModifyHelper = <T = any, R = AxiosResponse<T>>(
+export type ModifyHelper = < T = any, R = AxiosResponse<T>>(
   url: string,
   data?: any,
   config?: AxiosRequestConfig

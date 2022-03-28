@@ -19,7 +19,7 @@ function getUser() {
 }
 
 // 默认情况下，axios将 JavaScript 对象序列化为 JSON 。 要以 application/x-www-form-urlencoded 格式发送数据，您可以使用以下选项之一。
-function postURLSearchParams(){
+function postURLSearchParams() {
     const params = new URLSearchParams();
     params.append('name', 'axios');
     return  axios.post('/foo', params);
@@ -59,7 +59,7 @@ function getUser() {
 }
 
 // axle加强了以 application/x-www-form-urlencoded 格式发送数据的方法
-function postURLSearchParams(){
+function postURLSearchParams() {
     return axleHelpers.post('/foo', { name: 'axle'});
 }
 

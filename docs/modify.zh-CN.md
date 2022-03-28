@@ -10,7 +10,7 @@ import { createAxle } from '@varlet/axle'
 const axle = createAxle(/** @see http://www.axios-js.com/zh-cn/docs/#axios-create-config **/)
 const axleHelpers = axle.helpers
 
-function post(){
+function post() {
   return axleHelpers.post('/url', { name: 'axle' })
 }
 

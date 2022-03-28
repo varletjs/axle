@@ -10,11 +10,11 @@ import { createAxle } from '@varlet/axle'
 const axle = createAxle(/** @see http://www.axios-js.com/zh-cn/docs/#axios-create-config **/)
 const axleHelpers = axle.helpers
 
-function getById(){
+function getById() {
   return axleHelpers.get('url/1')
 }
 
-function getBlob(){
+function getBlob() {
   axleHelpers.getBlob('/url', { name: 'axle'}, { onDownloadProgress: (e) => {console.log(e)}}).then((res) => {
     axleHelpers.download(res.data, 'getBlob.png')
   })  
@@ -32,7 +32,7 @@ function getText() {
   return axleHelpers.getText('/index.html')
 }
 
-function getStream(){
+function getStream() {
   return axleHelpers.getStream('/url')
 }
 ```

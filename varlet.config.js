@@ -90,6 +90,14 @@ module.exports = {
       },
       {
         text: {
+          'zh-CN': '加强',
+          'en-US': 'Enhancements',
+        },
+        doc: 'enhance',
+        type: 3,
+      },
+      {
+        text: {
           'zh-CN': 'Axle API',
           'en-US': 'Axle API',
         },
@@ -108,7 +116,22 @@ module.exports = {
           'zh-CN': '用例',
           'en-US': 'Example',
         },
-        doc: 'example',
+        type: 1,
+      },
+      {
+        text: {
+          'zh-CN': 'Fetch',
+          'en-US': 'Fetch',
+        },
+        doc: 'fetch',
+        type: 2,
+      },
+      {
+        text: {
+          'zh-CN': 'Modify',
+          'en-US': 'Modify',
+        },
+        doc: 'modify',
         type: 2,
       },
     ],

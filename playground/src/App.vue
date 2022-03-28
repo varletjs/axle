@@ -106,7 +106,6 @@ const postMultipart = (file) => {
   }).then(({data})=>{
     console.log(data)
   })
-
 }
 
 const options = () => {

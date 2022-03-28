@@ -7,7 +7,10 @@
 
 ### Intro
 
-Axle is an extension request package developed based on axios. It expands some auxiliary functions of requests on the basis of axios. During development, more attention is paid to related business, which makes the complexity of request expansion and indeed improves the efficiency.
+`Axle` is an extension request package developed based on [`axios`](https://axios-http.com/). Using this tool, by default, you already know `axios`,
+`Axle` has all the capabilities of `axios` and extends some request related auxiliary functions on the basis of `axios`,
+Make the development pay more attention to the business itself, simplify the complexity of request invocation, and improve the generation efficiency.
+
 
 ### Open source licenses
 

@@ -1,4 +1,4 @@
-import{_ as t}from"./elevation.a0cf3236.js";import{e as c,o,c as r,a as s,i as l,j as n,m as e}from"./vendor.16f6342a.js";const h={components:{}},p={class:"varlet-site-doc"},i=s("h1",null,"Quickstart",-1),d={class:"card"},m=s("h3",null,"Install",-1),_=s("pre",{class:"hljs"},[s("code",null,[s("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),s("span",{class:"hljs-meta"},"#"),s("span",{class:"bash"}," Install with npm, yarn or pnpm"),e(`
+import{_ as t}from"./elevation.22442860.js";import{e as c,o,c as r,a as s,i as l,j as n,m as e}from"./vendor.16f6342a.js";const h={components:{}},p={class:"varlet-site-doc"},i=s("h1",null,"Quickstart",-1),d={class:"card"},m=s("h3",null,"Install",-1),_=s("pre",{class:"hljs"},[s("code",null,[s("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),s("span",{class:"hljs-meta"},"#"),s("span",{class:"bash"}," Install with npm, yarn or pnpm"),e(`
 `),s("span",{class:"hljs-meta"},`
 #`),s("span",{class:"bash"}," npm"),e(`
 npm i @varlet/axle -S

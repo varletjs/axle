@@ -1,4 +1,4 @@
-import{_ as r}from"./elevation.a0cf3236.js";import{e as o,o as l,c as s,i as p,j as a,a as e,m as t}from"./vendor.16f6342a.js";const c={components:{}},i={class:"varlet-site-doc"},d=e("h1",null,"\u51FD\u6570\u7B7E\u540D",-1),h=e("pre",{class:"hljs"},[e("code",null,[e("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),e("span",{class:"hljs-comment"},"// 'get' | 'head' | 'options' | 'delete'"),t(`
+import{_ as r}from"./elevation.22442860.js";import{e as o,o as l,c as s,i as p,j as a,a as e,m as t}from"./vendor.16f6342a.js";const c={components:{}},i={class:"varlet-site-doc"},d=e("h1",null,"\u51FD\u6570\u7B7E\u540D",-1),h=e("pre",{class:"hljs"},[e("code",null,[e("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),e("span",{class:"hljs-comment"},"// 'get' | 'head' | 'options' | 'delete'"),t(`
 `),e("span",{class:"hljs-keyword"},"export"),t(),e("span",{class:"hljs-keyword"},"type"),t(` FetchHelper = <T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,

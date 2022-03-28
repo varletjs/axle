@@ -1,4 +1,4 @@
-import{_ as t}from"./elevation.a0cf3236.js";import{e as c,o,c as r,a as s,i as l,j as n,m as a}from"./vendor.16f6342a.js";const h={components:{}},p={class:"varlet-site-doc"},d=s("h1",null,"\u5FEB\u901F\u5F00\u59CB",-1),i={class:"card"},m=s("h3",null,"\u5B89\u88C5",-1),_=s("pre",{class:"hljs"},[s("code",null,[s("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),s("span",{class:"hljs-meta"},"#"),s("span",{class:"bash"}," Install with npm, yarn or pnpm"),a(`
+import{_ as t}from"./elevation.22442860.js";import{e as c,o,c as r,a as s,i as l,j as n,m as a}from"./vendor.16f6342a.js";const h={components:{}},p={class:"varlet-site-doc"},d=s("h1",null,"\u5FEB\u901F\u5F00\u59CB",-1),i={class:"card"},m=s("h3",null,"\u5B89\u88C5",-1),_=s("pre",{class:"hljs"},[s("code",null,[s("link",{class:"hljs-style",rel:"stylesheet",href:"./highlight.css"}),s("span",{class:"hljs-meta"},"#"),s("span",{class:"bash"}," Install with npm, yarn or pnpm"),a(`
 `),s("span",{class:"hljs-meta"},`
 #`),s("span",{class:"bash"}," npm"),a(`
 npm i @varlet/axle -S

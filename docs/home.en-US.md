@@ -14,4 +14,4 @@ Make the development pay more attention to the business itself, simplify the com
 
 ### Open source licenses
 
-Component library based on `MIT` licenses.
+`Axle` based on `MIT` licenses.

@@ -105,11 +105,89 @@ module.exports = {
       },
       {
         text: {
-          'zh-CN': '函数签名',
-          'en-US': 'Function Signature',
+          'zh-CN': '请求数据',
+          'en-US': 'Fetch',
         },
-        doc: 'functionSignature',
-        type: 2,
+        type: 1,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Json',
+          'en-US': 'Json',
+        },
+        doc: 'json',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Blob',
+          'en-US': 'Blob',
+        },
+        doc: 'blob',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Document',
+          'en-US': 'Document',
+        },
+        doc: 'document',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Arraybuffer',
+          'en-US': 'Arraybuffer',
+        },
+        doc: 'arraybuffer',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Text',
+          'en-US': 'Text',
+        },
+        doc: 'text',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '请求 Stream',
+          'en-US': 'Stream',
+        },
+        doc: 'stream',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '提交数据',
+          'en-US': 'Modify',
+        },
+        type: 1,
+      },
+      {
+        text: {
+          'zh-CN': '提交 Urlencoded',
+          'en-US': 'Urlencoded',
+        },
+        doc: 'urlencoded',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '提交 Json',
+          'en-US': 'Json',
+        },
+        doc: 'modifyJson',
+        type: 3,
+      },
+      {
+        text: {
+          'zh-CN': '提交 FormData',
+          'en-US': 'FormData',
+        },
+        doc: 'formData',
+        type: 3,
       },
       {
         text: {
@@ -123,7 +201,7 @@ module.exports = {
           'zh-CN': 'Fetch',
           'en-US': 'Fetch',
         },
-        doc: 'fetch',
+        doc: 'fetchExample',
         type: 2,
       },
       {
@@ -131,7 +209,7 @@ module.exports = {
           'zh-CN': 'Modify',
           'en-US': 'Modify',
         },
-        doc: 'modify',
+        doc: 'modifyExample',
         type: 2,
       },
     ],

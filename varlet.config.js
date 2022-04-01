@@ -122,6 +122,14 @@ module.exports = {
       },
       {
         text: {
+          'zh-CN': '开发工具支持',
+          'en-US': 'Ide Code Support',
+        },
+        doc: 'ide',
+        type: 3,
+      },
+      {
+        text: {
           'zh-CN': 'Axle API',
           'en-US': 'Axle API',
         },

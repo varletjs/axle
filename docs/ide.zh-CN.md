@@ -15,11 +15,11 @@
 
 当以 `#` 号开头，并且跟上所需要使用的方法的英语字母时，`vscode` 将会给出提示。
 
-<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/varlet-ui/ext_vsc_use.png" alt="vscode ext link" />
+<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_use.png" alt="vscode ext link" />
 
 选中某条提示并按下回车，能够快速生成对应的代码模板。
 
-<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/varlet-ui/ext_vsc_gen.png" alt="vscode ext link" />
+<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_gen.png" alt="vscode ext link" />
 
 当我们向代码中贴入文本时，使用 `cmd`(`windows` 用户使用 `ctrl` ) + `shift` + `v` 可以提取剪切板中的地址。
 

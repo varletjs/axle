@@ -1,0 +1,20 @@
+import{_ as o}from"./elevation.a8512ead.js";import{e as t,o as c,c as p,a as s,i as l,j as n,U as r,m as e}from"./vendor.bb785d67.js";const i={components:{}},d={class:"varlet-site-doc"},h=r('<h1>Axle API</h1><h2>Modify</h2><div class="card"><h3>Json</h3><p><code>Axle</code> provides the following methods to send <code>application/json</code> format data.</p><ul><li><code>postJson</code></li><li><code>putJson</code></li><li><code>patchJson</code></li></ul></div>',3),_={class:"card"},u=s("h3",null,"Function Signature",-1),j=s("pre",{class:"hljs"},[s("code",null,[s("span",{class:"hljs-keyword"},"export"),e(),s("span",{class:"hljs-keyword"},"type"),e(" ModifyHelper = < T = "),s("span",{class:"hljs-built_in"},"any"),e(", R = AxiosResponse<T>>"),s("span",{class:"hljs-function"},[e("("),s("span",{class:"hljs-params"},[e(`
+  url: `),s("span",{class:"hljs-built_in"},"string"),e(`,
+  data?: `),s("span",{class:"hljs-built_in"},"any"),e(`,
+  config?: AxiosRequestConfig
+`)]),e(") =>")]),e(),s("span",{class:"hljs-built_in"},"Promise"),e(`<R>
+
+`),s("span",{class:"hljs-keyword"},"export"),e(),s("span",{class:"hljs-keyword"},"interface"),e(` AxleHelpers {
+  `),s("span",{class:"hljs-attr"},"postJson"),e(`: ModifyHelper
+  `),s("span",{class:"hljs-attr"},"putJson"),e(`: ModifyHelper
+  `),s("span",{class:"hljs-attr"},"patchJson"),e(`: ModifyHelper
+}
+`)])],-1),m={class:"card"},x=s("h3",null,"Example",-1),f=s("p",null,[s("code",null,"POST"),e(" , "),s("code",null,"PUT"),e(" , "),s("code",null,"PATCH"),e(" have similar behaviors. Let\u2019s take "),s("code",null,"POST"),e(" as an example.")],-1),y=s("pre",{class:"hljs"},[s("code",null,[s("span",{class:"hljs-keyword"},"import"),e(" { createAxle } "),s("span",{class:"hljs-keyword"},"from"),e(),s("span",{class:"hljs-string"},"'@varlet/axle'"),e(`
+
+`),s("span",{class:"hljs-keyword"},"const"),e(" axle = createAxle("),s("span",{class:"hljs-comment"},[e("/** "),s("span",{class:"hljs-doctag"},"@see "),e("http://www.axios-js.com/zh-cn/docs/#axios-create-config **/")]),e(`)
+`),s("span",{class:"hljs-keyword"},"const"),e(` axleHelpers = axle.helpers
+
+`),s("span",{class:"hljs-function"},[s("span",{class:"hljs-keyword"},"function"),e(),s("span",{class:"hljs-title"},"postJson"),e("("),s("span",{class:"hljs-params"}),e(") ")]),e(`{
+  `),s("span",{class:"hljs-keyword"},"return"),e(" axleHelpers.postJson("),s("span",{class:"hljs-string"},"'/user'"),e(", { "),s("span",{class:"hljs-attr"},"name"),e(": "),s("span",{class:"hljs-string"},"'axle'"),e(` })
+}
+`)])],-1);function w(v,k,g,J,A,H){const a=t("var-site-code-example");return c(),p("div",d,[h,s("div",_,[u,l(a,null,{default:n(()=>[j]),_:1})]),s("div",m,[x,f,l(a,null,{default:n(()=>[y]),_:1})])])}var b=o(i,[["render",w]]);export{b as default};

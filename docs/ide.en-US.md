@@ -2,8 +2,8 @@
 
 ### Intro
 
-`axle` 为 `vscode` 单独提供了一个辅助插件 `axle-vscode-extension` ，可以在插件市场下载。
-插件提供了代码提示、代码生成以及接口地址提取的功能。
+`Axle ` provides a separate auxiliary plug-in `axle vscode extension` for `vscode`, which can be downloaded in the plug-in market.
+The plug-in provides the functions of code prompt, code generation and interface address extraction
 
 ### VSCode Extension
 

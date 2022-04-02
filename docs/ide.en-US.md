@@ -15,11 +15,11 @@ Search the `axle-vscode-extension` installation in the `vscode` plugin market
 
 `vscode` will prompt when starting with a `#` sign followed by the English letter of the method to be used.
 
-<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_use.png" alt="vscode ext link" />
+<img style="width: 50%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_use.png" alt="vscode ext use" />
 
 Select a prompt and press Enter to quickly generate the corresponding code template.
 
-<img style="width: 78%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_gen.png" alt="vscode ext link" />
+<img style="width: 50%; margin-top: 10px; border-radius: 5px" src="https://varlet.gitee.io/axle/ext_vsc_gen.png" alt="vscode ext gen" />
 
 When we paste text into the code, use `cmd` (`windows` users use `ctrl` ) + `shift` + `v` to extract the address from the clipboard.
 

@@ -11,7 +11,6 @@
   ],
   "license": "MIT",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
     "bootstrap:ci": "pnpm i",
     "bootstrap": "pnpm i && pnpm --filter ./playground i",
     "dev": "varlet-cli dev",

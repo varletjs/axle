@@ -21,15 +21,15 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@varlet/cli": "^1.26.7",
-    "@varlet/icons": "^1.26.7",
-    "@varlet/touch-emulator": "^1.26.7",
+    "@varlet/cli": "latest",
+    "@varlet/icons": "latest",
+    "@varlet/touch-emulator": "latest",
     "clipboard": "^2.0.6",
     "live-server": "^1.2.1",
     "lodash-es": "^4.17.21",
     "typescript": "^4.4.4",
-    "vue": "3.2.16",
-    "vue-router": "4.0.12"
+    "vue": "^3.2.37",
+    "vue-router": "^4.0.16"
   },
   "homepage": "https://varlet.gitee.io/axle/",
   "repository": {
@@ -45,11 +45,12 @@
   ],
   "packageManager": "pnpm@6.24.3",
   "files": [
-    "lib"
+    "lib",
+    "es"
   ],
   "author": "Joker <13255238145@163.com>",
   "dependencies": {
-    "axios": "^0.26.1",
-    "qs": "^6.10.3"
+    "axios": "^0.27.2",
+    "qs": "^6.11.0"
   }
 }

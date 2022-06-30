@@ -24,8 +24,8 @@ function getDocument() {
   return axleHelpers.getDocument('/index.html')
 }
 
-function getArraybuffer() {
-    return axleHelpers.getArraybuffer('/url')
+function getArrayBuffer() {
+    return axleHelpers.getArrayBuffer('/url')
 }
 
 function getText() {

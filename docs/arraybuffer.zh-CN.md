@@ -2,14 +2,14 @@
 
 ## 请求数据
 
-### 请求 Arraybuffer
+### 请求 ArrayBuffer
 
 `Axle` 提供了以下几种请求 `arraybuffer` 的方法。
 
-- `getArraybuffer`
-- `headArraybuffer`
-- `optionsArraybuffer`
-- `deleteArraybuffer`
+- `getArrayBuffer`
+- `headArrayBuffer`
+- `optionsArrayBuffer`
+- `deleteArrayBuffer`
 
 ### 函数签名
 
@@ -21,10 +21,10 @@ export type FetchHelper = < T = any, R = AxiosResponse<T>>(
 ) => Promise<R>
 
 export interface AxleHelpers {
-  getArraybuffer: FetchHelper
-  headArraybuffer: FetchHelper
-  optionsArraybuffer: FetchHelper
-  deleteArraybuffer: FetchHelper
+  getArrayBuffer: FetchHelper
+  headArrayBuffer: FetchHelper
+  optionsArrayBuffer: FetchHelper
+  deleteArrayBuffer: FetchHelper
 }
 ```
 
@@ -38,8 +38,8 @@ import { createAxle } from '@varlet/axle'
 const axle = createAxle(/** @see http://www.axios-js.com/zh-cn/docs/#axios-create-config **/)
 const axleHelpers = axle.helpers
 
-function getArraybuffer() {
-  return axleHelpers.getArraybuffer('/arraybufferurl')
+function getArrayBuffer() {
+  return axleHelpers.getArrayBuffer('/arraybufferurl')
 }
 ```
 

@@ -23,8 +23,8 @@ const getStream = () => {
     // axle.download(res.data as Blob,'getBlob.png')
   })
 }
-const getArraybuffer = () => {
-  axle.getArraybuffer('http://localhost:8000/getBlob').then((res) => {
+const getArrayBuffer = () => {
+  axle.getArrayBuffer('http://localhost:8000/getBlob').then((res) => {
     console.log(res)
   })
 }
@@ -72,8 +72,8 @@ const headStream = () => {
     console.log(res)
   })
 }
-const headArraybuffer = () => {
-  axle.headArraybuffer('http://localhost:8000/getBlob').then((res) => {
+const headArrayBuffer = () => {
+  axle.headArrayBuffer('http://localhost:8000/getBlob').then((res) => {
     console.log(res)
   })
 }
@@ -121,14 +121,14 @@ const options = () => {
       <var-button @click="get">get</var-button>
       <var-button @click="getBlob">getBlob</var-button>
       <var-button @click="getStream">getStream</var-button>
-      <var-button @click="getArraybuffer">getArraybuffer</var-button>
+      <var-button @click="getArrayBuffer">getArrayBuffer</var-button>
       <var-button @click="getDocument">getDocument</var-button>
       <var-button @click="getText">getText</var-button>
 
       <var-button @click="head">head</var-button>
       <var-button @click="headBlob">headBlob</var-button>
       <var-button @click="headStream">headStream</var-button>
-      <var-button @click="headArraybuffer">headArraybuffer</var-button>
+      <var-button @click="headArrayBuffer">headArrayBuffer</var-button>
       <var-button @click="headDocument">headDocument</var-button>
       <var-button @click="headText">headText</var-button>
 

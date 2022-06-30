@@ -45,8 +45,8 @@ export interface AxleHelpers {
   getDocument: FetchHelper
   // get text
   getText: FetchHelper
-  // get Arraybuffer, which can be used for segmented download
-  getArraybuffer: FetchHelper
+  // get ArrayBuffer, which can be used for segmented download
+  getArrayBuffer: FetchHelper
   // get a readable stream, which can be used for browser caching
   getStream: FetchHelper
 
@@ -54,14 +54,14 @@ export interface AxleHelpers {
   headBlob: FetchHelper
   headDocument: FetchHelper
   headText: FetchHelper
-  headArraybuffer: FetchHelper
+  headArrayBuffer: FetchHelper
   headStream: FetchHelper
 
   options: FetchHelper
   optionsBlob: FetchHelper
   optionsDocument: FetchHelper
   optionsText: FetchHelper
-  optionsArraybuffer: FetchHelper
+  optionsArrayBuffer: FetchHelper
   optionsStream: FetchHelper
 
   delete: FetchHelper

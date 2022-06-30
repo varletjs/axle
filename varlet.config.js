@@ -168,8 +168,8 @@ module.exports = {
       },
       {
         text: {
-          'zh-CN': '请求 Arraybuffer',
-          'en-US': 'Arraybuffer',
+          'zh-CN': '请求 ArrayBuffer',
+          'en-US': 'ArrayBuffer',
         },
         doc: 'arraybuffer',
         type: 3,

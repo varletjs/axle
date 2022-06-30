@@ -27,21 +27,21 @@ export interface AxiosHelpers {
   getBlob: FetchHelper;
   getDocument: FetchHelper;
   getText: FetchHelper;
-  getArraybuffer: FetchHelper;
+  getArrayBuffer: FetchHelper;
   getStream: FetchHelper;
 
   head: FetchHelper;
   headBlob: FetchHelper;
   headDocument: FetchHelper;
   headText: FetchHelper;
-  headArraybuffer: FetchHelper;
+  headArrayBuffer: FetchHelper;
   headStream: FetchHelper;
 
   options: FetchHelper;
   optionsBlob: FetchHelper;
   optionsDocument: FetchHelper;
   optionsText: FetchHelper;
-  optionsArraybuffer: FetchHelper;
+  optionsArrayBuffer: FetchHelper;
   optionsStream: FetchHelper;
 
   delete: FetchHelper;
@@ -165,21 +165,21 @@ export function createAxle(
     get: createFetchHelper(service, "get", "json"),
     getBlob: createFetchHelper(service, "get", "blob"),
     getDocument: createFetchHelper(service, "get", "document"),
-    getArraybuffer: createFetchHelper(service, "get", "arraybuffer"),
+    getArrayBuffer: createFetchHelper(service, "get", "arraybuffer"),
     getText: createFetchHelper(service, "get", "text"),
     getStream: createFetchHelper(service, "get", "stream"),
 
     head: createFetchHelper(service, "head", "json"),
     headBlob: createFetchHelper(service, "head", "blob"),
     headDocument: createFetchHelper(service, "head", "document"),
-    headArraybuffer: createFetchHelper(service, "head", "arraybuffer"),
+    headArrayBuffer: createFetchHelper(service, "head", "arraybuffer"),
     headText: createFetchHelper(service, "head", "text"),
     headStream: createFetchHelper(service, "head", "stream"),
 
     options: createFetchHelper(service, "options", "json"),
     optionsBlob: createFetchHelper(service, "options", "blob"),
     optionsDocument: createFetchHelper(service, "options", "document"),
-    optionsArraybuffer: createFetchHelper(service, "options", "arraybuffer"),
+    optionsArrayBuffer: createFetchHelper(service, "options", "arraybuffer"),
     optionsText: createFetchHelper(service, "options", "text"),
     optionsStream: createFetchHelper(service, "options", "stream"),
 

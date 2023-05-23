@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import axle from '@/utils/axle'
-import {$ref} from "vue/macros";
+import { ref } from 'vue'
 
 const getBlob = () => {
   axle
@@ -17,17 +17,20 @@ const getBlob = () => {
       axle.download(res.data as Blob, 'getBlob.png')
     })
 }
+
 const getStream = () => {
   axle.getStream('http://localhost:8000/getStream').then((res) => {
     console.log(res)
     // axle.download(res.data as Blob,'getBlob.png')
   })
 }
+
 const getArrayBuffer = () => {
   axle.getArrayBuffer('http://localhost:8000/getBlob').then((res) => {
     console.log(res)
   })
 }
+
 const get = () => {
   axle.get('http://localhost:8000/').then(({ data }) => {
     console.log(data)
@@ -36,15 +39,18 @@ const get = () => {
   axle.get('http://localhost:8000/withParams/1/axle').then(({ data }) => {
     console.log(data)
   })
+
   axle.get('http://localhost:8000/withQuery', { id: 1, name: 'axle' }).then(({ data }) => {
     console.log(data)
   })
 }
+
 const getDocument = () => {
   axle.getDocument('http://127.0.0.1:3000/index.html').then(({ data }) => {
     console.log(data)
   })
 }
+
 const getText = () => {
   axle.getText('http://127.0.0.1:3000/index.html').then(({ data }) => {
     console.log(data)
@@ -98,14 +104,16 @@ const postJSON = () => {
     console.log(data)
   })
 }
-const files = $ref([])
+const files = ref([])
 const postMultipart = (file) => {
-  axle.postMultipart('http://localhost:8000/postMultipart',{
-    file:file.file,
-    name:'axle'
-  }).then(({data})=>{
-    console.log(data)
-  })
+  axle
+    .postMultipart('http://localhost:8000/postMultipart', {
+      file: file.file,
+      name: 'axle',
+    })
+    .then(({ data }) => {
+      console.log(data)
+    })
 }
 
 const options = () => {

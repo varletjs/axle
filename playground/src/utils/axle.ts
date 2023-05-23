@@ -1,4 +1,4 @@
-import {createAxle} from '../../../es'
+import { createAxle } from '@varlet/axle'
 
 const { helpers: axle } = createAxle({})
 

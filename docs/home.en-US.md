@@ -1,10 +1,3 @@
-<div class="varlet-introduce">
-  <div>
-    <img style="width: 400px" src="../public/logo.svg" />
-    <div class="varlet-introduce__name"></div>  
-  </div>
-</div>
-
 ### Intro
 
 `Axle` is an extension request package developed based on [`axios`](https://axios-http.com/). Using this tool, by default, you already know `axios`,

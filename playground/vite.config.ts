@@ -6,7 +6,7 @@ import { VarletUIResolver } from 'unplugin-vue-components/resolvers'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [
-    vue({ reactivityTransform: true }),
+    vue(),
     components({
       resolvers: [VarletUIResolver()]
     }),

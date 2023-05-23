@@ -1,10 +1,3 @@
-<div class="varlet-introduce">
-  <div>
-    <img style="width: 400px" src="../public/logo.svg" />
-    <div class="varlet-introduce__name"></div>  
-  </div>
-</div>
-
 ### 介绍
 
 `Axle` 是一个基于 [`axios`](https://axios-http.com/) 开发的扩展请求包。使用这个工具我们默认您已经了解过 `axios`，

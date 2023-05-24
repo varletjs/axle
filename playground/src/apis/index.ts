@@ -1,6 +1,6 @@
-import { useAxle, axle } from '@/request'
+import { useAxle, axle, api } from '@/request'
 
-export const apiUser = '/api/user'
+export const apiUser = api('/api/user')
 
 export type Response<T> = {
   data: T
@@ -15,21 +15,21 @@ export interface User {
 
 export function useApiGetUsers() {
   return useAxle<User[]>({
-    url: apiUser,
+    url: apiUser(),
     runner: axle.get,
   })
 }
 
 export function useApiGetUser(id) {
   return useAxle<User>({
-    url: `${apiUser}/${id}`,
+    url: apiUser(id),
     runner: axle.get,
   })
 }
 
 export function useApiAddUser() {
   return useAxle<Response<User>>({
-    url: apiUser,
+    url: apiUser(),
     runner: axle.postJSON,
     immediate: false,
   })

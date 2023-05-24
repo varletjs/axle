@@ -19,7 +19,7 @@ async function handleSubmit() {
   Snackbar.loading('Submitting!')
 
   const [{ code }] = userModel.id
-    ? await apiUpdateUser({ url: `${apiUser}/${userModel.id}`, params: userModel })
+    ? await apiUpdateUser({ url: apiUser(userModel.id), params: userModel })
     : await apiAddUser({ params: userModel })
 
   if (code === 200) {
@@ -30,7 +30,7 @@ async function handleSubmit() {
 async function handleDelete() {
   Snackbar.loading('Deleting!')
 
-  const [{ code }] = await apiDeleteUser({ url: `${apiUser}/${deleteId.value}` })
+  const [{ code }] = await apiDeleteUser({ url: apiUser(deleteId.value) })
 
   if (code === 200) {
     Snackbar.success('Deleting Success!')
@@ -55,7 +55,7 @@ watch(
   <var-space direction="column">
     <var-space align="center">
       <var-input type="number" variant="outlined" v-model="id" />
-      <var-button type="primary" @click="apiGetUser({ url: `${apiUser}/${id}` })">Search</var-button>
+      <var-button type="primary" @click="apiGetUser({ url: apiUser(id) })">Search</var-button>
     </var-space>
 
     <var-cell>name: getUser</var-cell>

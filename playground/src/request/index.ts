@@ -29,4 +29,8 @@ const useAxle = createUseAxleHelper({
   errorFormatter
 })
 
-export { axle, useAxle }
+const api = (api: string) => {
+  return (id?: string) => `${api}${id ? `/${id}` : ''}`
+} 
+
+export { axle, useAxle, api }

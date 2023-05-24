@@ -14,12 +14,12 @@ jobs:
       - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 6
+          version: 8
 
-      - name: Set node version to 14
-        uses: actions/setup-node@v2
+      - name: Set node version to 16
+        uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
+          node-version: '16'
           cache: 'pnpm'
 
       - name: Install dependencies

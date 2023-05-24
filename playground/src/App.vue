@@ -1,154 +1,84 @@
 <script setup lang="ts">
-import axle from '@/utils/axle'
-import { ref } from 'vue'
+import { useApiGetUser, useApiGetUsers, useApiAddUser, useApiDeleteUser, useApiUpdateUser, apiUser } from './apis'
 
-const getBlob = () => {
-  axle
-    .getBlob(
-      'http://localhost:8000/getBlob',
-      {},
-      {
-        onDownloadProgress: (e) => {
-          console.log(e)
-        },
-      }
-    )
-    .then((res) => {
-      axle.download(res.data as Blob, 'getBlob.png')
-    })
-}
+const id = ref('1')
+const deleteId = ref('1')
 
-const getStream = () => {
-  axle.getStream('http://localhost:8000/getStream').then((res) => {
-    console.log(res)
-    // axle.download(res.data as Blob,'getBlob.png')
-  })
-}
+const [users, apiGetUsers, usersLoading] = useApiGetUsers()
+const [user, apiGetUser, userLoading] = useApiGetUser(id.value)
+const [addedUser, apiAddUser] = useApiAddUser()
+const [updatedUser, apiUpdateUser] = useApiUpdateUser()
+const [deletedUser, apiDeleteUser] = useApiDeleteUser()
 
-const getArrayBuffer = () => {
-  axle.getArrayBuffer('http://localhost:8000/getBlob').then((res) => {
-    console.log(res)
-  })
+const userModel = reactive({
+  id: undefined,
+  name: '',
+})
+
+async function handleSubmit() {
+  Snackbar.loading('Submitting!')
+
+  const [{ code }] = userModel.id
+    ? await apiUpdateUser({ url: `${apiUser}/${userModel.id}`, params: userModel })
+    : await apiAddUser({ params: userModel })
+
+  if (code === 200) {
+    Snackbar.success('Submitting Success!')
+  }
 }
 
-const get = () => {
-  axle.get('http://localhost:8000/').then(({ data }) => {
-    console.log(data)
-  })
+async function handleDelete() {
+  Snackbar.loading('Deleting!')
 
-  axle.get('http://localhost:8000/withParams/1/axle').then(({ data }) => {
-    console.log(data)
-  })
+  const [{ code }] = await apiDeleteUser({ url: `${apiUser}/${deleteId.value}` })
 
-  axle.get('http://localhost:8000/withQuery', { id: 1, name: 'axle' }).then(({ data }) => {
-    console.log(data)
-  })
+  if (code === 200) {
+    Snackbar.success('Deleting Success!')
+  }
 }
 
-const getDocument = () => {
-  axle.getDocument('http://127.0.0.1:3000/index.html').then(({ data }) => {
-    console.log(data)
-  })
-}
-
-const getText = () => {
-  axle.getText('http://127.0.0.1:3000/index.html').then(({ data }) => {
-    console.log(data)
-  })
-}
-
-const head = () => {
-  axle.head('http://localhost:8000/').then((res) => {
-    console.log(res)
-  })
-  axle.head('http://localhost:8000/withParams/1/axle').then((res) => {
-    console.log(res)
-  })
-  axle.head('http://localhost:8000/withQuery', { id: 1, name: 'axle' }).then((res) => {
-    console.log(res)
-  })
-}
-const headBlob = () => {
-  axle.headBlob('http://localhost:8000/getBlob').then((res) => {
-    console.log(res)
-  })
-}
-const headStream = () => {
-  axle.headStream('http://localhost:8000/getStream').then((res) => {
-    console.log(res)
-  })
-}
-const headArrayBuffer = () => {
-  axle.headArrayBuffer('http://localhost:8000/getBlob').then((res) => {
-    console.log(res)
-  })
-}
-const headDocument = () => {
-  axle.headDocument('http://127.0.0.1:3000/index.html').then((res) => {
-    console.log(res)
-  })
-}
-const headText = () => {
-  axle.headText('http://127.0.0.1:3000/index.html').then((res) => {
-    console.log(res)
-  })
-}
-
-const post = () => {
-  axle.post('http://localhost:8000/', { age: 1, name: 'axle' }).then(({ data }) => {
-    console.log(data)
-  })
-}
-const postJSON = () => {
-  axle.postJSON('http://localhost:8000/postJSON', { age: 1, name: 'axle' }).then(({ data }) => {
-    console.log(data)
-  })
-}
-const files = ref([])
-const postMultipart = (file) => {
-  axle
-    .postMultipart('http://localhost:8000/postMultipart', {
-      file: file.file,
-      name: 'axle',
-    })
-    .then(({ data }) => {
-      console.log(data)
-    })
-}
-
-const options = () => {
-  axle.options('http://localhost:8000/').then((res) => {
-    console.log(res)
-  })
-}
+watch(
+  () => [addedUser.value, updatedUser.value, deletedUser.value],
+  () => apiGetUsers()
+)
 </script>
 
 <template>
-  <div class="app-container">
-    <var-space direction="column">
-      <var-button @click="get">get</var-button>
-      <var-button @click="getBlob">getBlob</var-button>
-      <var-button @click="getStream">getStream</var-button>
-      <var-button @click="getArrayBuffer">getArrayBuffer</var-button>
-      <var-button @click="getDocument">getDocument</var-button>
-      <var-button @click="getText">getText</var-button>
+  <var-space direction="column">
+    <var-cell>name: getUsers</var-cell>
+    <var-cell>loading: {{ usersLoading }}</var-cell>
+    <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
+  </var-space>
 
-      <var-button @click="head">head</var-button>
-      <var-button @click="headBlob">headBlob</var-button>
-      <var-button @click="headStream">headStream</var-button>
-      <var-button @click="headArrayBuffer">headArrayBuffer</var-button>
-      <var-button @click="headDocument">headDocument</var-button>
-      <var-button @click="headText">headText</var-button>
+  <var-divider margin="30px 0" />
 
-      <var-button @click="post">post</var-button>
-      <var-button @click="postJSON">postJSON</var-button>
-      <var-uploader v-model="files" @after-read="postMultipart" :previewed="false" :hide-list="true">
-        <var-button>postMultipart</var-button>
-      </var-uploader>
-
-      <var-button @click="options">options</var-button>
+  <var-space direction="column">
+    <var-space align="center">
+      <var-input type="number" variant="outlined" v-model="id" />
+      <var-button type="primary" @click="apiGetUser({ url: `${apiUser}/${id}` })">Search</var-button>
     </var-space>
-  </div>
-</template>
 
-<style lang="less"></style>
+    <var-cell>name: getUser</var-cell>
+    <var-cell>loading: {{ userLoading }}</var-cell>
+    <var-cell>data: {{ user ?? 'No Data' }}</var-cell>
+  </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-space direction="column">
+    <var-space>
+      <var-input type="number" variant="outlined" clearable placeholder="user.id" v-model="userModel.id" />
+      <var-input variant="outlined" placeholder="user.name" v-model="userModel.name" />
+    </var-space>
+    <var-button type="primary" @click="handleSubmit">Submit</var-button>
+  </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-space direction="column">
+    <var-space>
+      <var-input type="number" variant="outlined" clearable placeholder="user.id" v-model="deleteId" />
+    </var-space>
+    <var-button type="danger" @click="handleDelete">Delete</var-button>
+  </var-space>
+</template>

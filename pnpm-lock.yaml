@@ -5,8 +5,8 @@ dependencies:
     specifier: ^2.11.1
     version: 2.11.1
   axios:
-    specifier: ^0.27.2
-    version: 0.27.2
+    specifier: ^1.4.0
+    version: 1.4.0
   qs:
     specifier: ^6.11.0
     version: 6.11.0
@@ -2391,11 +2391,12 @@ packages:
     hasBin: true
     dev: true
 
-  /axios@0.27.2:
-    resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
+  /axios@1.4.0:
+    resolution: {integrity: sha512-S4XCWMEmzvo64T9GfvQDOXgYRDJ/wsSZc7Jvdgx5u1sd0JwsuPLqb3SYmusag+edF6ziyMensPVqLTSc1PiSEA==}
     dependencies:
       follow-redirects: 1.15.1
       form-data: 4.0.0
+      proxy-from-env: 1.1.0
     transitivePeerDependencies:
       - debug
     dev: false
@@ -3851,7 +3852,7 @@ packages:
     dev: true
 
   /fresh@0.5.2:
-    resolution: {integrity: sha1-PYyt2Q2XZWn6g1qx+OSyOhBWBac=}
+    resolution: {integrity: sha512-zJ2mQYM18rEFOudeV4GShTGIQ7RbzA7ozbU9I/XBpm7kqgMywgmylMwXHxZJmkVoYkna9d2pVXVXPdYTP9ej8Q==}
     engines: {node: '>= 0.6'}
     dev: true
 
@@ -6201,6 +6202,10 @@ packages:
   /proto-list@1.2.4:
     resolution: {integrity: sha512-vtK/94akxsTMhe0/cbfpR+syPuszcuwhqVjJq26CuNDgFGj682oRBXOP5MJpv2r7JtE8MsiepGIqvvOTBwn2vA==}
     dev: true
+
+  /proxy-from-env@1.1.0:
+    resolution: {integrity: sha512-D+zkORCbA9f1tdWRK0RaCR3GPv50cMxcrz4X8k5LTSUD1Dkw47mKJEZQNunItRTkWwgtaUSo1RVFRIG9ZXiFYg==}
+    dev: false
 
   /proxy-middleware@0.15.0:
     resolution: {integrity: sha512-EGCG8SeoIRVMhsqHQUdDigB2i7qU7fCsWASwn54+nPutYO8n4q6EiwMzyfWlC+dzRFExP+kvcnDFdBDHoZBU7Q==}

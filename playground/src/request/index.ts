@@ -1,6 +1,18 @@
-import { createAxle, createUseAxleHelper } from '@varlet/axle'
+import { createAxle, createUseAxle } from '@varlet/axle'
 
-const { helpers: axle } = createAxle()
+function api(api: string) {
+  return (...ids: (string | number)[]) => {
+    const suffix = ids.reduce((suffix, id) => {
+      if (!id) {
+        return suffix
+      }
+      
+      return suffix + `/${id}`
+    }, '')
+
+    return `${api}${suffix}`
+  }
+}
 
 function dataFormatter(response) {
   const { method } = response.config
@@ -24,13 +36,13 @@ function errorFormatter(errorResponse) {
   return errorResponse
 }
 
-const useAxle = createUseAxleHelper({
-  dataFormatter,
-  errorFormatter
+const axle = createAxle({
+  baseURL: '/api'
 })
 
-const api = (api: string) => {
-  return (id?: string) => `${api}${id ? `/${id}` : ''}`
-} 
+const useAxle = createUseAxle({
+  dataFormatter,
+  errorFormatter,
+})
 
 export { axle, useAxle, api }

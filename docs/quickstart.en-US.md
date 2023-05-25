@@ -15,12 +15,40 @@ yarn add @varlet/axle
 pnpm add @varlet/axle
 ```
 
+### Request call
+
 ```js
 import { createAxle } from '@varlet/axle'
 
-// create axle instance , axle has the same abilities as axios
-const axle = createAxle(/** @see http://www.axios-js.com/zh-cn/docs/#axios-create-config **/)
+// create axle instance
+const axle = createAxle(/** @see https://axios-http.com **/)
 
-// Some helper functions of axle
-const axleHelpers = axle.helpers
+// The built-in axios of the axle, the usage is exactly the same as that of axios, and shares the configuration with the axle.
+const { axios } = axle
+
+const response = await axle. get('/user', { current: 1, pageSize: 10 }, { headers: {} })
+const response = await axle. post('/user', { name: 'Axle' }, { headers: {} })
+```
+
+### Vue Composition Api
+
+```vue
+<script setup>
+import { createUseAxle } from '@varlet/axle'
+
+const useAxle = createUseAxle()
+
+// default immediate request
+const [users, getUsers, loading, { error }] = useAxle({
+   url: '/user',
+   params: { current: 1, pageSize: 10 },
+   config: { headers: {} }
+})
+</script>
+
+<template>
+   <span>{{ users }}</span>
+   <span>{{ loading }}</span>
+   <span>{{ error }}</span>
+</template>
 ```

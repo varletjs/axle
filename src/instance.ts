@@ -5,18 +5,24 @@ import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosRespo
 export type AxleRequestConfig = AxiosRequestConfig & {
   exceptionMessage?: any
 }
+
 export type FetchHelper = <T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,
   config?: AxleRequestConfig
 ) => Promise<R>
+
 export type ModifyHelper = <T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,
   config?: AxleRequestConfig
 ) => Promise<R>
 
-export interface AxiosHelpers {
+export type FetchMethods = 'get' | 'delete' | 'options' | 'head'
+
+export type ModifyMethods = 'post' | 'put' | 'patch'
+
+export type AxleInstance = {
   get: FetchHelper
   getBlob: FetchHelper
   getDocument: FetchHelper
@@ -61,17 +67,11 @@ export interface AxiosHelpers {
 
   setHeader(key: string, value: string): void
   removeHeader(key: string | string[]): void
+
+  axios: AxiosInstance
 }
 
-export type FetchMethods = 'get' | 'delete' | 'options' | 'head'
-
-export type ModifyMethods = 'post' | 'put' | 'patch'
-
-export type AxleInstance = AxiosInstance & {
-  helpers: AxiosHelpers
-}
-
-export function createFetchHelper(service: AxleInstance, method: FetchMethods, responseType: ResponseType) {
+export function createFetchHelper(service: AxiosInstance, method: FetchMethods, responseType: ResponseType) {
   return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
     return service[method](url, {
       params: {
@@ -85,7 +85,7 @@ export function createFetchHelper(service: AxleInstance, method: FetchMethods, r
 }
 
 export function createModifyHelper(
-  service: AxleInstance,
+  service: AxiosInstance,
   method: ModifyMethods,
   contentType: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded'
 ) {
@@ -121,7 +121,7 @@ export function download(url: string | Blob, filename: string) {
 }
 
 export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
-  const service = axios.create(config) as AxleInstance
+  const service = axios.create(config)
 
   function setHeader(key: string, value: string | number | boolean) {
     ;(service.defaults.headers['common'] as AxiosRequestHeaders)[key] = value
@@ -136,7 +136,7 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     key.forEach((k) => Reflect.deleteProperty(service.defaults.headers['common'] as AxiosRequestHeaders, k))
   }
 
-  service.helpers = {
+  return {
     get: createFetchHelper(service, 'get', 'json'),
     getBlob: createFetchHelper(service, 'get', 'blob'),
     getDocument: createFetchHelper(service, 'get', 'document'),
@@ -179,7 +179,7 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
 
     setHeader,
     removeHeader,
-  }
 
-  return service
+    axios: service,
+  }
 }

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useApiGetUser, useApiGetUsers, useApiAddUser, useApiDeleteUser, useApiUpdateUser, apiUser } from './apis'
+import { useApiGetUser, useApiGetUsers, useApiAddUser, useApiDeleteUser, useApiUpdateUser, useApiPatchUser, apiUser } from './apis'
 
 const id = ref('1')
 const deleteId = ref('1')
@@ -8,6 +8,7 @@ const [users, apiGetUsers, usersLoading] = useApiGetUsers()
 const [user, apiGetUser, userLoading] = useApiGetUser(id.value)
 const [addedUser, apiAddUser] = useApiAddUser()
 const [updatedUser, apiUpdateUser] = useApiUpdateUser()
+const [patchedUser, apiPatchUser] = useApiPatchUser()
 const [deletedUser, apiDeleteUser] = useApiDeleteUser()
 
 const userModel = reactive({
@@ -38,7 +39,7 @@ async function handleDelete() {
 }
 
 watch(
-  () => [addedUser.value, updatedUser.value, deletedUser.value],
+  () => [addedUser.value, updatedUser.value, deletedUser.value, patchedUser.value],
   () => apiGetUsers()
 )
 </script>

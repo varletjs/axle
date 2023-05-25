@@ -15,12 +15,40 @@ yarn add @varlet/axle
 pnpm add @varlet/axle
 ```
 
+### 请求调用
+
 ```js
 import { createAxle } from '@varlet/axle'
 
-// 创建axle实例，axle拥有与axios相同的能力
-const axle = createAxle(/** @see http://www.axios-js.com/zh-cn/docs/#axios-create-config **/)
+// 创建 axle 实例
+const axle = createAxle(/** @see https://axios-http.com **/)
 
-// axle的一些辅助函数
-const axleHelpers = axle.helpers
+// axle 内置的 axios, 用法与 axios 完全一致，并与 axle 共享配置。
+const { axios } = axle
+
+const response = await axle.get('/user', { current: 1, pageSize: 10 }, { headers: {} })
+const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
+```
+
+### Vue Composition Api
+
+```vue
+<script setup>
+import { createUseAxle } from '@varlet/axle'
+
+const useAxle = createUseAxle()
+
+// 默认立即请求
+const [users, getUsers, loading, { error }] = useAxle({ 
+  url: '/user', 
+  params: { current: 1, pageSize: 10 },
+  config: { headers: {} }
+})
+</script>
+
+<template>
+  <span>{{ users }}</span>
+  <span>{{ loading }}</span>
+  <span>{{ error }}</span>
+</template>
 ```

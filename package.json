@@ -59,7 +59,7 @@
   "author": "Joker <13255238145@163.com>",
   "dependencies": {
     "@varlet/shared": "^2.11.1",
-    "axios": "^0.27.2",
+    "axios": "^1.4.0",
     "qs": "^6.11.0"
   }
 }

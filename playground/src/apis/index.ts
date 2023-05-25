@@ -1,6 +1,6 @@
 import { useAxle, axle, api } from '@/request'
 
-export const apiUser = api('/api/user')
+export const apiUser = api('/user')
 
 export type Response<T> = {
   data: T
@@ -45,6 +45,13 @@ export function useApiDeleteUser() {
 export function useApiUpdateUser() {
   return useAxle<Response<User>>({
     runner: axle.putJSON,
+    immediate: false,
+  })
+}
+
+export function useApiPatchUser() {
+  return useAxle<Response<User>>({
+    runner: axle.patchJSON,
     immediate: false,
   })
 }

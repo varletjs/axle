@@ -1,10 +1,8 @@
 ### Intro
 
-`Axle` is an extension request package developed based on [`axios`](https://axios-http.com/). Using this tool, by default, you already know `axios`,
-`Axle` has all the capabilities of `axios` and extends some request related auxiliary functions on the basis of `axios`,
-Make the development pay more attention to the business itself, simplify the complexity of request invocation, and improve the generation efficiency.
+`Axle` is an extension request package based on [`axios`](https://axios-http.com/). Using this tool we assume that you already know `axios`,
+`Axle` has all the capabilities of `axios`, and has been extended on the basis of `axios`, allowing developers to focus more on the business itself, simplifying the complexity of request calls, thereby improving production efficiency.
 
+### Open Source License
 
-### Open source licenses
-
-`Axle` based on `MIT` licenses.
+`Axle` is based on the `MIT` license.

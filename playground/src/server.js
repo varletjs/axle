@@ -59,7 +59,7 @@ router.post('/user', async (ctx) => {
 
   const user = {
     id: id++,
-    name: ctx.request.body.name
+    name: ctx.request.body.name,
   }
 
   users.push(user)
@@ -67,7 +67,7 @@ router.post('/user', async (ctx) => {
   response(ctx, 200, null)
 })
 
-router.put('/user/:id', async (ctx) => {
+async function putOrPatch(ctx) {
   await delay(500)
 
   const user = users.find((user) => user.id === Number(ctx.params.id))
@@ -79,7 +79,10 @@ router.put('/user/:id', async (ctx) => {
   user.name = ctx.request.body.name
 
   response(ctx, 200, user)
-})
+}
+
+router.put('/user/:id', putOrPatch)
+router.patch('/user/:id', putOrPatch)
 
 router.delete('/user/:id', async (ctx) => {
   await delay(500)

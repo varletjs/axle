@@ -1,8 +1,8 @@
 import { ref, type Ref, type UnwrapRef } from 'vue'
-import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './helpers'
+import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance'
 
 // default options
-export interface CreateUseAxleHelperOptions {
+export interface CreateUseAxleOptions {
   runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   url?: string
   data?: any
@@ -23,7 +23,7 @@ export type RunReturn<D> = Promise<[UnwrapRef<D>, undefined] | [undefined, Error
 
 export type Run<D, P> = (options?: RunOptions<P>) => RunReturn<D>
 
-export interface UseAxleHelperOptions<D, P> {
+export interface UseAxleOptions<D, P> {
   runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   url?: string
   data?: D
@@ -34,7 +34,7 @@ export interface UseAxleHelperOptions<D, P> {
   errorFormatter?(errorResponse: Error): Error
 }
 
-export function createUseAxleHelper(options: CreateUseAxleHelperOptions = {}) {
+export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultRunner = options.runner
   const defaultUrl = options.url
   const defaultInitialData = options.data
@@ -44,8 +44,8 @@ export function createUseAxleHelper(options: CreateUseAxleHelperOptions = {}) {
   const defaultDataFormatter = options.dataFormatter ?? ((v) => v)
   const defaultErrorFormatter = options.errorFormatter ?? ((v) => v)
 
-  const useAxleHelper = <D = any, P = any>(
-    options: UseAxleHelperOptions<D, P> = {}
+  const useAxle = <D = any, P = any>(
+    options: UseAxleOptions<D, P> = {}
   ): [
     data: Ref<UnwrapRef<D>>,
     run: Run<D, P>,
@@ -115,5 +115,5 @@ export function createUseAxleHelper(options: CreateUseAxleHelperOptions = {}) {
     ]
   }
 
-  return useAxleHelper
+  return useAxle
 }

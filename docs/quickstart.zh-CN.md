@@ -32,15 +32,17 @@ const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
 
 ### Vue Composition Api
 
-```vue
+```html
 <script setup>
-import { createUseAxle } from '@varlet/axle'
+import { createAxle, createUseAxle } from '@varlet/axle'
 
+const axle = createAxle()
 const useAxle = createUseAxle()
 
-// 默认立即请求
-const [users, getUsers, loading, { error }] = useAxle({ 
-  url: '/user', 
+// default immediate request
+const [users, getUsers, loading, { error }] = useAxle({
+  runner: axle.get,
+  url: '/user',
   params: { current: 1, pageSize: 10 },
   config: { headers: {} }
 })

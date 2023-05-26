@@ -37,26 +37,28 @@ const response = await axle.get('/user', { current: 1, pageSize: 10 }, { headers
 const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
 ```
 
-#### Vue Composition Api
+### Vue Composition Api
 
-```vue
+```html
 <script setup>
-import { createUseAxle } from '@varlet/axle'
+import { createAxle, createUseAxle } from '@varlet/axle'
 
+const axle = createAxle()
 const useAxle = createUseAxle()
 
 // default immediate request
 const [users, getUsers, loading, { error }] = useAxle({
+  runner: axle.get,
   url: '/user',
   params: { current: 1, pageSize: 10 },
-  config: { headers: {} },
+  config: { headers: {} }
 })
 </script>
 
 <template>
-  <span>{{ users }}</span>
-  <span>{{ loading }}</span>
-  <span>{{ error }}</span>
+   <span>{{ users }}</span>
+   <span>{{ loading }}</span>
+   <span>{{ error }}</span>
 </template>
 ```
 

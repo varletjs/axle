@@ -3,7 +3,7 @@
   "version": "0.0.3",
   "description": "A useful axios helper",
   "type": "module",
-  "main": "main/index.js",
+  "main": "es/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
   "files": [

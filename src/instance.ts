@@ -74,10 +74,7 @@ export type AxleInstance = {
 export function createFetchHelper(service: AxiosInstance, method: FetchMethods, responseType: ResponseType) {
   return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
     return service[method](url, {
-      params: {
-        _t: Date.now(),
-        ...params,
-      },
+      ...params,
       responseType,
       ...config,
     })

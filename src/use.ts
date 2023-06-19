@@ -1,5 +1,5 @@
 import { ref, type Ref, type UnwrapRef } from 'vue'
-import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance'
+import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance.js'
 
 // default options
 export interface CreateUseAxleOptions {

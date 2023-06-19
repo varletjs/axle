@@ -1,2 +1,2 @@
-export * from './instance'
-export * from './use'
+export * from './instance.js'
+export * from './use.js'

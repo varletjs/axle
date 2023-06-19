@@ -25,7 +25,7 @@ function dataFormatter(response) {
     return response.data.data
   }
 
-  if (['post', 'put', 'delete', 'patch']) {
+  if (['post', 'put', 'delete', 'patch'].includes(method)) {
     return response.data
   }
 }

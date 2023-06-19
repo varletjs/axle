@@ -1,6 +1,6 @@
 {
   "name": "@varlet/axle",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A useful axios helper",
   "type": "module",
   "main": "es/index.js",

@@ -5,16 +5,18 @@
   "type": "module",
   "main": "es/index.js",
   "module": "es/index.js",
-  "types": "es/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./es/index.d.ts",
-      "import": "./es/index.js"
-    },
-    "./use": {
-      "types": "./es/use.d.ts",
-      "import": "./es/use.js"
+  "types": "index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./es/*"
+      ]
     }
+  },
+  "exports": {
+    ".": "./es/index.js",
+    "./use": "./es/use.js",
+    "./*": "./*"
   },
   "files": [
     "es"

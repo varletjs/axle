@@ -10,7 +10,7 @@
     "allowJs": true,
     "esModuleInterop": true,
     "lib": ["esnext", "dom"],
-    "types": ["vue/macros-global", "@varlet/ui/types/global", "vite/client"],
+    "types": ["vue/macros-global", "vite/client"],
     "paths": {
       "@/*": ["./src/*"]
     }

@@ -34,7 +34,8 @@ const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
 
 ```html
 <script setup>
-import { createAxle, createUseAxle } from '@varlet/axle'
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle()
 const useAxle = createUseAxle()

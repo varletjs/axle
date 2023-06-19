@@ -6,6 +6,16 @@
   "main": "es/index.js",
   "module": "es/index.js",
   "types": "es/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./es/index.d.ts",
+      "import": "./es/index.js"
+    },
+    "./use": {
+      "types": "./es/use.d.ts",
+      "import": "./es/use.js"
+    }
+  },
   "files": [
     "es"
   ],

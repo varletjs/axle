@@ -1,9 +1,6 @@
-<div>
-  <a href="https://github.com/varletjs/axle">
-    <img src="https://github.com/varletjs/axle/blob/main/public/logo.svg" width="400">
-  </a>
-  <h2>A tool library based on axios to simplify the development process</h2>
-</div>
+### Intro
+
+A tool library based on axios to simplify the development process
 
 ### Quickstart
 
@@ -22,7 +19,7 @@ yarn add @varlet/axle
 pnpm add @varlet/axle
 ```
 
-#### Request call
+#### Request Call
 
 ```js
 import { createAxle } from '@varlet/axle'
@@ -44,11 +41,12 @@ const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
 import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
-const axle = createAxle()
-const useAxle = createUseAxle()
+const axle = createAxle(/** @see https://axios-http.com **/)
+const useAxle = createUseAxle(/** @see https://github.com/varletjs/axle/blob/main/src/use.ts?plain=1#L5 **/)
 
 // default immediate request
 const [users, getUsers, loading, { error }] = useAxle({
+  /** @see https://github.com/varletjs/axle/blob/main/src/use.ts?plain=1#L26 **/
   runner: axle.get,
   url: '/user',
   params: { current: 1, pageSize: 10 },

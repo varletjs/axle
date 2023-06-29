@@ -1,4 +1,4 @@
-name: Deploy Site And Sync to Gitee
+name: Sync to Gitee
 
 on:
   push:
@@ -10,29 +10,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-
-      - name: Set node version to 16
-        uses: actions/setup-node@v3
-        with:
-          node-version: '16'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm bootstrap:ci
-
-      - name: Build site
-        run: pnpm build
-
-      - name: Deploy site
-        uses: JamesIves/github-pages-deploy-action@4.1.1
-        with:
-          branch: gh-page
-          folder: site
 
       - name: Sync to Gitee
         uses: wearerequired/git-mirror-action@master

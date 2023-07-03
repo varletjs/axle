@@ -1,3 +1,12 @@
+## [0.0.10](https://github.com/varletjs/axle/compare/v0.0.9...v0.0.10) (2023-07-03)
+
+
+### Features
+
+* support prevData for dataFormatter ([e65c889](https://github.com/varletjs/axle/commit/e65c8898e9334e3bad634d0a0c99c7717f4ae0fa))
+
+
+
 ## [0.0.9](https://github.com/varletjs/axle/compare/v0.0.8...v0.0.9) (2023-06-29)
 
 

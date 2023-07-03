@@ -15,7 +15,7 @@ function api(api: string) {
   }
 }
 
-function dataFormatter(response) {
+function dataTransformer(response) {
   const { method } = response.config
 
   if (response.data.code !== 200) {
@@ -31,7 +31,7 @@ function dataFormatter(response) {
   }
 }
 
-function errorFormatter(errorResponse) {
+function errorTransformer(errorResponse) {
   Snackbar.error(errorResponse.message)
 
   return errorResponse
@@ -42,8 +42,8 @@ const axle = createAxle({
 })
 
 const useAxle = createUseAxle({
-  dataFormatter,
-  errorFormatter,
+  dataTransformer,
+  errorTransformer,
 })
 
 export { axle, useAxle, api }

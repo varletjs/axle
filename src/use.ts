@@ -29,7 +29,7 @@ export interface UseAxleOptions<D, P, R> {
   config?: AxleRequestConfig
   immediate?: boolean
   dataTransformer?(response: R, prevData: D): D
-  errorTransformer?(errorResponse: Error, prevError: Error): Error
+  errorTransformer?(errorResponse: Error, prevError: Error | undefined): Error
 }
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {

@@ -23,14 +23,14 @@ export type RunReturn<D> = Promise<[UnwrapRef<D>, undefined] | [undefined, Error
 
 export type Run<D, P> = (options?: RunOptions<P>) => RunReturn<D>
 
-export interface UseAxleOptions<D, P> {
+export interface UseAxleOptions<D, P, R> {
   runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   url?: string
   data?: D
   params?: P
   config?: AxleRequestConfig
   immediate?: boolean
-  dataTransformer?(data: any, prevData: any): D
+  dataTransformer?(response: R, prevData: D): D
   errorTransformer?(errorResponse: Error): Error
 }
 
@@ -44,8 +44,8 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultDataTransformer = options.dataTransformer ?? ((v) => v)
   const defaultErrorTransformer = options.errorTransformer ?? ((v) => v)
 
-  const useAxle = <D = any, P = any>(
-    options: UseAxleOptions<D, P> = {}
+  const useAxle = <D = any, P = any, R = any>(
+    options: UseAxleOptions<D, P, R> = {}
   ): [
     data: Ref<UnwrapRef<D>>,
     run: Run<D, P>,

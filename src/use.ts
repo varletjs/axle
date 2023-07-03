@@ -10,7 +10,7 @@ export interface CreateUseAxleOptions {
   config?: AxleRequestConfig
   immediate?: boolean
   dataTransformer?(data: any, prevData: any): any
-  errorTransformer?(errorResponse: Error, prevError: Error): Error
+  errorTransformer?(errorResponse: Error, prevError: Error | undefined): Error
 }
 
 export interface RunOptions<P> {

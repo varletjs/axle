@@ -19,9 +19,7 @@ export interface RunOptions<P> {
   config?: AxleRequestConfig
 }
 
-export type RunReturn<D> = Promise<[UnwrapRef<D>, undefined] | [undefined, Error]>
-
-export type Run<D, P> = (options?: RunOptions<P>) => RunReturn<D>
+export type Run<D, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D>>
 
 export interface UseAxleOptions<D, P, R> {
   runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
@@ -71,7 +69,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       throw new Error('[Axle]: Cannot found valid runner, so options.runner is required')
     }
 
-    const run: Run<D, P> = (options: RunOptions<P> = {}): RunReturn<D> => {
+    const run: Run<D, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D>> => {
       const url = options.url ?? initialUrl
 
       if (!url) {
@@ -86,14 +84,14 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
           error.value = undefined
           loading.value = false
 
-          return [data.value, undefined] as any
+          return data.value
         })
         .catch((responseError) => {
           data.value = initialData
           error.value = errorTransformer(responseError)
           loading.value = false
-
-          return [undefined, error.value!] as any
+          
+          throw responseError
         })
     }
 

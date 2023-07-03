@@ -1,3 +1,12 @@
+## [0.0.14](https://github.com/varletjs/axle/compare/v0.0.13...v0.0.14) (2023-07-03)
+
+
+### Features
+
+* support prevError ([02780eb](https://github.com/varletjs/axle/commit/02780eb85486369b555f99b9fb7f51bda6dfde48))
+
+
+
 ## [0.0.13](https://github.com/varletjs/axle/compare/v0.0.12...v0.0.13) (2023-07-03)
 
 

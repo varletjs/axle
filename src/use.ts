@@ -10,7 +10,7 @@ export interface CreateUseAxleOptions {
   config?: AxleRequestConfig
   immediate?: boolean
   dataTransformer?(data: any, prevData: any): any
-  errorTransformer?(errorResponse: Error): Error
+  errorTransformer?(errorResponse: Error, prevError: any): Error
 }
 
 export interface RunOptions<P> {
@@ -29,7 +29,7 @@ export interface UseAxleOptions<D, P, R> {
   config?: AxleRequestConfig
   immediate?: boolean
   dataTransformer?(response: R, prevData: D): D
-  errorTransformer?(errorResponse: Error): Error
+  errorTransformer?(errorResponse: Error, prevError: Error): Error
 }
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
@@ -88,7 +88,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
         })
         .catch((responseError) => {
           data.value = initialData
-          error.value = errorTransformer(responseError)
+          error.value = errorTransformer(responseError, error.value)
           loading.value = false
           
           throw responseError

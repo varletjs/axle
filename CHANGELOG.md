@@ -1,3 +1,12 @@
+## [0.0.12](https://github.com/varletjs/axle/compare/v0.0.11...v0.0.12) (2023-07-03)
+
+
+### Bug Fixes
+
+* fix params invalid ([f6196fa](https://github.com/varletjs/axle/commit/f6196faa6d9ba2a68135003f0afe857256fa7a0c))
+
+
+
 ## [0.0.11](https://github.com/varletjs/axle/compare/v0.0.10...v0.0.11) (2023-07-03)
 
 

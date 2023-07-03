@@ -38,7 +38,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultInitialData = options.data
   const defaultInitialParams = options.params
   const defaultInitialConfig = options.config
-  const defaultImmediate = options.immediate ?? true
+  const defaultImmediate = options.immediate ?? false
   const defaultDataTransformer = options.dataTransformer ?? ((v) => v)
   const defaultErrorTransformer = options.errorTransformer ?? ((v) => v)
 

@@ -9,8 +9,8 @@ export interface CreateUseAxleOptions {
   params?: any
   config?: AxleRequestConfig
   immediate?: boolean
-  dataFormatter?(data: any): any
-  errorFormatter?(errorResponse: Error): Error
+  dataTransformer?(data: any, prevData: any): any
+  errorTransformer?(errorResponse: Error): Error
 }
 
 export interface RunOptions<P> {
@@ -30,8 +30,8 @@ export interface UseAxleOptions<D, P> {
   params?: P
   config?: AxleRequestConfig
   immediate?: boolean
-  dataFormatter?(response: any): D
-  errorFormatter?(errorResponse: Error): Error
+  dataTransformer?(data: any, prevData: any): D
+  errorTransformer?(errorResponse: Error): Error
 }
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
@@ -41,8 +41,8 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultInitialParams = options.params
   const defaultInitialConfig = options.config
   const defaultImmediate = options.immediate ?? true
-  const defaultDataFormatter = options.dataFormatter ?? ((v) => v)
-  const defaultErrorFormatter = options.errorFormatter ?? ((v) => v)
+  const defaultDataTransformer = options.dataTransformer ?? ((v) => v)
+  const defaultErrorTransformer = options.errorTransformer ?? ((v) => v)
 
   const useAxle = <D = any, P = any>(
     options: UseAxleOptions<D, P> = {}
@@ -59,8 +59,8 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       params: initialParams = defaultInitialParams,
       config: initialConfig = defaultInitialConfig,
       immediate = defaultImmediate,
-      dataFormatter = defaultDataFormatter,
-      errorFormatter = defaultErrorFormatter
+      dataTransformer = defaultDataTransformer,
+      errorTransformer = defaultErrorTransformer
     } = options
     const initialUrl = url
     const data = ref<D>(initialData)
@@ -82,7 +82,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
 
       return runner(url, options.params, options.config)
         .then((response) => {
-          data.value = dataFormatter(response)
+          data.value = dataTransformer(response, data.value)
           error.value = undefined
           loading.value = false
 
@@ -90,7 +90,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
         })
         .catch((responseError) => {
           data.value = initialData
-          error.value = errorFormatter(responseError)
+          error.value = errorTransformer(responseError)
           loading.value = false
 
           return [undefined, error.value!] as any

@@ -1,85 +1,53 @@
 import { ref, type Ref, type UnwrapRef } from 'vue'
 import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance.js'
 
-// default options
-export interface CreateUseAxleOptions {
-  runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
-  url?: string
-  data?: any
-  params?: any
-  config?: AxleRequestConfig
-  immediate?: boolean
-  extra?: any
-  onBefore?(): void
-  onSuccess?(response: any, prev: any): any
-  onError?(error: Error, prev: Error | undefined): Error
-}
-
 export interface RunOptions<P> {
   url?: string
   params?: P
   config?: AxleRequestConfig
 }
 
-export type Run<D, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D>>
+export type Run<D, R, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D | R>>
 
-export interface UseAxleOptions<D = any, P = Record<string, any>, R = any> {
-  runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
-  url?: string
-  data?: D
+export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
+  url: string
+  data: D | R
+  runner: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   params?: P
   config?: AxleRequestConfig
   immediate?: boolean
   onBefore?(): void
-  onSuccess?(response: R, prev: D): D
+  onSuccess?(response: UnwrapRef<R>, prev: UnwrapRef<D | R>): UnwrapRef<D | R>
   onError?(error: Error, prev: Error | undefined): Error
 }
 
-export function createUseAxle(options: CreateUseAxleOptions = {}) {
-  const defaultRunner = options.runner
-  const defaultUrl = options.url
-  const defaultInitialData = options.data
-  const defaultInitialParams = options.params
-  const defaultInitialConfig = options.config
-  const defaultImmediate = options.immediate ?? false
-  const defaultOnBefore = options.onBefore ?? (() => {})
-  const defaultOnSuccess = options.onSuccess ?? ((v) => v)
-  const defaultOnError = options.onError ?? ((v) => v)
-
-  const useAxle = <D = any, P = Record<string, any>, R = any>(
-    options: UseAxleOptions<D, P, R> = {}
+export function createUseAxle() {
+  const useAxle = <D = any, R = any, P = Record<string, any>>(
+    options: UseAxleOptions<D, R, P>
   ): [
-    data: Ref<UnwrapRef<D>>,
-    run: Run<D, P>,
+    data: Ref<UnwrapRef<D | R>>,
+    run: Run<D, R, P>,
     loading: Ref<UnwrapRef<boolean>>,
     extra: { error: Ref<UnwrapRef<Error | undefined>> }
   ] => {
     const {
-      runner = defaultRunner,
-      data: initialData = defaultInitialData,
-      url = defaultUrl,
-      params: initialParams = defaultInitialParams,
-      config: initialConfig = defaultInitialConfig,
-      immediate = defaultImmediate,
-      onBefore = defaultOnBefore,
-      onSuccess = defaultOnSuccess,
-      onError = defaultOnError,
+      url,
+      runner,
+      immediate,
+      data: initialData,
+      params: initialParams,
+      config: initialConfig,
+      onBefore = () => {},
+      onSuccess = (response) => response,
+      onError = (error) => error,
     } = options
     const initialUrl = url
-    const data = ref<D>(initialData)
+    const data = ref<D | R>(initialData)
     const loading = ref(false)
     const error = ref<Error>()
 
-    if (!runner) {
-      throw new Error('[Axle]: Cannot found valid runner, so options.runner is required')
-    }
-
-    const run: Run<D, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D>> => {
+    const run: Run<D, R, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D | R>> => {
       const url = options.url ?? initialUrl
-
-      if (!url) {
-        throw new Error('[Axle]: Cannot found valid url, so options.url is required')
-      }
 
       onBefore()
 
@@ -87,7 +55,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
 
       return runner(url, options.params, options.config)
         .then((response) => {
-          data.value = onSuccess(response, data.value)
+          data.value = onSuccess(response as UnwrapRef<R>, data.value)
           error.value = undefined
           loading.value = false
 

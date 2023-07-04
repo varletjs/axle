@@ -12,7 +12,7 @@ export interface UserModel {
   name: string
 }
 
-export function useApiGetUsers<D>(options?: UseAxleOptions<D, {}, Response<UserModel[]>>) {
+export function useApiGetUsers<D>(options?: UseAxleOptions<D, Response<UserModel[]>>) {
   return useAxle({
     url: '/user/list-user',
     runner: axle.get,
@@ -20,7 +20,7 @@ export function useApiGetUsers<D>(options?: UseAxleOptions<D, {}, Response<UserM
   })
 }
 
-export function useApiGetUser<D>(options?: UseAxleOptions<D, {}, Response<UserModel>>) {
+export function useApiGetUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/get-user',
     runner: axle.get,
@@ -28,7 +28,7 @@ export function useApiGetUser<D>(options?: UseAxleOptions<D, {}, Response<UserMo
   })
 }
 
-export function useApiAddUser<D>(options?: UseAxleOptions<D, {}, Response<UserModel>>) {
+export function useApiAddUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/add-user',
     runner: axle.postJSON,
@@ -36,7 +36,7 @@ export function useApiAddUser<D>(options?: UseAxleOptions<D, {}, Response<UserMo
   })
 }
 
-export function useApiDeleteUser<D>(options?: UseAxleOptions<D, {}, Response<UserModel>>) {
+export function useApiDeleteUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/delete-user',
     runner: axle.delete,
@@ -44,7 +44,7 @@ export function useApiDeleteUser<D>(options?: UseAxleOptions<D, {}, Response<Use
   })
 }
 
-export function useApiUpdateUser<D>(options?: UseAxleOptions<D, {}, Response<UserModel>>) {
+export function useApiUpdateUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/update-user',
     runner: axle.putJSON,
@@ -52,7 +52,7 @@ export function useApiUpdateUser<D>(options?: UseAxleOptions<D, {}, Response<Use
   })
 }
 
-export function useApiPatchUser<D>(options?: UseAxleOptions<D, {}, Response<UserModel>>) {
+export function useApiPatchUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/patch-user',
     runner: axle.patchJSON,

@@ -24,7 +24,6 @@ const [users, apiGetUsers, isUsersLoading] = useApiGetUsers<UserModel[]>({
   },
 })
 const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel>({
-  immediate: true,
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)

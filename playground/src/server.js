@@ -36,15 +36,15 @@ const users = [
   },
 ]
 
-router.get('/user', async (ctx) => {
-  await delay(500)
+router.get('/user/list-user', async (ctx) => {
+  await delay(300)
   response(ctx, 200, users)
 })
 
-router.get('/user/:id', async (ctx) => {
-  await delay(500)
+router.get('/user/get-user', async (ctx) => {
+  await delay(300)
 
-  const user = users.find((user) => user.id === Number(ctx.params.id))
+  const user = users.find((user) => user.id === Number(ctx.request.query.id))
 
   if (!user) {
     response(ctx, 404, null, 'not found this user')
@@ -54,8 +54,8 @@ router.get('/user/:id', async (ctx) => {
   response(ctx, 200, user)
 })
 
-router.post('/user', async (ctx) => {
-  await delay(500)
+router.post('/user/add-user', async (ctx) => {
+  await delay(300)
 
   const user = {
     id: id++,
@@ -64,13 +64,13 @@ router.post('/user', async (ctx) => {
 
   users.push(user)
 
-  response(ctx, 200, null)
+  response(ctx, 200, user)
 })
 
 async function putOrPatch(ctx) {
-  await delay(500)
+  await delay(300)
 
-  const user = users.find((user) => user.id === Number(ctx.params.id))
+  const user = users.find((user) => user.id === Number(ctx.request.body.id))
   if (!user) {
     response(ctx, 404, null, 'not found this user')
     return
@@ -81,13 +81,13 @@ async function putOrPatch(ctx) {
   response(ctx, 200, user)
 }
 
-router.put('/user/:id', putOrPatch)
-router.patch('/user/:id', putOrPatch)
+router.put('/user/update-user', putOrPatch)
+router.patch('/user/patch-user', putOrPatch)
 
-router.delete('/user/:id', async (ctx) => {
-  await delay(500)
+router.delete('/user/delete-user', async (ctx) => {
+  await delay(300)
 
-  const index = users.findIndex((user) => user.id === Number(ctx.params.id))
+  const index = users.findIndex((user) => user.id === Number(ctx.request.query.id))
 
   if (index === -1) {
     response(ctx, 404, null, 'not found this user')

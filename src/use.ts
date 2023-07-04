@@ -9,8 +9,10 @@ export interface CreateUseAxleOptions {
   params?: any
   config?: AxleRequestConfig
   immediate?: boolean
-  dataTransformer?(data: any, prevData: any): any
-  errorTransformer?(errorResponse: Error, prevError: Error | undefined): Error
+  extra?: any
+  onBefore?(): void
+  onSuccess?(response: any, prev: any): any
+  onError?(error: Error, prev: Error | undefined): Error
 }
 
 export interface RunOptions<P> {
@@ -28,8 +30,9 @@ export interface UseAxleOptions<D, P, R> {
   params?: P
   config?: AxleRequestConfig
   immediate?: boolean
-  dataTransformer?(response: R, prevData: D): D
-  errorTransformer?(errorResponse: Error, prevError: Error | undefined): Error
+  onBefore?(): void
+  onSuccess?(response: R, prev: D): D
+  onError?(error: Error, prev: Error | undefined): Error
 }
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
@@ -39,8 +42,9 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultInitialParams = options.params
   const defaultInitialConfig = options.config
   const defaultImmediate = options.immediate ?? false
-  const defaultDataTransformer = options.dataTransformer ?? ((v) => v)
-  const defaultErrorTransformer = options.errorTransformer ?? ((v) => v)
+  const defaultOnBefore = options.onBefore ?? (() => {})
+  const defaultOnSuccess = options.onSuccess ?? ((v) => v)
+  const defaultOnError = options.onError ?? ((v) => v)
 
   const useAxle = <D = any, P = any, R = any>(
     options: UseAxleOptions<D, P, R> = {}
@@ -57,8 +61,9 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       params: initialParams = defaultInitialParams,
       config: initialConfig = defaultInitialConfig,
       immediate = defaultImmediate,
-      dataTransformer = defaultDataTransformer,
-      errorTransformer = defaultErrorTransformer
+      onBefore = defaultOnBefore,
+      onSuccess = defaultOnSuccess,
+      onError = defaultOnError,
     } = options
     const initialUrl = url
     const data = ref<D>(initialData)
@@ -76,21 +81,22 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
         throw new Error('[Axle]: Cannot found valid url, so options.url is required')
       }
 
+      onBefore()
+
       loading.value = true
 
       return runner(url, options.params, options.config)
         .then((response) => {
-          data.value = dataTransformer(response, data.value)
+          data.value = onSuccess(response, data.value)
           error.value = undefined
           loading.value = false
 
           return data.value
         })
         .catch((responseError) => {
-          data.value = initialData
-          error.value = errorTransformer(responseError, error.value)
+          error.value = onError(responseError, error.value)
           loading.value = false
-          
+
           throw responseError
         })
     }

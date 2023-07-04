@@ -1,41 +1,108 @@
 <script setup lang="ts">
-import { useApiGetUser, useApiGetUsers, useApiAddUser, useApiDeleteUser, useApiUpdateUser, useApiPatchUser, apiUser } from './apis'
+import {
+  useApiGetUser,
+  useApiGetUsers,
+  useApiAddUser,
+  useApiDeleteUser,
+  useApiUpdateUser,
+  useApiPatchUser,
+  UserModel,
+} from './apis'
 
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, apiGetUsers, usersLoading] = useApiGetUsers()
-const [user, apiGetUser, userLoading] = useApiGetUser(id.value)
-const [addedUser, apiAddUser] = useApiAddUser()
-const [updatedUser, apiUpdateUser] = useApiUpdateUser()
-const [patchedUser, apiPatchUser] = useApiPatchUser()
-const [deletedUser, apiDeleteUser] = useApiDeleteUser()
+const [users, apiGetUsers, isUsersLoading] = useApiGetUsers<UserModel[]>({
+  immediate: true,
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-const userModel = reactive({
-  id: undefined,
+    return response.data
+  },
+})
+const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel>({
+  immediate: true,
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
+
+    return response.data
+  },
+})
+const [addedUser, apiAddUser] = useApiAddUser<UserModel>({
+  onBefore() {
+    Snackbar.loading('Adding!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
+
+    Snackbar.success('Add User Success!')
+    return response.data
+  },
+})
+const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel>({
+  onBefore() {
+    Snackbar.loading('Updating!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
+
+    Snackbar.success('Update User Success!')
+    return response.data
+  },
+})
+const [patchedUser] = useApiPatchUser<UserModel>({
+  onBefore() {
+    Snackbar.loading('Patching!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
+
+    Snackbar.success('Patch User Success!')
+    return response.data
+  },
+})
+const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel>({
+  onBefore() {
+    Snackbar.loading('Deleting!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
+
+    Snackbar.success('Delete User Success!')
+    return response.data
+  },
+})
+
+const userModel = reactive<UserModel>({
+  id: '',
   name: '',
 })
 
 async function handleSubmit() {
-  Snackbar.loading('Submitting!')
-
-  const [{ code }] = userModel.id
-    ? await apiUpdateUser({ url: apiUser(userModel.id), params: userModel })
-    : await apiAddUser({ params: userModel })
-
-  if (code === 200) {
-    Snackbar.success('Submitting Success!')
-  }
+  const options = { params: userModel }
+  userModel.id ? await apiUpdateUser(options) : await apiAddUser(options)
 }
 
 async function handleDelete() {
-  Snackbar.loading('Deleting!')
-
-  const [{ code }] = await apiDeleteUser({ url: apiUser(deleteId.value) })
-
-  if (code === 200) {
-    Snackbar.success('Deleting Success!')
-  }
+  await apiDeleteUser({ params: { id: deleteId.value } })
 }
 
 watch(
@@ -47,7 +114,7 @@ watch(
 <template>
   <var-space direction="column">
     <var-cell>name: getUsers</var-cell>
-    <var-cell>loading: {{ usersLoading }}</var-cell>
+    <var-cell>loading: {{ isUsersLoading }}</var-cell>
     <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
   </var-space>
 
@@ -56,11 +123,11 @@ watch(
   <var-space direction="column">
     <var-space align="center">
       <var-input type="number" variant="outlined" v-model="id" />
-      <var-button type="primary" @click="apiGetUser({ url: apiUser(id) })">Search</var-button>
+      <var-button type="primary" @click="apiGetUser({ params: { id } })">Search</var-button>
     </var-space>
 
     <var-cell>name: getUser</var-cell>
-    <var-cell>loading: {{ userLoading }}</var-cell>
+    <var-cell>loading: {{ isUserLoading }}</var-cell>
     <var-cell>data: {{ user ?? 'No Data' }}</var-cell>
   </var-space>
 

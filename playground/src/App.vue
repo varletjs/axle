@@ -17,30 +17,27 @@ const [users, apiGetUsers, isUsersLoading] = useApiGetUsers<UserModel[]>({
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     return response.data
   },
 })
-const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel | null>({
+const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel>({
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     return response.data
   },
 })
-const [addedUser, apiAddUser] = useApiAddUser<UserModel | null>({
+const [addedUser, apiAddUser] = useApiAddUser<UserModel>({
   onBefore() {
     Snackbar.loading('Adding!')
   },
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     Snackbar.success('Add User Success!')
@@ -54,7 +51,6 @@ const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel | null>({
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     Snackbar.success('Update User Success!')
@@ -68,7 +64,6 @@ const [patchedUser] = useApiPatchUser<UserModel | null>({
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     Snackbar.success('Patch User Success!')
@@ -82,7 +77,6 @@ const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel | null>({
   onSuccess(response) {
     if (response.code !== 200) {
       Snackbar(response.message)
-      return
     }
 
     Snackbar.success('Delete User Success!')

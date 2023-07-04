@@ -21,8 +21,8 @@ export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   onError?(error: Error, prev: Error | undefined): Error
 }
 
-export type UseAxleReturn<D = any, R = any, P = Record<string, any>> = [
-  data: Ref<UnwrapRef<D | R | undefined | null>>,
+export type UseAxleReturn<D, P> = [
+  data: Ref<UnwrapRef<D>>,
   run: Run<D, P>,
   loading: Ref<UnwrapRef<boolean>>,
   extra: { error: Ref<UnwrapRef<Error | undefined>> }
@@ -31,7 +31,7 @@ export type UseAxleReturn<D = any, R = any, P = Record<string, any>> = [
 export function createUseAxle() {
   const useAxle = <D = any, R = any, P = Record<string, any>>(
     options: UseAxleOptions<D, R, P>
-  ): UseAxleReturn<D, R, P> => {
+  ): UseAxleReturn<D, P> => {
     const {
       url,
       runner,

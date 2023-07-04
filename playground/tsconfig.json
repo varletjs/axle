@@ -10,6 +10,7 @@
     "allowJs": true,
     "outDir": "lib",
     "esModuleInterop": true,
+    "strictNullChecks": true,
     "lib": ["esnext", "dom"],
     "types": ["vue/macros-global", "vite/client"],
     "paths": {

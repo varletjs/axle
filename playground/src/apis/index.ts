@@ -12,7 +12,9 @@ export interface UserModel {
   name: string
 }
 
-export function useApiGetUsers<D>(options?: UseAxleOptions<D, Response<UserModel[]>>) {
+export type UseApiOptions<D = any, R = any, P = Record<string, any>> = Partial<UseAxleOptions<D, R, P>>
+
+export function useApiGetUsers<D>(options?: UseApiOptions<D, Response<UserModel[]>>) {
   return useAxle({
     url: '/user/list-user',
     runner: axle.get,
@@ -20,7 +22,7 @@ export function useApiGetUsers<D>(options?: UseAxleOptions<D, Response<UserModel
   })
 }
 
-export function useApiGetUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
+export function useApiGetUser<D>(options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/get-user',
     runner: axle.get,
@@ -28,11 +30,11 @@ export function useApiGetUser<D>(options?: UseAxleOptions<D, Response<UserModel>
   })
 }
 
-export function useApiAddUser<D>(options?: UseAxleOptions<D, Response<UserModel>>) {
+export function useApiAddUser<D>(options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
     url: '/user/add-user',
     runner: axle.postJSON,
-    ...options
+    ...options,
   })
 }
 
@@ -40,7 +42,7 @@ export function useApiDeleteUser<D>(options?: UseAxleOptions<D, Response<UserMod
   return useAxle({
     url: '/user/delete-user',
     runner: axle.delete,
-    ...options
+    ...options,
   })
 }
 
@@ -48,7 +50,7 @@ export function useApiUpdateUser<D>(options?: UseAxleOptions<D, Response<UserMod
   return useAxle({
     url: '/user/update-user',
     runner: axle.putJSON,
-    ...options
+    ...options,
   })
 }
 
@@ -56,6 +58,6 @@ export function useApiPatchUser<D>(options?: UseAxleOptions<D, Response<UserMode
   return useAxle({
     url: '/user/patch-user',
     runner: axle.patchJSON,
-    ...options
+    ...options,
   })
 }

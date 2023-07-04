@@ -23,72 +23,72 @@ const [users, apiGetUsers, isUsersLoading] = useApiGetUsers<UserModel[]>({
     return response.data
   },
 })
-// const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel>({
-//   onSuccess(response) {
-//     if (response.code !== 200) {
-//       Snackbar(response.message)
-//       return
-//     }
+const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel | null>({
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-//     return response.data
-//   },
-// })
-// const [addedUser, apiAddUser] = useApiAddUser<UserModel>({
-//   onBefore() {
-//     Snackbar.loading('Adding!')
-//   },
-//   onSuccess(response) {
-//     if (response.code !== 200) {
-//       Snackbar(response.message)
-//       return
-//     }
+    return response.data
+  },
+})
+const [addedUser, apiAddUser] = useApiAddUser<UserModel | null>({
+  onBefore() {
+    Snackbar.loading('Adding!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-//     Snackbar.success('Add User Success!')
-//     return response.data
-//   },
-// })
-// const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel>({
-//   onBefore() {
-//     Snackbar.loading('Updating!')
-//   },
-//   onSuccess(response) {
-//     if (response.code !== 200) {
-//       Snackbar(response.message)
-//       return
-//     }
+    Snackbar.success('Add User Success!')
+    return response.data
+  },
+})
+const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel | null>({
+  onBefore() {
+    Snackbar.loading('Updating!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-//     Snackbar.success('Update User Success!')
-//     return response.data
-//   },
-// })
-// const [patchedUser] = useApiPatchUser<UserModel>({
-//   onBefore() {
-//     Snackbar.loading('Patching!')
-//   },
-//   onSuccess(response) {
-//     if (response.code !== 200) {
-//       Snackbar(response.message)
-//       return
-//     }
+    Snackbar.success('Update User Success!')
+    return response.data
+  },
+})
+const [patchedUser] = useApiPatchUser<UserModel | null>({
+  onBefore() {
+    Snackbar.loading('Patching!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-//     Snackbar.success('Patch User Success!')
-//     return response.data
-//   },
-// })
-// const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel>({
-//   onBefore() {
-//     Snackbar.loading('Deleting!')
-//   },
-//   onSuccess(response) {
-//     if (response.code !== 200) {
-//       Snackbar(response.message)
-//       return
-//     }
+    Snackbar.success('Patch User Success!')
+    return response.data
+  },
+})
+const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel | null>({
+  onBefore() {
+    Snackbar.loading('Deleting!')
+  },
+  onSuccess(response) {
+    if (response.code !== 200) {
+      Snackbar(response.message)
+      return
+    }
 
-//     Snackbar.success('Delete User Success!')
-//     return response.data
-//   },
-// })
+    Snackbar.success('Delete User Success!')
+    return response.data
+  },
+})
 
 const userModel = reactive<UserModel>({
   id: '',

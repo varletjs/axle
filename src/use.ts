@@ -7,29 +7,31 @@ export interface RunOptions<P> {
   config?: AxleRequestConfig
 }
 
-export type Run<D, R, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D | R | undefined | null>>
+export type Run<D, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D>>
 
 export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   url: string
   runner: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
-  data?: D | R | undefined | null
+  data: D
   params?: P
   config?: AxleRequestConfig
   immediate?: boolean
   onBefore?(): void
-  onSuccess?(response: UnwrapRef<R>, prev: UnwrapRef<D | R | undefined | null>): UnwrapRef<D | R>
+  onSuccess?(response: UnwrapRef<R>, prev: UnwrapRef<D>): UnwrapRef<D>
   onError?(error: Error, prev: Error | undefined): Error
 }
 
 export type UseAxleReturn<D = any, R = any, P = Record<string, any>> = [
   data: Ref<UnwrapRef<D | R | undefined | null>>,
-  run: Run<D, R, P>,
+  run: Run<D, P>,
   loading: Ref<UnwrapRef<boolean>>,
   extra: { error: Ref<UnwrapRef<Error | undefined>> }
 ]
 
 export function createUseAxle() {
-  const useAxle = <D = any, R = any, P = Record<string, any>>(options: UseAxleOptions<D, R, P>): UseAxleReturn<D, R, P> => {
+  const useAxle = <D = any, R = any, P = Record<string, any>>(
+    options: UseAxleOptions<D, R, P>
+  ): UseAxleReturn<D, R, P> => {
     const {
       url,
       runner,
@@ -38,15 +40,15 @@ export function createUseAxle() {
       params: initialParams,
       config: initialConfig,
       onBefore = () => {},
-      onSuccess = (response) => response,
+      onSuccess = (response) => response as unknown as UnwrapRef<D>,
       onError = (error) => error,
     } = options
     const initialUrl = url
-    const data = ref<D | R | undefined | null>(initialData)
+    const data = ref<D>(initialData)
     const loading = ref(false)
     const error = ref<Error>()
 
-    const run: Run<D, R, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D | R | undefined | null>> => {
+    const run: Run<D, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D>> => {
       const url = options.url ?? initialUrl
 
       onBefore()

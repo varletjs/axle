@@ -12,7 +12,7 @@ import {
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, apiGetUsers, isUsersLoading] = useApiGetUsers({
+const [users, apiGetUsers, isUsersLoading] = useApiGetUsers<UserModel[]>({
   data: [],
   immediate: true,
   onSuccess(response) {
@@ -23,7 +23,7 @@ const [users, apiGetUsers, isUsersLoading] = useApiGetUsers({
     return response.data
   },
 })
-const [user, apiGetUser, isUserLoading] = useApiGetUser({
+const [user, apiGetUser, isUserLoading] = useApiGetUser<UserModel>({
   data: {},
   onSuccess(response) {
     if (response.code !== 200) {
@@ -33,7 +33,7 @@ const [user, apiGetUser, isUserLoading] = useApiGetUser({
     return response.data
   },
 })
-const [addedUser, apiAddUser] = useApiAddUser({
+const [addedUser, apiAddUser] = useApiAddUser<UserModel>({
   data: {},
   onBefore() {
     Snackbar.loading('Adding!')
@@ -47,7 +47,7 @@ const [addedUser, apiAddUser] = useApiAddUser({
     return response.data
   },
 })
-const [updatedUser, apiUpdateUser] = useApiUpdateUser({
+const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel>({
   data: {},
   onBefore() {
     Snackbar.loading('Updating!')
@@ -61,7 +61,7 @@ const [updatedUser, apiUpdateUser] = useApiUpdateUser({
     return response.data
   },
 })
-const [patchedUser] = useApiPatchUser({
+const [patchedUser] = useApiPatchUser<UserModel>({
   data: {},
   onBefore() {
     Snackbar.loading('Patching!')
@@ -75,7 +75,7 @@ const [patchedUser] = useApiPatchUser({
     return response.data
   },
 })
-const [deletedUser, apiDeleteUser] = useApiDeleteUser({
+const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel>({
   data: {},
   onBefore() {
     Snackbar.loading('Deleting!')

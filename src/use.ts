@@ -23,7 +23,7 @@ export interface RunOptions<P> {
 
 export type Run<D, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D>>
 
-export interface UseAxleOptions<D, P, R> {
+export interface UseAxleOptions<D = any, P = Record<string, any>, R = any> {
   runner?: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   url?: string
   data?: D
@@ -46,7 +46,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const defaultOnSuccess = options.onSuccess ?? ((v) => v)
   const defaultOnError = options.onError ?? ((v) => v)
 
-  const useAxle = <D = any, P = any, R = any>(
+  const useAxle = <D = any, P = Record<string, any>, R = any>(
     options: UseAxleOptions<D, P, R> = {}
   ): [
     data: Ref<UnwrapRef<D>>,

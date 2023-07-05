@@ -17,18 +17,28 @@ export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   config?: AxleRequestConfig
   immediate?: boolean
   onBefore?(): void
-  onSuccess?(response: UnwrapRef<R>, prev: UnwrapRef<D>): UnwrapRef<D>
+  onAfter?(): void
+  onTransform?(response: UnwrapRef<R>, prev: UnwrapRef<D>): UnwrapRef<D>
+  onSuccess?(response: UnwrapRef<R>): void
   onError?(error: Error, prev: Error | undefined): Error
 }
 
 export type UseAxleReturn<D, P> = [
   data: Ref<UnwrapRef<D>>,
   run: Run<D, P>,
-  loading: Ref<UnwrapRef<boolean>>,
-  extra: { error: Ref<UnwrapRef<Error | undefined>> }
+  extra: {
+    loading: Ref<UnwrapRef<boolean>>
+    error: Ref<UnwrapRef<Error | undefined>>
+  }
 ]
 
-export function createUseAxle() {
+export interface CreateUseAxleOptions {
+  onTransform?(response: any, prev: any): any
+}
+
+export function createUseAxle(options: CreateUseAxleOptions = {}) {
+  const { onTransform: defaultOnTransform } = options
+  
   const useAxle = <D = any, R = any, P = Record<string, any>>(
     options: UseAxleOptions<D, R, P>
   ): UseAxleReturn<D, P> => {
@@ -40,7 +50,9 @@ export function createUseAxle() {
       params: initialParams,
       config: initialConfig,
       onBefore = () => {},
-      onSuccess = (response) => response as unknown as UnwrapRef<D>,
+      onAfter = () => {},
+      onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ?? ((response) => response as unknown as UnwrapRef<D>),
+      onSuccess = () => {},
       onError = (error) => error,
     } = options
     const initialUrl = url
@@ -57,17 +69,21 @@ export function createUseAxle() {
 
       return runner(url, options.params, options.config)
         .then((response) => {
-          data.value = onSuccess(response as UnwrapRef<R>, data.value)
+          data.value = onTransform(response as UnwrapRef<R>, data.value)
           error.value = undefined
-          loading.value = false
+
+          onSuccess(response as UnwrapRef<R>)
 
           return data.value
         })
         .catch((responseError) => {
           error.value = onError(responseError, error.value)
-          loading.value = false
 
           throw responseError
+        })
+        .finally(() => {
+          loading.value = false
+          onAfter()
         })
     }
 
@@ -82,8 +98,8 @@ export function createUseAxle() {
     return [
       data,
       run,
-      loading,
       {
+        loading,
         error,
       },
     ]

@@ -12,51 +12,56 @@ export interface UserModel {
   name?: string
 }
 
-export type UseApiOptions<D = any, R = any, P = Record<string, any>> = Pick<UseAxleOptions<D, R, P>, 'data'> &
-  Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
+export type UseApiOptions<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
 
-export function useApiGetUsers<D>(options: UseApiOptions<D, Response<UserModel[]>>) {
+export function useApiGetUsers<D>(data: D, options: UseApiOptions<D, Response<UserModel[]>>) {
   return useAxle({
+    data,
     url: '/user/list-user',
     runner: axle.get,
     ...options,
   })
 }
 
-export function useApiGetUser<D>(options: UseApiOptions<D, Response<UserModel>>) {
+export function useApiGetUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
+    data,
     url: '/user/get-user',
     runner: axle.get,
     ...options,
   })
 }
 
-export function useApiAddUser<D>(options: UseApiOptions<D, Response<UserModel>>) {
+export function useApiAddUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
+    data,
     url: '/user/add-user',
     runner: axle.postJSON,
     ...options,
   })
 }
 
-export function useApiDeleteUser<D>(options: UseApiOptions<D, Response<UserModel>>) {
+export function useApiDeleteUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
+    data,
     url: '/user/delete-user',
     runner: axle.delete,
     ...options,
   })
 }
 
-export function useApiUpdateUser<D>(options: UseApiOptions<D, Response<UserModel>>) {
+export function useApiUpdateUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
+    data,
     url: '/user/update-user',
     runner: axle.putJSON,
     ...options,
   })
 }
 
-export function useApiPatchUser<D>(options: UseApiOptions<D, Response<UserModel>>) {
+export function useApiPatchUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
   return useAxle({
+    data,
     url: '/user/patch-user',
     runner: axle.patchJSON,
     ...options,

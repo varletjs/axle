@@ -6,23 +6,16 @@ const axle = createAxle({
 })
 
 const useAxle = createUseAxle({
-  onTransform: (response) => response.data 
+  onTransform: (response) => response.data,
 })
 
 axle.axios.interceptors.response.use(
   (response) => {
-    const { status, data } = response
-
-    if (status !== 200) {
-      Snackbar.error(data.message)
-      return data
+    if (response.data.code !== 200) {
+      Snackbar.warning(response.data.message)
     }
 
-    if (data.code !== 200) {
-      Snackbar(data.message)
-    }
-
-    return data
+    return response.data
   },
   (error) => {
     Snackbar.error(error.message)

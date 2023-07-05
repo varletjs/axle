@@ -14,7 +14,7 @@ export interface User {
 
 export type Options<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
 
-export function useApiGetUsers<D>(data: D, options: Options<D, Response<User[]>>) {
+export function useApiGetUsers<D>(data: D, options?: Options<D, Response<User[]>>) {
   return useAxle({
     data,
     url: '/user/list-user',

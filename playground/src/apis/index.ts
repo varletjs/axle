@@ -7,14 +7,14 @@ export type Response<T> = {
   message: string
 }
 
-export interface UserModel {
+export interface User {
   id?: string
   name?: string
 }
 
-export type UseApiOptions<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
+export type Options<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
 
-export function useApiGetUsers<D>(data: D, options: UseApiOptions<D, Response<UserModel[]>>) {
+export function useApiGetUsers<D>(data: D, options: Options<D, Response<User[]>>) {
   return useAxle({
     data,
     url: '/user/list-user',
@@ -23,7 +23,7 @@ export function useApiGetUsers<D>(data: D, options: UseApiOptions<D, Response<Us
   })
 }
 
-export function useApiGetUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
+export function useApiGetUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/get-user',
@@ -32,7 +32,7 @@ export function useApiGetUser<D>(data: D, options?: UseApiOptions<D, Response<Us
   })
 }
 
-export function useApiAddUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
+export function useApiAddUser<D>(data: D, options?: Options<D, Response<UserModel>>) {
   return useAxle({
     data,
     url: '/user/add-user',
@@ -41,7 +41,7 @@ export function useApiAddUser<D>(data: D, options?: UseApiOptions<D, Response<Us
   })
 }
 
-export function useApiDeleteUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
+export function useApiDeleteUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/delete-user',
@@ -50,7 +50,7 @@ export function useApiDeleteUser<D>(data: D, options?: UseApiOptions<D, Response
   })
 }
 
-export function useApiUpdateUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
+export function useApiUpdateUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/update-user',
@@ -59,7 +59,7 @@ export function useApiUpdateUser<D>(data: D, options?: UseApiOptions<D, Response
   })
 }
 
-export function useApiPatchUser<D>(data: D, options?: UseApiOptions<D, Response<UserModel>>) {
+export function useApiPatchUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/patch-user',

@@ -20,7 +20,7 @@ export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   onAfter?(): void
   onTransform?(response: UnwrapRef<R>, prev: UnwrapRef<D>): UnwrapRef<D>
   onSuccess?(response: UnwrapRef<R>): void
-  onError?(error: Error, prev: Error | undefined): Error
+  onError?(error: Error): void
 }
 
 export type UseAxleReturn<D, P> = [
@@ -53,7 +53,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ?? ((response) => response as unknown as UnwrapRef<D>),
       onSuccess = () => {},
-      onError = (error) => error,
+      onError = () => {},
     } = options
     const initialUrl = url
     const data = ref<D>(initialData)
@@ -77,7 +77,9 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
           return data.value
         })
         .catch((responseError) => {
-          error.value = onError(responseError, error.value)
+          error.value = responseError
+
+          onError(responseError)
 
           throw responseError
         })

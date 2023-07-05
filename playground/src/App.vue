@@ -6,15 +6,15 @@ import {
   useApiDeleteUser,
   useApiUpdateUser,
   useApiPatchUser,
-  UserModel,
+  User,
 } from './apis'
 
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, apiGetUsers, { loading: isUsersLoading }] = useApiGetUsers<UserModel[]>([], { immediate: true })
-const [user, apiGetUser, { loading: isUserLoading }] = useApiGetUser<UserModel>({})
-const [addedUser, apiAddUser] = useApiAddUser<UserModel>(
+const [users, apiGetUsers, { loading: isUsersLoading }] = useApiGetUsers<User[]>([], { immediate: true })
+const [user, apiGetUser, { loading: isUserLoading }] = useApiGetUser<User>({})
+const [addedUser, apiAddUser] = useApiAddUser<User>(
   {},
   {
     onBefore() {
@@ -27,7 +27,7 @@ const [addedUser, apiAddUser] = useApiAddUser<UserModel>(
     },
   }
 )
-const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel>(
+const [updatedUser, apiUpdateUser] = useApiUpdateUser<User>(
   {},
   {
     onBefore() {
@@ -40,7 +40,7 @@ const [updatedUser, apiUpdateUser] = useApiUpdateUser<UserModel>(
     },
   }
 )
-const [patchedUser] = useApiPatchUser<UserModel>(
+const [patchedUser] = useApiPatchUser<User>(
   {},
   {
     onBefore() {
@@ -53,7 +53,7 @@ const [patchedUser] = useApiPatchUser<UserModel>(
     },
   }
 )
-const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel>(
+const [deletedUser, apiDeleteUser] = useApiDeleteUser<User>(
   {},
   {
     onBefore() {
@@ -67,14 +67,14 @@ const [deletedUser, apiDeleteUser] = useApiDeleteUser<UserModel>(
   }
 )
 
-const userModel = reactive<UserModel>({
+const userRecord = reactive<User>({
   id: '',
   name: '',
 })
 
 async function handleSubmit() {
-  const options = { params: userModel }
-  userModel.id ? await apiUpdateUser(options) : await apiAddUser(options)
+  const options = { params: user }
+  userRecord.id ? await apiUpdateUser(options) : await apiAddUser(options)
 }
 
 async function handleDelete() {
@@ -111,8 +111,8 @@ watch(
 
   <var-space direction="column">
     <var-space>
-      <var-input type="number" variant="outlined" clearable placeholder="user.id" v-model="userModel.id" />
-      <var-input variant="outlined" placeholder="user.name" v-model="userModel.name" />
+      <var-input type="number" variant="outlined" clearable placeholder="user.id" v-model="userRecord.id" />
+      <var-input variant="outlined" placeholder="user.name" v-model="userRecord.name" />
     </var-space>
     <var-button type="primary" @click="handleSubmit">Submit</var-button>
   </var-space>

@@ -32,7 +32,7 @@ export function useApiGetUser<D>(data: D, options?: Options<D, Response<User>>) 
   })
 }
 
-export function useApiAddUser<D>(data: D, options?: Options<D, Response<UserModel>>) {
+export function useApiAddUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/add-user',

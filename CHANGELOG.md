@@ -1,3 +1,12 @@
+## [0.0.23](https://github.com/varletjs/axle/compare/v0.0.22...v0.0.23) (2023-07-05)
+
+
+### Bug Fixes
+
+* fix onError ([82fb1da](https://github.com/varletjs/axle/commit/82fb1daf6b6fcc46e5665603dd08180583d77cac))
+
+
+
 ## [0.0.22](https://github.com/varletjs/axle/compare/v0.0.21...v0.0.22) (2023-07-05)
 
 

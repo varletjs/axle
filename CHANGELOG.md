@@ -1,3 +1,17 @@
+## [0.0.25](https://github.com/varletjs/axle/compare/v0.0.24...v0.0.25) (2023-07-06)
+
+
+### Bug Fixes
+
+* fix args ([e312004](https://github.com/varletjs/axle/commit/e3120048696da1dd7f5653d1b709f9c914b989b3))
+
+
+### Features
+
+* support retry ([aae87f0](https://github.com/varletjs/axle/commit/aae87f013d10668479c4f8f8838c4918ec0e734a))
+
+
+
 ## [0.0.24](https://github.com/varletjs/axle/compare/v0.0.23...v0.0.24) (2023-07-06)
 
 

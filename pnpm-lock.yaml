@@ -20,8 +20,8 @@ devDependencies:
     specifier: ^6.9.7
     version: 6.9.7
   '@varlet/cli':
-    specifier: ^2.11.1
-    version: 2.11.1(@varlet/icons@2.11.1)(@varlet/touch-emulator@2.11.1)(@vue/runtime-core@3.2.47)(@vue/test-utils@2.3.2)(clipboard@2.0.11)(live-server@1.2.2)(lodash-es@4.17.21)(vue-router@4.2.0)(vue@3.3.4)
+    specifier: ^2.11.8
+    version: 2.11.8(@varlet/icons@2.11.8)(@varlet/touch-emulator@2.11.8)(@vue/runtime-core@3.2.47)(@vue/test-utils@2.3.2)(clipboard@2.0.11)(live-server@1.2.2)(lodash-es@4.17.21)(vue-router@4.2.0)(vue@3.3.4)
   rimraf:
     specifier: ^5.0.1
     version: 5.0.1
@@ -29,7 +29,7 @@ devDependencies:
     specifier: ^5.1.5
     version: 5.1.5
   vue:
-    specifier: ^3.3.4
+    specifier: 3.3.4
     version: 3.3.4
 
 packages:
@@ -1773,6 +1773,7 @@ packages:
 
   /@sinonjs/fake-timers@10.2.0:
     resolution: {integrity: sha512-OPwQlEdg40HAj5KNF8WW6q2KG4Z+cBCZb3m4ninfTZKaBmbIJodviQsDBoYMPHkOyJJMHnOJo5j2+LKDOhOACg==}
+    deprecated: Use version 10.1.0. Version 10.2.0 has potential breaking issues
     dependencies:
       '@sinonjs/commons': 3.0.0
     dev: true
@@ -1898,13 +1899,13 @@ packages:
       '@types/yargs-parser': 21.0.0
     dev: true
 
-  /@varlet/cli@2.11.1(@varlet/icons@2.11.1)(@varlet/touch-emulator@2.11.1)(@vue/runtime-core@3.2.47)(@vue/test-utils@2.3.2)(clipboard@2.0.11)(live-server@1.2.2)(lodash-es@4.17.21)(vue-router@4.2.0)(vue@3.3.4):
-    resolution: {integrity: sha512-0wNFCDytAoJu4wsPW9OeoQMPrblWwMOETyZ6m1Tof+HBg285h69x3dvd51kuI7hBs6Ee3NUtl5E4VQ64tmCq7w==}
+  /@varlet/cli@2.11.8(@varlet/icons@2.11.8)(@varlet/touch-emulator@2.11.8)(@vue/runtime-core@3.2.47)(@vue/test-utils@2.3.2)(clipboard@2.0.11)(live-server@1.2.2)(lodash-es@4.17.21)(vue-router@4.2.0)(vue@3.3.4):
+    resolution: {integrity: sha512-a8HqNkGNhTvXEQ33+96t1+jFJmCReoZg0j4sy2Lgvks+kUPtV9Lv6J2sZOcwUQsanYKOcy2J0sf82tQ5hjARsg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
-      '@varlet/icons': 2.11.1
-      '@varlet/touch-emulator': 2.11.1
+      '@varlet/icons': 2.11.8
+      '@varlet/touch-emulator': 2.11.8
       '@vue/runtime-core': 3.2.47
       '@vue/test-utils': 2.3.2
       clipboard: ^2.0.6
@@ -1918,10 +1919,10 @@ packages:
       '@babel/plugin-transform-typescript': 7.21.3(@babel/core@7.21.8)
       '@babel/preset-env': 7.18.6(@babel/core@7.21.8)
       '@babel/preset-typescript': 7.18.6(@babel/core@7.21.8)
-      '@varlet/icons': 2.11.1
-      '@varlet/shared': 2.11.1
-      '@varlet/touch-emulator': 2.11.1
-      '@varlet/vite-plugins': 2.11.1
+      '@varlet/icons': 2.11.8
+      '@varlet/shared': 2.11.8
+      '@varlet/touch-emulator': 2.11.8
+      '@varlet/vite-plugins': 2.11.8
       '@vitejs/plugin-vue': 4.2.2(vite@4.3.5)(vue@3.3.4)
       '@vitejs/plugin-vue-jsx': 3.0.1(vite@4.3.5)(vue@3.3.4)
       '@vue/babel-plugin-jsx': 1.1.1(@babel/core@7.21.8)
@@ -1970,26 +1971,21 @@ packages:
       - utf-8-validate
     dev: true
 
-  /@varlet/icons@2.11.1:
-    resolution: {integrity: sha512-J/etC9Sc+M+1jZJDQje3fB20KUeweXuIKxR+BMHfSZmDaeMEf7o3ATStQp2CWJxTSJE9FC5VtEgVaXEwkBK4cg==}
-    dev: true
-
-  /@varlet/shared@2.11.1:
-    resolution: {integrity: sha512-QAPtVWtIuZwy0+TPGc7wzVLo6aghiMXayAkFtcJXooIzEaNXOTF69Xljf9UR2gvMYSPiyZDylPf5dRsEepFiJQ==}
+  /@varlet/icons@2.11.8:
+    resolution: {integrity: sha512-LbpzNzPjlZR8O4niz5Vf6DHiVuaaa7GHYnKE/0K13hQ+YraV4bGzVriM1vNVXtSzLEphYrUjnG+c0znnR7XgkA==}
     dev: true
 
   /@varlet/shared@2.11.8:
     resolution: {integrity: sha512-PukW5LrzUyUvIkwqHsytaMZZYVv9P33BCG6fRGgQLS9I+JjJTf/VVo17HjEb3h23IDvqFpgE3034BOtiX1zCYg==}
-    dev: false
 
-  /@varlet/touch-emulator@2.11.1:
-    resolution: {integrity: sha512-qQ8b4NTU0icAr8FpWnjj9JQVfy6gasG7fAP90OeIC4J8TtkuikX8emdAt5ulgluLwsHnTtbmnbez4fULDAY8Tg==}
+  /@varlet/touch-emulator@2.11.8:
+    resolution: {integrity: sha512-yxdVHsZsz/GwtMXsrHTC7hE4UxsWhRkPlJAXKMW55XJpvZHVbxdmdgiyryBlCBtj+BXfqH5f4cGXusccvznzAw==}
     dev: true
 
-  /@varlet/vite-plugins@2.11.1:
-    resolution: {integrity: sha512-IuvcbxCnL594EMYmoFxw28iMsmrC7QCXOdrYhF99Sfl3tGhSGj8Af7Oc7JBCHFybZczp8RahS/PZzqTMFgm6Vg==}
+  /@varlet/vite-plugins@2.11.8:
+    resolution: {integrity: sha512-rmpOxp2WwnPSS8KkAmBomUgfgSz5E9KltNUKzN6lzrSuCOseH0WjcU+/4gqtpxWSQrhmMiOp595zoGbsk4ZHVQ==}
     dependencies:
-      '@varlet/shared': 2.11.1
+      '@varlet/shared': 2.11.8
       ejs: 3.1.8
       fs-extra: 9.1.0
       highlight.js: 10.7.3

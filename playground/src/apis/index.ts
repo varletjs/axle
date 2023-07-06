@@ -67,3 +67,12 @@ export function useApiPatchUser<D>(data: D, options?: Options<D, Response<User>>
     ...options,
   })
 }
+
+export function useApiDownloadFile<D>(data: D, options?: Options<D, Blob>) {
+  return useAxle({
+    data,
+    url: 'http://localhost:5173/logo.png',
+    runner: axle.getBlob,
+    ...options,
+  })
+}

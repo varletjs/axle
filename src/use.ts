@@ -1,4 +1,4 @@
-import { ref, type Ref, type UnwrapRef } from 'vue'
+import { ref, type Ref } from 'vue'
 import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance.js'
 
 export interface RunOptions<P> {
@@ -7,7 +7,7 @@ export interface RunOptions<P> {
   config?: AxleRequestConfig
 }
 
-export type Run<D, P> = (options?: RunOptions<P>) => Promise<UnwrapRef<D>>
+export type Run<D, P> = (options?: RunOptions<P>) => Promise<D>
 
 export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   url: string
@@ -18,17 +18,20 @@ export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   immediate?: boolean
   onBefore?(): void
   onAfter?(): void
-  onTransform?(response: UnwrapRef<R>, prev: UnwrapRef<D>): UnwrapRef<D>
-  onSuccess?(response: UnwrapRef<R>): void
+  onTransform?(response: R, prev: D): D
+  onSuccess?(response: R): void
   onError?(error: Error): void
 }
 
 export type UseAxleReturn<D, P> = [
-  data: Ref<UnwrapRef<D>>,
+  data: Ref<D>,
   run: Run<D, P>,
   extra: {
-    loading: Ref<UnwrapRef<boolean>>
-    error: Ref<UnwrapRef<Error | undefined>>
+    uploadProgress: Ref<number>
+    downloadProgress: Ref<number>
+    loading: Ref<boolean>
+    error: Ref<Error | undefined>
+    abort(): void
   }
 ]
 
@@ -38,10 +41,8 @@ export interface CreateUseAxleOptions {
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const { onTransform: defaultOnTransform } = options
-  
-  const useAxle = <D = any, R = any, P = Record<string, any>>(
-    options: UseAxleOptions<D, R, P>
-  ): UseAxleReturn<D, P> => {
+
+  const useAxle = <D = any, R = any, P = Record<string, any>>(options: UseAxleOptions<D, R, P>) => {
     const {
       url,
       runner,
@@ -51,28 +52,57 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       config: initialConfig,
       onBefore = () => {},
       onAfter = () => {},
-      onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ?? ((response) => response as unknown as UnwrapRef<D>),
+      onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ??
+        ((response) => response as unknown as D),
       onSuccess = () => {},
       onError = () => {},
     } = options
+
     const initialUrl = url
-    const data = ref<D>(initialData)
+    const data = ref<D>(initialData) as Ref<D>
     const loading = ref(false)
     const error = ref<Error>()
+    const downloadProgress = ref(0)
+    const uploadProgress = ref(0)
 
-    const run: Run<D, P> = (options: RunOptions<P> = {}): Promise<UnwrapRef<D>> => {
+    let controller = new AbortController()
+
+    const abort = () => {
+      controller.abort()
+    }
+
+    const run: Run<D, P> = (options: RunOptions<P> = {}) => {
+      if (controller.signal.aborted) {
+        controller = new AbortController()
+      }
+
+      uploadProgress.value = 0
+      downloadProgress.value = 0
+
       const url = options.url ?? initialUrl
 
       onBefore()
 
       loading.value = true
 
-      return runner(url, options.params, options.config)
+      return runner(url, options.params, {
+        signal: controller.signal,
+
+        onUploadProgress(event) {
+          uploadProgress.value = event.progress ?? 0
+        },
+
+        onDownloadProgress(event) {
+          downloadProgress.value = event.progress ?? 0
+        },
+
+        ...options.config,
+      })
         .then((response) => {
-          data.value = onTransform(response as UnwrapRef<R>, data.value)
+          data.value = onTransform(response as R, data.value)
           error.value = undefined
 
-          onSuccess(response as UnwrapRef<R>)
+          onSuccess(response as R)
 
           return data.value
         })
@@ -103,8 +133,11 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       {
         loading,
         error,
+        uploadProgress,
+        downloadProgress,
+        abort,
       },
-    ]
+    ] as UseAxleReturn<D, P>
   }
 
   return useAxle

@@ -14,6 +14,9 @@ dependencies:
   '@varlet/ui':
     specifier: ^2.11.8
     version: 2.11.8(vue@3.3.1)
+  '@varlet/use':
+    specifier: ^2.12.2
+    version: 2.12.2(vue@3.3.1)
   koa:
     specifier: ^2.14.2
     version: 2.14.2
@@ -353,6 +356,10 @@ packages:
     resolution: {integrity: sha512-PukW5LrzUyUvIkwqHsytaMZZYVv9P33BCG6fRGgQLS9I+JjJTf/VVo17HjEb3h23IDvqFpgE3034BOtiX1zCYg==}
     dev: false
 
+  /@varlet/shared@2.12.2:
+    resolution: {integrity: sha512-LSABYZJCZLQHGuC7RmhK7WaChpcWI9HIriQTLLshbflNYB/I+YxAFA7a2MrJndnaN90iCFFIYITwtY3nnDkyBg==}
+    dev: false
+
   /@varlet/touch-emulator@2.11.8:
     resolution: {integrity: sha512-yxdVHsZsz/GwtMXsrHTC7hE4UxsWhRkPlJAXKMW55XJpvZHVbxdmdgiyryBlCBtj+BXfqH5f4cGXusccvznzAw==}
     dev: false
@@ -377,6 +384,15 @@ packages:
       vue: ^3.2.0
     dependencies:
       '@varlet/shared': 2.11.8
+      vue: 3.3.1
+    dev: false
+
+  /@varlet/use@2.12.2(vue@3.3.1):
+    resolution: {integrity: sha512-wDRZ/8UpTscWY/5cJ+2o6qSvl4FiECJoaLpHTK8WZC92j/zUwPJYY6vDIbImsROJW0SN9Ob4zVKJTjTqXC9Rrw==}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      '@varlet/shared': 2.12.2
       vue: 3.3.1
     dev: false
 

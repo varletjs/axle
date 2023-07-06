@@ -11,7 +11,7 @@ const useAxle = createUseAxle({
 
 axle.axios.interceptors.response.use(
   (response) => {
-    if (response.data.code !== 200) {
+    if (response.data.code !== 200 && response.data.message) {
       Snackbar.warning(response.data.message)
     }
 

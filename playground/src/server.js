@@ -42,7 +42,7 @@ router.get('/user/list-user', async (ctx) => {
 })
 
 router.get('/user/get-user', async (ctx) => {
-  await delay(300)
+  await delay(2000)
 
   const user = users.find((user) => user.id === Number(ctx.request.query.id))
 

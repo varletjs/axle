@@ -1,3 +1,17 @@
+## [0.0.24](https://github.com/varletjs/axle/compare/v0.0.23...v0.0.24) (2023-07-06)
+
+
+### Bug Fixes
+
+* update ([e8f7e69](https://github.com/varletjs/axle/commit/e8f7e695ef4c6f7bd61f633cc8c8d17bdf3bc965))
+
+
+### Features
+
+* support abort and progress ([54ee3c3](https://github.com/varletjs/axle/commit/54ee3c3c5de6c3c4222dcf11ddc60d04fd70e1b2))
+
+
+
 ## [0.0.23](https://github.com/varletjs/axle/compare/v0.0.22...v0.0.23) (2023-07-05)
 
 

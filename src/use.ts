@@ -46,7 +46,7 @@ export type UseAxleInstance<D, R, P> = [
 ]
 
 export interface CreateUseAxleOptions {
-  onTransform?(response: any, prev: any): any
+  onTransform?(response: any, refs: any): any
 }
 
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
@@ -118,7 +118,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
           ...options.config,
         })
 
-        data.value = onTransform(response as R, data.value)
+        data.value = onTransform(response as R, refs)
         error.value = undefined
         onSuccess(response as R, refs)
         loading.value = false

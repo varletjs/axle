@@ -18,6 +18,7 @@ axle.axios.interceptors.response.use(
     return response.data
   },
   (error) => {
+    console.log(error)
     Snackbar.error(error.message)
     return Promise.reject(error)
   }

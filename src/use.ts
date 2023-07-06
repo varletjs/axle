@@ -5,27 +5,37 @@ export interface RunOptions<P> {
   url?: string
   params?: P
   config?: AxleRequestConfig
+  _retryCount?: number
 }
 
-export type Run<D, P> = (options?: RunOptions<P>) => Promise<D>
+export type Run<R, P> = (options?: RunOptions<P>) => Promise<R>
+
+export interface UseAxleRefs<D> {
+  data: Ref<D>
+  loading: Ref<boolean>
+  error: Ref<Error | undefined>
+  uploadProgress: Ref<number>
+  downloadProgress: Ref<number>
+}
 
 export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
   url: string
   runner: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
   data: D
   params?: P
+  retry?: number
   config?: AxleRequestConfig
   immediate?: boolean
-  onBefore?(): void
-  onAfter?(): void
-  onTransform?(response: R, prev: D): D
-  onSuccess?(response: R): void
-  onError?(error: Error): void
+  onBefore?(refs: UseAxleRefs<D>): void
+  onAfter?(refs: UseAxleRefs<D>): void
+  onTransform?(response: R, refs: UseAxleRefs<D>): D
+  onSuccess?(response: R, refs: UseAxleRefs<D>): void
+  onError?(error: Error, refs: UseAxleRefs<D>): void
 }
 
-export type UseAxleReturn<D, P> = [
+export type UseAxleInstance<D, R, P> = [
   data: Ref<D>,
-  run: Run<D, P>,
+  run: Run<R, P>,
   extra: {
     uploadProgress: Ref<number>
     downloadProgress: Ref<number>
@@ -42,7 +52,9 @@ export interface CreateUseAxleOptions {
 export function createUseAxle(options: CreateUseAxleOptions = {}) {
   const { onTransform: defaultOnTransform } = options
 
-  const useAxle = <D = any, R = any, P = Record<string, any>>(options: UseAxleOptions<D, R, P>) => {
+  const useAxle = <D = any, R = any, P = Record<string, any>>(
+    options: UseAxleOptions<D, R, P>
+  ): UseAxleInstance<D, R, P> => {
     const {
       url,
       runner,
@@ -50,6 +62,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       data: initialData,
       params: initialParams,
       config: initialConfig,
+      retry = 0,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ??
@@ -64,14 +77,19 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
     const error = ref<Error>()
     const downloadProgress = ref(0)
     const uploadProgress = ref(0)
+    const shouldRetry = retry > 0
+
+    const refs: UseAxleRefs<D> = {
+      data,
+      loading,
+      error,
+      downloadProgress,
+      uploadProgress
+    }
 
     let controller = new AbortController()
 
-    const abort = () => {
-      controller.abort()
-    }
-
-    const run: Run<D, P> = (options: RunOptions<P> = {}) => {
+    const run: Run<R, P> = async (options: RunOptions<P> = {}) => {
       if (controller.signal.aborted) {
         controller = new AbortController()
       }
@@ -81,42 +99,50 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
 
       const url = options.url ?? initialUrl
 
-      onBefore()
+      onBefore(refs)
 
       loading.value = true
 
-      return runner(url, options.params, {
-        signal: controller.signal,
+      try {
+        const response = await runner(url, options.params, {
+          signal: controller.signal,
 
-        onUploadProgress(event) {
-          uploadProgress.value = event.progress ?? 0
-        },
+          onUploadProgress(event) {
+            uploadProgress.value = event.progress ?? 0
+          },
 
-        onDownloadProgress(event) {
-          downloadProgress.value = event.progress ?? 0
-        },
+          onDownloadProgress(event) {
+            downloadProgress.value = event.progress ?? 0
+          },
 
-        ...options.config,
-      })
-        .then((response) => {
-          data.value = onTransform(response as R, data.value)
-          error.value = undefined
-
-          onSuccess(response as R)
-
-          return data.value
+          ...options.config,
         })
-        .catch((responseError) => {
-          error.value = responseError
 
-          onError(responseError)
+        data.value = onTransform(response as R, data.value)
+        error.value = undefined
+        onSuccess(response as R, refs)
+        loading.value = false
+        onAfter(refs)
 
-          throw responseError
-        })
-        .finally(() => {
-          loading.value = false
-          onAfter()
-        })
+        return response as R
+      } catch (responseError: unknown) {
+        const currentRetryCount = options._retryCount == null ? 0 : options._retryCount
+
+        if (shouldRetry && currentRetryCount < retry) {
+          return run({ ...options, _retryCount: currentRetryCount + 1 })
+        }
+
+        error.value = responseError as Error
+        onError(responseError as Error, refs)
+        loading.value = false
+        onAfter(refs)
+
+        throw responseError
+      }
+    }
+
+    const abort = () => {
+      controller.abort()
     }
 
     if (immediate) {
@@ -137,7 +163,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
         downloadProgress,
         abort,
       },
-    ] as UseAxleReturn<D, P>
+    ]
   }
 
   return useAxle

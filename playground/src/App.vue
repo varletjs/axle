@@ -7,6 +7,7 @@ import {
   useApiUpdateUser,
   useApiPatchUser,
   useApiDownloadFile,
+  useApiThrowError,
   User,
 } from './apis'
 
@@ -14,6 +15,7 @@ const id = ref('1')
 const deleteId = ref('1')
 
 const [users, apiGetUsers, { loading: isUsersLoading }] = useApiGetUsers<User[]>([], { immediate: true })
+
 const [user, apiGetUser, { loading: isUserLoading, abort }] = useApiGetUser<User>(
   {},
   {
@@ -24,6 +26,7 @@ const [user, apiGetUser, { loading: isUserLoading, abort }] = useApiGetUser<User
     },
   }
 )
+
 const [addedUser, apiAddUser] = useApiAddUser<User>(
   {},
   {
@@ -37,6 +40,7 @@ const [addedUser, apiAddUser] = useApiAddUser<User>(
     },
   }
 )
+
 const [updatedUser, apiUpdateUser] = useApiUpdateUser<User>(
   {},
   {
@@ -50,6 +54,7 @@ const [updatedUser, apiUpdateUser] = useApiUpdateUser<User>(
     },
   }
 )
+
 const [patchedUser] = useApiPatchUser<User>(
   {},
   {
@@ -63,6 +68,7 @@ const [patchedUser] = useApiPatchUser<User>(
     },
   }
 )
+
 const [deletedUser, apiDeleteUser] = useApiDeleteUser<User>(
   {},
   {
@@ -76,9 +82,20 @@ const [deletedUser, apiDeleteUser] = useApiDeleteUser<User>(
     },
   }
 )
+
 const [file, apiDownloadFile, { downloadProgress }] = useApiDownloadFile<Blob | null>(null, {
   onTransform: (response) => response,
 })
+
+const [errorUser, apiThrowError, { loading: isThrowErrorLoading }] = useApiThrowError(
+  {},
+  {
+    onBefore(refs) {
+      refs.data.value = {}
+    },
+    retry: 3,
+  }
+)
 
 const userRecord = reactive<User>({
   id: '',
@@ -146,5 +163,14 @@ watch(
     <h3>Download Progress: {{ downloadProgress * 100 }} %</h3>
     <h3>File Size: {{ file?.size ?? 0 }}</h3>
     <var-button type="primary" @click="() => apiDownloadFile()">Download (PS: Please use slow 3G)</var-button>
+  </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-space direction="column">
+    <var-cell>name: throw error</var-cell>
+    <var-cell>loading: {{ isThrowErrorLoading }}</var-cell>
+    <var-cell>data: {{ errorUser ?? 'No Data' }}</var-cell>
+    <var-button type="primary" @click="() => apiThrowError()">Retry</var-button>
   </var-space>
 </template>

@@ -76,3 +76,12 @@ export function useApiDownloadFile<D>(data: D, options?: Options<D, Blob>) {
     ...options,
   })
 }
+
+export function useApiThrowError<D>(data: D, options?: Options<D, Response<User>>) {
+  return useAxle({
+    data,
+    url: '/user/throw-error',
+    runner: axle.get,
+    ...options,
+  })
+}

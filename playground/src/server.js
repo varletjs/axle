@@ -36,6 +36,8 @@ const users = [
   },
 ]
 
+let count = 0
+
 router.get('/user/list-user', async (ctx) => {
   await delay(300)
   response(ctx, 200, users)
@@ -52,6 +54,19 @@ router.get('/user/get-user', async (ctx) => {
   }
 
   response(ctx, 200, user)
+})
+
+router.get('/user/throw-error', async (ctx) => {
+  await delay(200)
+
+  count++
+
+  if (count % 4 === 0) {
+    response(ctx, 200, users[0])
+    return
+  }
+
+  ctx.status = 500
 })
 
 router.post('/user/add-user', async (ctx) => {

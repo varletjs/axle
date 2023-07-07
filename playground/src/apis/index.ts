@@ -14,7 +14,7 @@ export interface User {
 
 export type Options<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>>
 
-export function useApiGetUsers<D>(data: D, options?: Options<D, Response<User[]>>) {
+export function useGetUsers<D>(data: D, options?: Options<D, Response<User[]>>) {
   return useAxle({
     data,
     url: '/user/list-user',
@@ -23,7 +23,7 @@ export function useApiGetUsers<D>(data: D, options?: Options<D, Response<User[]>
   })
 }
 
-export function useApiGetUser<D>(data: D, options?: Options<D, Response<User>>) {
+export function useGetUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/get-user',
@@ -32,7 +32,7 @@ export function useApiGetUser<D>(data: D, options?: Options<D, Response<User>>) 
   })
 }
 
-export function useApiAddUser<D>(data: D, options?: Options<D, Response<User>>) {
+export function useAddUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/add-user',
@@ -41,7 +41,7 @@ export function useApiAddUser<D>(data: D, options?: Options<D, Response<User>>) 
   })
 }
 
-export function useApiDeleteUser<D>(data: D, options?: Options<D, Response<User>>) {
+export function useDeleteUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/delete-user',
@@ -50,7 +50,7 @@ export function useApiDeleteUser<D>(data: D, options?: Options<D, Response<User>
   })
 }
 
-export function useApiUpdateUser<D>(data: D, options?: Options<D, Response<User>>) {
+export function useUpdateUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/update-user',
@@ -59,7 +59,7 @@ export function useApiUpdateUser<D>(data: D, options?: Options<D, Response<User>
   })
 }
 
-export function useApiPatchUser<D>(data: D, options?: Options<D, Response<User>>) {
+export function usePatchUser<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/patch-user',
@@ -68,7 +68,7 @@ export function useApiPatchUser<D>(data: D, options?: Options<D, Response<User>>
   })
 }
 
-export function useApiDownloadFile<D>(data: D, options?: Options<D, Blob>) {
+export function useDownloadFile<D>(data: D, options?: Options<D, Blob>) {
   return useAxle({
     data,
     url: 'http://localhost:5173/logo.png',
@@ -77,7 +77,7 @@ export function useApiDownloadFile<D>(data: D, options?: Options<D, Blob>) {
   })
 }
 
-export function useApiThrowError<D>(data: D, options?: Options<D, Response<User>>) {
+export function useThrowError<D>(data: D, options?: Options<D, Response<User>>) {
   return useAxle({
     data,
     url: '/user/throw-error',

@@ -1,6 +1,6 @@
 ### Intro
 
-A tool library based on axios to simplify the development process
+Progressive request tool based on axios.
 
 ### Quickstart
 
@@ -30,8 +30,16 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 // The built-in axios of the axle, the usage is exactly the same as that of axios, and shares the configuration with the axle.
 const { axios } = axle
 
-const response = await axle.get('/user', { current: 1, pageSize: 10 }, { headers: {} })
-const response = await axle.post('/user', { name: 'Axle' }, { headers: {} })
+axios.interceptors.response.use(
+  response => response,
+  error => Promise.reject(error)
+)
+
+const response = await axle.get('/url', { current: 1, pageSize: 10 }, { headers: {} })
+const response = await axle.post('/url', { name: 'Axle' }, { headers: {} })
+const response = await axle.getBlob('/url')
+const response = await axle.postJSON('/url', { name: 'Axle' }, { headers: {} })
+const response = await axle.postMultipart('/url', { name: 'Axle', file: new File() })
 ```
 
 ### Vue Composition Api
@@ -42,11 +50,9 @@ import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle(/** @see https://github.com/varletjs/axle/blob/main/src/use.ts?plain=1#L5 **/)
+const useAxle = createUseAxle(/** Unstable **/)
 
-// default immediate request
-const [users, getUsers, loading, { error }] = useAxle({
-  /** @see https://github.com/varletjs/axle/blob/main/src/use.ts?plain=1#L26 **/
+const [users, getUsers, { loading, error }] = useAxle({
   runner: axle.get,
   url: '/user',
   params: { current: 1, pageSize: 10 },

@@ -1,22 +1,22 @@
 <script setup lang="ts">
 import {
-  useApiGetUser,
-  useApiGetUsers,
-  useApiAddUser,
-  useApiDeleteUser,
-  useApiUpdateUser,
-  useApiPatchUser,
-  useApiDownloadFile,
-  useApiThrowError,
+  useGetUser,
+  useGetUsers,
+  useAddUser,
+  useDeleteUser,
+  useUpdateUser,
+  usePatchUser,
+  useDownloadFile,
+  useThrowError,
   User,
 } from './apis'
 
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, apiGetUsers, { loading: isUsersLoading }] = useApiGetUsers<User[]>([], { immediate: true })
+const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>([], { immediate: true })
 
-const [user, apiGetUser, { loading: isUserLoading, abort }] = useApiGetUser<User>(
+const [user, getUser, { loading: isUserLoading, abort }] = useGetUser<User>(
   {},
   {
     onSuccess(response) {
@@ -27,7 +27,7 @@ const [user, apiGetUser, { loading: isUserLoading, abort }] = useApiGetUser<User
   }
 )
 
-const [addedUser, apiAddUser] = useApiAddUser<User>(
+const [addedUser, addUser] = useAddUser<User>(
   {},
   {
     onBefore() {
@@ -41,7 +41,7 @@ const [addedUser, apiAddUser] = useApiAddUser<User>(
   }
 )
 
-const [updatedUser, apiUpdateUser] = useApiUpdateUser<User>(
+const [updatedUser, updateUser] = useUpdateUser<User>(
   {},
   {
     onBefore() {
@@ -55,7 +55,7 @@ const [updatedUser, apiUpdateUser] = useApiUpdateUser<User>(
   }
 )
 
-const [patchedUser] = useApiPatchUser<User>(
+const [patchedUser] = usePatchUser<User>(
   {},
   {
     onBefore() {
@@ -69,7 +69,7 @@ const [patchedUser] = useApiPatchUser<User>(
   }
 )
 
-const [deletedUser, apiDeleteUser] = useApiDeleteUser<User>(
+const [deletedUser, deleteUser] = useDeleteUser<User>(
   {},
   {
     onBefore() {
@@ -83,11 +83,11 @@ const [deletedUser, apiDeleteUser] = useApiDeleteUser<User>(
   }
 )
 
-const [file, apiDownloadFile, { downloadProgress }] = useApiDownloadFile<Blob | null>(null, {
+const [file, downloadFile, { downloadProgress }] = useDownloadFile<Blob | null>(null, {
   onTransform: (response) => response,
 })
 
-const [errorUser, apiThrowError, { loading: isThrowErrorLoading }] = useApiThrowError(
+const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError(
   {},
   {
     onBefore(refs) {
@@ -104,16 +104,16 @@ const userRecord = reactive<User>({
 
 async function handleSubmit() {
   const options = { params: user }
-  userRecord.id ? await apiUpdateUser(options) : await apiAddUser(options)
+  userRecord.id ? await updateUser(options) : await addUser(options)
 }
 
 async function handleDelete() {
-  await apiDeleteUser({ params: { id: deleteId.value } })
+  await deleteUser({ params: { id: deleteId.value } })
 }
 
 watch(
   () => [addedUser.value, updatedUser.value, deletedUser.value, patchedUser.value],
-  () => apiGetUsers()
+  () => getUsers()
 )
 </script>
 
@@ -129,7 +129,7 @@ watch(
   <var-space direction="column">
     <var-space align="center">
       <var-input type="number" variant="outlined" v-model="id" />
-      <var-button type="primary" @click="apiGetUser({ params: { id } })">Search</var-button>
+      <var-button type="primary" @click="getUser({ params: { id } })">Search</var-button>
       <var-button type="warning" @click="abort">Abort</var-button>
     </var-space>
 
@@ -162,7 +162,7 @@ watch(
   <var-space direction="column">
     <h3>Download Progress: {{ downloadProgress * 100 }} %</h3>
     <h3>File Size: {{ file?.size ?? 0 }}</h3>
-    <var-button type="primary" @click="() => apiDownloadFile()">Download (PS: Please use slow 3G)</var-button>
+    <var-button type="primary" @click="() => downloadFile()">Download (PS: Please use slow 3G)</var-button>
   </var-space>
 
   <var-divider margin="30px 0" />
@@ -171,6 +171,6 @@ watch(
     <var-cell>name: throw error</var-cell>
     <var-cell>loading: {{ isThrowErrorLoading }}</var-cell>
     <var-cell>data: {{ errorUser ?? 'No Data' }}</var-cell>
-    <var-button type="primary" @click="() => apiThrowError()">Retry</var-button>
+    <var-button type="primary" @click="() => throwError()">Retry</var-button>
   </var-space>
 </template>

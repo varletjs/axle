@@ -47,7 +47,7 @@ import { createUseAxle } from '@varlet/axle/use'
 const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle()
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = useAxle({
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
   // 请求初始化数据
   data: [],
   // 请求函数
@@ -97,6 +97,7 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = 
   <span>{{ uploadProgress }}</span>
   <span>{{ downloadProgress }}</span>
   <button @click="getUsers">发送请求</button>
+  <button @click="abort">中断请求</button>
 </template>
 ```
 

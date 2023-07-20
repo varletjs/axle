@@ -45,9 +45,9 @@ import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle(/** Unstable **/)
+const useAxle = createUseAxle()
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = useAxle({
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
   // Request initial data
   data: [],
   // Request runner
@@ -97,6 +97,7 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = 
   <span>{{ uploadProgress }}</span>
   <span>{{ downloadProgress }}</span>
   <button @click="getUsers">Send Request</button>
+  <button @click="abort">Abort Request</button>
 </template>
 ```
 

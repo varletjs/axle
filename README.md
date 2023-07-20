@@ -72,20 +72,20 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
       uploadProgress.value, 
       downloadProgress.value
     )
-    // Do request before
+    // This funciton will be runned when before request.
   },
   onTransform(response, refs) {
     // Handle data transform, The transformed data will be the value of users.
     return response.data
   },
   onSuccess(response, refs) {
-    // Do request success
+    // Request success
   },
   onError(error, refs) {
-    // Do request error
+    // Request error
   },
   onAfter(refs) {
-    // Do request after
+    // This funciton will be runned. Whatever it will success or not 
   }
 })
 </script>

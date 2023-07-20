@@ -1,8 +1,6 @@
 <span>English</span> | 
 <a href="https://github.com/varletjs/axle/blob/dev/README.zh-CN.md">中文</a>
 
----
-
 ### Intro
 
 Progressive request tool based on axios. It does not destroy the original abilities of axios, and helps you process requests more easily.

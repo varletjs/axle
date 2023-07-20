@@ -1,8 +1,6 @@
 <a href="https://github.com/varletjs/axle/blob/dev/README.md">English</a> |
 <span>中文</span>
 
----
-
 ### 介绍
 
 基于 [axios](https://axios-http.com/) 的渐进式请求工具。 它不会破坏 `axios` 原有的能力，帮助您更轻松地处理请求。

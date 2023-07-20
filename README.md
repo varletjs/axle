@@ -1,5 +1,5 @@
 <span>English</span> | 
-<a href="https://github.com/varletjs/axle/blob/dev/README.zh-CN.md">中文</a>
+<a href="https://github.com/varletjs/axle/blob/main/README.zh-CN.md">中文</a>
 
 ### Intro
 

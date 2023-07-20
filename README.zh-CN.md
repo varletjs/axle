@@ -1,4 +1,4 @@
-<a href="https://github.com/varletjs/axle/blob/dev/README.md">English</a> |
+<a href="https://github.com/varletjs/axle/blob/main/README.md">English</a> |
 <span>中文</span>
 
 ### 介绍

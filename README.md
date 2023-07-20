@@ -75,7 +75,7 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
     // Do request before
   },
   onTransform(response, refs) {
-    // Handle data transform
+    // Handle data transform, The transformed data will be the value of users.
     return response.data
   },
   onSuccess(response, refs) {

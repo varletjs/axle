@@ -1,6 +1,6 @@
 import axios from 'axios'
 import qs from 'qs'
-import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, ResponseType } from 'axios'
+import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, HeadersDefaults, ResponseType } from 'axios'
 
 export type AxleRequestConfig = AxiosRequestConfig & {
   exceptionMessage?: any
@@ -52,19 +52,20 @@ export type AxleInstance = {
   deleteStream: FetchHelper
 
   post: ModifyHelper
-  postJSON: ModifyHelper
+  postUrlEncode: ModifyHelper
   postMultipart: ModifyHelper
 
   put: ModifyHelper
-  putJSON: ModifyHelper
+  putUrlEncode: ModifyHelper
   putMultipart: ModifyHelper
 
   patch: ModifyHelper
-  patchJSON: ModifyHelper
+  patchUrlEncode: ModifyHelper
   patchMultipart: ModifyHelper
 
   download(blob: string | Blob, filename: string): void
 
+  getHeaders(): HeadersDefaults['common']
   setHeader(key: string, value: string): void
   removeHeader(key: string | string[]): void
 
@@ -120,6 +121,10 @@ export function download(url: string | Blob, filename: string) {
 export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
   const service = axios.create(config)
 
+  function getHeaders() {
+    return service.defaults.headers['common']
+  }
+
   function setHeader(key: string, value: string | number | boolean) {
     ;(service.defaults.headers['common'] as AxiosRequestHeaders)[key] = value
   }
@@ -162,18 +167,20 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     deleteText: createFetchHelper(service, 'delete', 'text'),
     deleteStream: createFetchHelper(service, 'delete', 'stream'),
 
-    post: createModifyHelper(service, 'post', 'application/x-www-form-urlencoded'),
-    postJSON: createModifyHelper(service, 'post', 'application/json'),
+    post: createModifyHelper(service, 'post', 'application/json'),
+    postUrlEncode: createModifyHelper(service, 'post', 'application/x-www-form-urlencoded'),
     postMultipart: createModifyHelper(service, 'post', 'multipart/form-data'),
 
-    put: createModifyHelper(service, 'put', 'application/x-www-form-urlencoded'),
-    putJSON: createModifyHelper(service, 'put', 'application/json'),
+    put: createModifyHelper(service, 'put', 'application/json'),
+    putUrlEncode: createModifyHelper(service, 'put', 'application/x-www-form-urlencoded'),
     putMultipart: createModifyHelper(service, 'put', 'multipart/form-data'),
-    patch: createModifyHelper(service, 'patch', 'application/x-www-form-urlencoded'),
-    patchJSON: createModifyHelper(service, 'patch', 'application/json'),
+
+    patch: createModifyHelper(service, 'patch', 'application/json'),
+    patchUrlEncode: createModifyHelper(service, 'patch', 'application/x-www-form-urlencoded'),
     patchMultipart: createModifyHelper(service, 'patch', 'multipart/form-data'),
     download,
 
+    getHeaders,
     setHeader,
     removeHeader,
 

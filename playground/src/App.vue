@@ -14,88 +14,80 @@ import {
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>([], { immediate: true })
+const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>({
+  data: [],
+  immediate: true,
+})
 
-const [user, getUser, { loading: isUserLoading, abort }] = useGetUser<User>(
-  {},
-  {
-    onSuccess(response) {
-      if (response.code === 200) {
-        Snackbar.success('Getting Success!')
-      }
-    },
-  }
-)
+const [user, getUser, { loading: isUserLoading, abort }] = useGetUser<User>({
+  data: {},
+  onSuccess(response) {
+    if (response.code === 200) {
+      Snackbar.success('Getting Success!')
+    }
+  },
+})
 
-const [addedUser, addUser] = useAddUser<User>(
-  {},
-  {
-    onBefore() {
-      Snackbar.loading('Adding!')
-    },
-    onSuccess(response) {
-      if (response.code === 200) {
-        Snackbar.success('Add User Success!')
-      }
-    },
-  }
-)
+const [addedUser, addUser] = useAddUser<User>({
+  data: {},
+  onBefore() {
+    Snackbar.loading('Adding!')
+  },
+  onSuccess(response) {
+    if (response.code === 200) {
+      Snackbar.success('Add User Success!')
+    }
+  },
+})
 
-const [updatedUser, updateUser] = useUpdateUser<User>(
-  {},
-  {
-    onBefore() {
-      Snackbar.loading('Updating!')
-    },
-    onSuccess(response) {
-      if (response.code === 200) {
-        Snackbar.success('Update User Success!')
-      }
-    },
-  }
-)
+const [updatedUser, updateUser] = useUpdateUser<User>({
+  data: {},
+  onBefore() {
+    Snackbar.loading('Updating!')
+  },
+  onSuccess(response) {
+    if (response.code === 200) {
+      Snackbar.success('Update User Success!')
+    }
+  },
+})
 
-const [patchedUser] = usePatchUser<User>(
-  {},
-  {
-    onBefore() {
-      Snackbar.loading('Patching!')
-    },
-    onSuccess(response) {
-      if (response.code === 200) {
-        Snackbar.success('Patch User Success!')
-      }
-    },
-  }
-)
+const [patchedUser] = usePatchUser<User>({
+  data: {},
+  onBefore() {
+    Snackbar.loading('Patching!')
+  },
+  onSuccess(response) {
+    if (response.code === 200) {
+      Snackbar.success('Patch User Success!')
+    }
+  },
+})
 
-const [deletedUser, deleteUser] = useDeleteUser<User>(
-  {},
-  {
-    onBefore() {
-      Snackbar.loading('Deleting!')
-    },
-    onSuccess(response) {
-      if (response.code === 200) {
-        Snackbar.success('Delete User Success!')
-      }
-    },
-  }
-)
+const [deletedUser, deleteUser] = useDeleteUser<User>({
+  data: {},
+  onBefore() {
+    Snackbar.loading('Deleting!')
+  },
+  onSuccess(response) {
+    if (response.code === 200) {
+      Snackbar.success('Delete User Success!')
+    }
+  },
+})
 
-const [file, downloadFile, { downloadProgress }] = useDownloadFile<Blob | null>(null, {
+const [file, downloadFile, { downloadProgress }] = useDownloadFile<Blob | null>({
+  data: null,
   onTransform: (response) => response,
 })
 
-const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError(
-  {},
-  {
-    onBefore(refs) {
-      refs.data.value = {}
-    },
-    retry: 3,
-  }
-)
+const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError({
+  data: {},
+  onBefore(refs) {
+    refs.data.value = {}
+  },
+  retry: 3,
+})
 
 const userRecord = reactive<User>({
   id: '',

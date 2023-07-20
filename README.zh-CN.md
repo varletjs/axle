@@ -1,18 +1,18 @@
-<span>English</span> | 
-<a href="https://github.com/varletjs/axle/blob/dev/README.zh-CN.md">中文</a>
+<a href="https://github.com/varletjs/axle/blob/dev/README.md">English</a> |
+<span>中文</span>
 
 ---
 
-### Intro
+### 介绍
 
-Progressive request tool based on axios. It does not destroy the original abilities of axios, and helps you process requests more easily.
+基于 [axios](https://axios-http.com/) 的渐进式请求工具。 它不会破坏 `axios` 原有的能力，帮助您更轻松地处理请求。
 
-### QuickStart
+### 快速开始
 
-#### Install
+#### 安装
 
 ```shell
-# Install with npm, yarn or pnpm
+# 通过 npm, yarn, pnpm 安装
 
 # npm
 npm i @varlet/axle -S
@@ -24,9 +24,9 @@ yarn add @varlet/axle
 pnpm add @varlet/axle
 ```
 
-#### Send Request
+#### 发送请求
 
-Axle normalizes the parameters of the request function, and expands more request functions for different interface requirements. Here is a simple example.
+`Axle` 归一化了请求函数的参数，并针对不同的业务需求，扩展了更多请求函数，下面是一个简单的例子。
 
 ```js
 import { createAxle } from '@varlet/axle'
@@ -37,9 +37,9 @@ axle.get('/url', { current: 1, pageSize: 10 }, { headers: {} })
 axle.post('/url', { name: 'Axle' }, { headers: {} })
 ```
 
-#### Vue Composition API
+#### Vue 组合式 API
 
-Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `error retry`, `lifecycle`, etc., And inherit all the configuration of `axios`.
+Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`错误重试`，`生命周期` 等等，并继承了 `axios` 的所有配置。
 
 ```html
 <script setup>
@@ -47,24 +47,24 @@ import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle(/** Unstable **/)
+const useAxle = createUseAxle()
 
 const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = useAxle({
-  // Request initial data
+  // 请求初始化数据
   data: [],
-  // Request runner
+  // 请求函数
   runner: axle.get,
-  // Request url
+  // 请求地址
   url: '/user',
-  // Whether to send the request immediately, defaults false
+  // 是否立即发送请求, 默认值: false
   immediate: true,
-  // The number of retries after a failed request, defaults 0
+  // 错误重试次数, 默认值: 0
   retry: 3,
-  // Request params, defaults {}
+  // 请求参数, 默认值: {}
   params: { current: 1, pageSize: 10 },
-  // Axios config, see https://axios-http.com
+  // Axios 配置, see https://axios-http.com
   config: { headers: {} },
-  // lifecycle
+  // 生命周期
   onBefore(refs) {
     const { data, loading, error, uploadProgress, downloadProgress } = refs
     console.log(
@@ -74,20 +74,20 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = 
       uploadProgress.value, 
       downloadProgress.value
     )
-    // Do request before
+    // 处理请求前逻辑
   },
   onTransform(response, refs) {
-    // Handle data transform
+    // 处理数据转换，转换后的数据将成为 users 的值。
     return response.data
   },
   onSuccess(response, refs) {
-    // Do request success
+    // 处理请求成功逻辑
   },
   onError(error, refs) {
-    // Do request error
+    // 处理请求错误逻辑
   },
   onAfter(refs) {
-    // Do request after
+    // 处理请求结束逻辑，无论成功失败都会触发。
   }
 })
 </script>
@@ -98,48 +98,48 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress }] = 
   <span>{{ error }}</span>
   <span>{{ uploadProgress }}</span>
   <span>{{ downloadProgress }}</span>
-  <button @click="getUsers">Send Request</button>
+  <button @click="getUsers">发送请求</button>
 </template>
 ```
 
-### Config
+### 配置
 
-Axle fully supports all configuration abilities of axios.
+`Axle` 完全支持 `axios` 的所有配置能力。
 
 ```js
 const axle = createAxle(/** @see https://axios-http.com **/)
-// The built-in axios of the axle, the usage is exactly the same as that of axios, and shares the configuration with the axle.
+// axle 内置的 axios ，用法和 axios 一模一样，并且和 axle 共享配置。
 const { axios } = axle
 
 axios.defaults.baseURL = 'https://api.example.com'
 axios.defaults.headers.common['TOKEN'] = TOKEN
 axios.defaults.timeout = 2500
 
-// Add a request interceptor
+// 添加请求前拦截器
 axios.interceptors.request.use((config) => {
-  // Do something before request is sent
+  // 请求前处理
   return config
 }, (error) => {
-  // Do something with request error
+  // 请求错误处理
   return Promise.reject(error)
 })
 
-// Add a response interceptor
+// 添加请求后返回拦截器
 axios.interceptors.response.use((response) => {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
+  // 任何位于 2xx 范围内的状态码都会导致该函数触发
+  // 对响应数据做一些事情
   return response
 }, (error) => {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
+  // 任何超出 2xx 范围的状态代码都会导致此函数触发
+  // 对响应错误做一些事情
   return Promise.reject(error)
 })
 ```
 
-## Axle & Axios Request Functions
+## Axle & Axios 请求函数
 
-The request function provided by Axle can help you send requests more easily. Here are some examples including comparison with axios.
-Tips: Take `get` and `post` as examples below, Axle also supports `options`, `head`, `delete`, `patch` , `put` methods.
+`Axle` 提供的请求函数可以帮助您更轻松地发送请求。 以下是一些示例，包括与 `axios` 的比较。
+提示：下面只是以 `get` 和 `post` 为例，除此之外 Axle 还支持 `options`、`head`、`delete`、`patch` 、`put` 方法。
 
 ### get
 
@@ -201,7 +201,7 @@ axle.getStream('/url', { id: 1 })
 
 #### JSON
 
-Same with axios.
+和 axios 一致。
 
 ```js
 // axios
@@ -240,15 +240,15 @@ axios.post('/url', formData, {
 axle.postMultipart('/url', { name: 'foo', file: new File() })
 ```
 
-### Utils
+### 实用工具
 
-#### Notify the browser to download the file
+#### 通知浏览器下载文件
 
 ```js
 axle.download(await axle.getBlob('/url', { id: 1 }), 'filename')
 ```
 
-#### Common Header Operate
+#### 公共 header 操作
 
 ```js
 const headers = axle.getHeaders()

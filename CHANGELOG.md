@@ -1,3 +1,12 @@
+## [0.0.26](https://github.com/varletjs/axle/compare/v0.0.25...v0.0.26) (2023-07-20)
+
+
+### Features
+
+* rename postJSON ([35236b9](https://github.com/varletjs/axle/commit/35236b96d292507052d371441e0ef1d47946ee15))
+
+
+
 ## [0.0.25](https://github.com/varletjs/axle/compare/v0.0.24...v0.0.25) (2023-07-06)
 
 

@@ -130,7 +130,7 @@ axios.get('/url', { params: { id: 1 }, responseType: 'stream' })
 axle.getStream('/url', { id: 1 })
 ```
 
-## post
+### post
 
 #### JSON
 

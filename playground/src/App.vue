@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useHasLoading, useAllData, useAverageProgress } from '@varlet/axle/use'
+import { download } from '@varlet/axle';
 import {
   useGetUser,
   useGetUsers,
@@ -77,7 +78,7 @@ const [deletedUser, deleteUser] = useDeleteUser<User>({
   },
 })
 
-const [file, downloadFile, { downloadProgress }] = useDownloadFile<Blob | null>({
+const [file, downloadBlob, { downloadProgress }] = useDownloadFile<Blob | null>({
   data: null,
   onTransform: (response) => response,
 })
@@ -126,6 +127,10 @@ async function handleSubmit() {
 
 async function handleDelete() {
   await deleteUser({ params: { id: deleteId.value } })
+}
+
+async function downloadFile() {
+  download(await downloadBlob(), 'logo.png')
 }
 
 watch(

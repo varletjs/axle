@@ -201,7 +201,10 @@ import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
+const useAxle = createUseAxle({
+  // Optional value: Default onTransform of the useAxle 
+  onTransform: response => response
+})
 
 const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
   // Request initial data

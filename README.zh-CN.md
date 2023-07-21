@@ -201,7 +201,10 @@ import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
+const useAxle = createUseAxle({
+  // 可选项: useAxle 的默认 onTransform
+  onTransform: response => response
+})
 
 const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
   // 请求初始化数据

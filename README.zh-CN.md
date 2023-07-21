@@ -35,72 +35,6 @@ axle.get('/url', { current: 1, pageSize: 10 }, { headers: {} })
 axle.post('/url', { name: 'Axle' }, { headers: {} })
 ```
 
-#### Vue 组合式 API
-
-Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`错误重试`，`生命周期` 等等，并继承了 `axios` 的所有配置。
-
-```html
-<script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
-
-const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
-
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
-  // 请求初始化数据
-  data: [],
-  // 请求函数
-  runner: axle.get,
-  // 请求地址
-  url: '/user',
-  // 是否立即发送请求, 默认值: false
-  immediate: true,
-  // 错误重试次数, 默认值: 0
-  retry: 3,
-  // 请求参数, 默认值: {}
-  params: { current: 1, pageSize: 10 },
-  // Axios 配置, see https://axios-http.com
-  config: { headers: {} },
-  // 生命周期
-  onBefore(refs) {
-    const { data, loading, error, uploadProgress, downloadProgress } = refs
-    console.log(
-      data.value, 
-      loading.value,
-      error.value, 
-      uploadProgress.value, 
-      downloadProgress.value
-    )
-    // 处理请求前逻辑
-  },
-  onTransform(response, refs) {
-    // 处理数据转换，转换后的数据将成为 users 的值。
-    return response.data
-  },
-  onSuccess(response, refs) {
-    // 处理请求成功逻辑
-  },
-  onError(error, refs) {
-    // 处理请求错误逻辑
-  },
-  onAfter(refs) {
-    // 处理请求结束逻辑，无论成功失败都会触发。
-  }
-})
-</script>
-
-<template>
-  <span>{{ users }}</span>
-  <span>{{ loading }}</span>
-  <span>{{ error }}</span>
-  <span>{{ uploadProgress }}</span>
-  <span>{{ downloadProgress }}</span>
-  <button @click="getUsers">发送请求</button>
-  <button @click="abort">中断请求</button>
-</template>
-```
-
 ### 配置
 
 `Axle` 完全支持 `axios` 的所有配置能力。
@@ -239,12 +173,14 @@ axios.post('/url', formData, {
 axle.postMultipart('/url', { name: 'foo', file: new File() })
 ```
 
-### 实用工具
+## 实用工具
 
 #### 通知浏览器下载文件
 
 ```js
-axle.download(await axle.getBlob('/url', { id: 1 }), 'filename')
+import { download } from '@varlet/axle'
+
+download(await axle.getBlob('/url', { id: 1 }), 'filename')
 ```
 
 #### 公共 header 操作
@@ -253,6 +189,125 @@ axle.download(await axle.getBlob('/url', { id: 1 }), 'filename')
 const headers = axle.getHeaders()
 axle.setHeader('TOKEN', TOKEN)
 axle.removeHeader('TOKEN')
+```
+
+## Vue 组合式 API
+
+Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`错误重试`，`生命周期` 等等，并继承了 `axios` 的所有配置。
+
+```html
+<script setup>
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
+
+const axle = createAxle(/** @see https://axios-http.com **/)
+const useAxle = createUseAxle()
+
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+  // 请求初始化数据
+  data: [],
+  // 请求函数
+  runner: axle.get,
+  // 请求地址
+  url: '/user',
+  // 是否立即发送请求, 默认值: false
+  immediate: true,
+  // 错误重试次数, 默认值: 0
+  retry: 3,
+  // 请求参数, 默认值: {}
+  params: { current: 1, pageSize: 10 },
+  // Axios 配置, see https://axios-http.com
+  config: { headers: {} },
+  // 生命周期
+  onBefore(refs) {
+    const { data, loading, error, uploadProgress, downloadProgress } = refs
+    console.log(
+      data.value, 
+      loading.value,
+      error.value, 
+      uploadProgress.value, 
+      downloadProgress.value
+    )
+    // 处理请求前逻辑
+  },
+  onTransform(response, refs) {
+    // 处理数据转换，转换后的数据将成为 users 的值。
+    return response.data
+  },
+  onSuccess(response, refs) {
+    // 处理请求成功逻辑
+  },
+  onError(error, refs) {
+    // 处理请求错误逻辑
+  },
+  onAfter(refs) {
+    // 处理请求结束逻辑，无论成功失败都会触发。
+  }
+})
+</script>
+
+<template>
+  <span>{{ users }}</span>
+  <span>{{ loading }}</span>
+  <span>{{ error }}</span>
+  <span>{{ uploadProgress }}</span>
+  <span>{{ downloadProgress }}</span>
+  <button @click="getUsers">发送请求</button>
+  <button @click="abort">中断请求</button>
+</template>
+```
+
+### 并行请求实用工具
+
+Axle 提供了一些并行请求处理工具，请参考以下示例。
+
+```html
+<script setup>
+import { createAxle } from '@varlet/axle'
+import { createUseAxle, useAllData, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+
+const axle = createAxle(/** @see https://axios-http.com **/)
+const useAxle = createUseAxle()
+
+const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+  data: [],
+  runner: axle.get,
+  url: '/user',
+})
+
+const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+  data: [],
+  runner: axle.get,
+  url: '/role',
+})
+
+// 所有请求结束时，loading 为 false
+const loading = useHasLoading(isUsersLoading, isRolesLoading)
+// 所有请求结束时，downloadProgress 为 1
+const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+// Ref<[
+//   [{ name: 'foo' }, { name: 'bar' }], 
+//   [{ role: 'admin' }, { role: 'user' }]
+// ]> <-
+// [
+//   Ref<[{ name: 'foo' }, { name: 'bar' }]>, 
+//   Ref<[{ role: 'admin' }, { role: 'user' }]>
+// ]
+const usersRoles = useAllData(users, roles)
+
+function sendAllRequest() {
+  // parallel
+  getUsers()
+  getRoles()
+}
+</script>
+
+<template>
+  <span>{{ usersRoles }}</span>
+  <span>{{ loading }}</span>
+  <span>{{ downloadProgress }}</span>
+  <button @click="sendAllRequest">发送全部请求</button>
+</template>
 ```
 
 

@@ -35,72 +35,6 @@ axle.get('/url', { current: 1, pageSize: 10 }, { headers: {} })
 axle.post('/url', { name: 'Axle' }, { headers: {} })
 ```
 
-#### Vue Composition API
-
-Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `error retry`, `lifecycle`, etc., And inherit all the configuration of `axios`.
-
-```html
-<script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
-
-const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
-
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
-  // Request initial data
-  data: [],
-  // Request runner
-  runner: axle.get,
-  // Request url
-  url: '/user',
-  // Whether to send the request immediately, defaults false
-  immediate: true,
-  // The number of retries after a failed request, defaults 0
-  retry: 3,
-  // Request params, defaults {}
-  params: { current: 1, pageSize: 10 },
-  // Axios config, see https://axios-http.com
-  config: { headers: {} },
-  // lifecycle
-  onBefore(refs) {
-    const { data, loading, error, uploadProgress, downloadProgress } = refs
-    console.log(
-      data.value, 
-      loading.value,
-      error.value, 
-      uploadProgress.value, 
-      downloadProgress.value
-    )
-    // This funciton will be runned when before request.
-  },
-  onTransform(response, refs) {
-    // Handle data transform, The transformed data will be the value of users.
-    return response.data
-  },
-  onSuccess(response, refs) {
-    // Request success
-  },
-  onError(error, refs) {
-    // Request error
-  },
-  onAfter(refs) {
-    // This funciton will be runned. Whatever it will success or not 
-  }
-})
-</script>
-
-<template>
-  <span>{{ users }}</span>
-  <span>{{ loading }}</span>
-  <span>{{ error }}</span>
-  <span>{{ uploadProgress }}</span>
-  <span>{{ downloadProgress }}</span>
-  <button @click="getUsers">Send Request</button>
-  <button @click="abort">Abort Request</button>
-</template>
-```
-
 ### Config
 
 Axle fully supports all configuration abilities of axios.
@@ -239,12 +173,14 @@ axios.post('/url', formData, {
 axle.postMultipart('/url', { name: 'foo', file: new File() })
 ```
 
-### Utils
+## Utils
 
 #### Notify the browser to download the file
 
 ```js
-axle.download(await axle.getBlob('/url', { id: 1 }), 'filename')
+import { download } from '@varlet/axle'
+
+download(await axle.getBlob('/url', { id: 1 }), 'filename')
 ```
 
 #### Common Header Operate
@@ -253,6 +189,125 @@ axle.download(await axle.getBlob('/url', { id: 1 }), 'filename')
 const headers = axle.getHeaders()
 axle.setHeader('TOKEN', TOKEN)
 axle.removeHeader('TOKEN')
+```
+
+## Vue Composition API
+
+Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `error retry`, `lifecycle`, etc., And inherit all the configuration of `axios`.
+
+```html
+<script setup>
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
+
+const axle = createAxle(/** @see https://axios-http.com **/)
+const useAxle = createUseAxle()
+
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+  // Request initial data
+  data: [],
+  // Request runner
+  runner: axle.get,
+  // Request url
+  url: '/user',
+  // Whether to send the request immediately, defaults false
+  immediate: true,
+  // The number of retries after a failed request, defaults 0
+  retry: 3,
+  // Request params, defaults {}
+  params: { current: 1, pageSize: 10 },
+  // Axios config, see https://axios-http.com
+  config: { headers: {} },
+  // lifecycle
+  onBefore(refs) {
+    const { data, loading, error, uploadProgress, downloadProgress } = refs
+    console.log(
+      data.value, 
+      loading.value,
+      error.value, 
+      uploadProgress.value, 
+      downloadProgress.value
+    )
+    // Do request before
+  },
+  onTransform(response, refs) {
+    // Handle data transform, The transformed data will be the value of users.
+    return response.data
+  },
+  onSuccess(response, refs) {
+    // Do request success
+  },
+  onError(error, refs) {
+    // Do request error
+  },
+  onAfter(refs) {
+    // Do request after
+  }
+})
+</script>
+
+<template>
+  <span>{{ users }}</span>
+  <span>{{ loading }}</span>
+  <span>{{ error }}</span>
+  <span>{{ uploadProgress }}</span>
+  <span>{{ downloadProgress }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="abort">Abort Request</button>
+</template>
+```
+
+### Parallel Utils
+
+Axle provides some parallel request processing tools, please refer to the following examples.
+
+```html
+<script setup>
+import { createAxle } from '@varlet/axle'
+import { createUseAxle, useAllData, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+
+const axle = createAxle(/** @see https://axios-http.com **/)
+const useAxle = createUseAxle()
+
+const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+  data: [],
+  runner: axle.get,
+  url: '/user',
+})
+
+const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+  data: [],
+  runner: axle.get,
+  url: '/role',
+})
+
+// At the end of all requests, loading is false
+const loading = useHasLoading(isUsersLoading, isRolesLoading)
+// At the end of all requests, downloadProgress is 1
+const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+// Ref<[
+//   [{ name: 'foo' }, { name: 'bar' }], 
+//   [{ role: 'admin' }, { role: 'user' }]
+// ]> <-
+// [
+//   Ref<[{ name: 'foo' }, { name: 'bar' }]>, 
+//   Ref<[{ role: 'admin' }, { role: 'user' }]>
+// ]
+const usersRoles = useAllData(users, roles)
+
+function sendAllRequest() {
+  // parallel
+  getUsers()
+  getRoles()
+}
+</script>
+
+<template>
+  <span>{{ usersRoles }}</span>
+  <span>{{ loading }}</span>
+  <span>{{ downloadProgress }}</span>
+  <button @click="sendAllRequest">Send All Request</button>
+</template>
 ```
 
 

@@ -84,7 +84,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       loading,
       error,
       downloadProgress,
-      uploadProgress
+      uploadProgress,
     }
 
     let controller = new AbortController()
@@ -168,3 +168,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
 
   return useAxle
 }
+
+export * from './useAllData.js'
+export * from './useHasLoading.js'
+export * from './useAverageProgress.js'

@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useHasLoading, useAllData, useAverageProgress } from '@varlet/axle/use'
 import {
   useGetUser,
   useGetUsers,
@@ -89,10 +90,34 @@ const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError(
   retry: 3,
 })
 
+// parallel
+const [usersOne, getUsersOne, { loading: isUsersLoadingOne, downloadProgress: userDownloadProgressOne }] = useGetUsers<
+  User[]
+>({
+  data: [],
+  immediate: true,
+})
+
+const [usersTwo, getUsersTwo, { loading: isUsersLoadingTwo, downloadProgress: userDownloadProgressTwo }] = useGetUsers<
+  User[]
+>({
+  data: [],
+  immediate: true,
+})
+
+const usersAverageDownloadProgress = useAverageProgress(userDownloadProgressOne, userDownloadProgressTwo)
+const hasUsersLoading = useHasLoading(isUsersLoadingOne, isUsersLoadingTwo)
+const allUsers = useAllData(usersOne, usersTwo)
+
 const userRecord = reactive<User>({
   id: '',
   name: '',
 })
+
+function runAll() {
+  allUsers.value = [[], []]
+  Promise.all([getUsersOne(), getUsersTwo()])
+}
 
 async function handleSubmit() {
   const options = { params: user }
@@ -164,5 +189,15 @@ watch(
     <var-cell>loading: {{ isThrowErrorLoading }}</var-cell>
     <var-cell>data: {{ errorUser ?? 'No Data' }}</var-cell>
     <var-button type="primary" @click="() => throwError()">Retry</var-button>
+  </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-space direction="column">
+    <var-cell>name: parallel</var-cell>
+    <var-cell>loading: {{ hasUsersLoading }}</var-cell>
+    <var-cell>download progress: {{ usersAverageDownloadProgress * 100 }} %</var-cell>
+    <var-cell>data: {{ allUsers ?? 'No Data' }}</var-cell>
+    <var-button type="primary" @click="runAll">Run All</var-button>
   </var-space>
 </template>

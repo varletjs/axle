@@ -1,6 +1,7 @@
 import axios from 'axios'
 import qs from 'qs'
 import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, HeadersDefaults, ResponseType } from 'axios'
+import { inBrowser } from '@varlet/shared'
 
 export type AxleRequestConfig = AxiosRequestConfig & {
   exceptionMessage?: any
@@ -63,8 +64,6 @@ export type AxleInstance = {
   patchUrlEncode: ModifyHelper
   patchMultipart: ModifyHelper
 
-  download(blob: string | Blob, filename: string): void
-
   getHeaders(): HeadersDefaults['common']
   setHeader(key: string, value: string): void
   removeHeader(key: string | string[]): void
@@ -108,6 +107,10 @@ export function createModifyHelper(
 }
 
 export function download(url: string | Blob, filename: string) {
+  if (!inBrowser()) {
+    return
+  }
+
   const a = document.createElement('a')
   a.download = filename
   a.style.display = 'none'
@@ -178,7 +181,6 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     patch: createModifyHelper(service, 'patch', 'application/json'),
     patchUrlEncode: createModifyHelper(service, 'patch', 'application/x-www-form-urlencoded'),
     patchMultipart: createModifyHelper(service, 'patch', 'multipart/form-data'),
-    download,
 
     getHeaders,
     setHeader,

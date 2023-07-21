@@ -1,6 +1,6 @@
-import { computed } from 'vue'
+import { type Ref, type WritableComputedRef, computed } from 'vue'
 
-export function useAllData<DC extends any[]>(...dataCollection: DC) {
+export function useAllData<T extends Ref<any>[]>(...dataCollection: T): WritableComputedRef<T[number]['value'][]> {
   return computed({
     get: () => dataCollection.map((data) => data.value),
 

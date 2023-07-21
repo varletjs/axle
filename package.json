@@ -1,7 +1,7 @@
 {
   "name": "@varlet/axle",
   "version": "0.1.0",
-  "description": "A useful axios helper",
+  "description": "Progressive request tool based on axios",
   "type": "module",
   "main": "es/index.js",
   "module": "es/index.js",
@@ -26,7 +26,7 @@
     "axios",
     "helpers"
   ],
-  "author": "Joker <13255238145@163.com>",
+  "author": "haoziqaq <357229046@qq.com>",
   "license": "MIT",
   "scripts": {
     "bootstrap": "pnpm i && pnpm build && pnpm --filter ./playground i",
@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@varlet/cli": "^2.11.8",
+    "@varlet/cli": "^2.13.1",
     "rimraf": "^5.0.1",
     "typescript": "^5.1.5",
     "vue": "3.3.4"

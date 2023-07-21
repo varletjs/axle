@@ -1,3 +1,12 @@
+# [0.1.0](https://github.com/varletjs/axle/compare/v0.0.26...v0.1.0) (2023-07-21)
+
+
+### Features
+
+* support more utils ([f0a7992](https://github.com/varletjs/axle/commit/f0a7992337c8988e465483aa33158fc952188ca6))
+
+
+
 ## [0.0.26](https://github.com/varletjs/axle/compare/v0.0.25...v0.0.26) (2023-07-20)
 
 

@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@varlet/cli": "^2.13.1",
+    "@varlet/cli": "^2.15.0",
     "rimraf": "^5.0.1",
     "typescript": "^5.1.5",
     "vue": "3.3.4"

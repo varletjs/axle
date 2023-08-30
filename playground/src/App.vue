@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useHasLoading, useAllData, useAverageProgress } from '@varlet/axle/use'
-import { download } from '@varlet/axle';
+import { download } from '@varlet/axle'
 import {
   useGetUser,
   useGetUsers,

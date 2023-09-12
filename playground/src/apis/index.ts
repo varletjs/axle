@@ -17,7 +17,7 @@ export type Options<V, R = any, P = Record<string, any>> = Partial<UseAxleOption
 export function useGetUsers<V>(options: Options<V, Response<User[]>>) {
   return useAxle({
     url: '/user/list-user',
-    runner: 'get',
+    method: 'get',
     ...options,
   })
 }
@@ -25,7 +25,7 @@ export function useGetUsers<V>(options: Options<V, Response<User[]>>) {
 export function useGetUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/get-user',
-    runner: 'get',
+    method: 'get',
     ...options,
   })
 }
@@ -33,7 +33,7 @@ export function useGetUser<V>(options: Options<V, Response<User>>) {
 export function useAddUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/add-user',
-    runner: 'post',
+    method: 'post',
     ...options,
   })
 }
@@ -41,7 +41,7 @@ export function useAddUser<V>(options: Options<V, Response<User>>) {
 export function useDeleteUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/delete-user',
-    runner: 'delete',
+    method: 'delete',
     ...options,
   })
 }
@@ -49,7 +49,7 @@ export function useDeleteUser<V>(options: Options<V, Response<User>>) {
 export function useUpdateUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/update-user',
-    runner: 'put',
+    method: 'put',
     ...options,
   })
 }
@@ -57,7 +57,7 @@ export function useUpdateUser<V>(options: Options<V, Response<User>>) {
 export function usePatchUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/patch-user',
-    runner: 'patch',
+    method: 'patch',
     ...options,
   })
 }
@@ -65,7 +65,7 @@ export function usePatchUser<V>(options: Options<V, Response<User>>) {
 export function useDownloadFile<V>(options: Options<V, Blob>) {
   return useAxle({
     url: 'http://localhost:5173/logo.png',
-    runner: 'getBlob',
+    method: 'getBlob',
     ...options,
   })
 }
@@ -73,7 +73,7 @@ export function useDownloadFile<V>(options: Options<V, Blob>) {
 export function useThrowError<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/throw-error',
-    runner: 'get',
+    method: 'get',
     ...options,
   })
 }

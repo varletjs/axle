@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useHasLoading, useAllData, useAverageProgress } from '@varlet/axle/use'
+import { useHasLoading, useValues, useAverageProgress } from '@varlet/axle/use'
 import { download } from '@varlet/axle'
 import {
   useGetUser,
@@ -16,13 +16,9 @@ import {
 const id = ref('1')
 const deleteId = ref('1')
 
-const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>({
-  data: [],
-  immediate: true,
-})
+const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>({ immediate: true })
 
-const [user, getUser, { loading: isUserLoading, abort }] = useGetUser<User>({
-  data: {},
+const [user, getUser, { loading: isUserLoading, abort }] = useGetUser({
   onSuccess(response) {
     if (response.code === 200) {
       Snackbar.success('Getting Success!')
@@ -31,7 +27,6 @@ const [user, getUser, { loading: isUserLoading, abort }] = useGetUser<User>({
 })
 
 const [addedUser, addUser] = useAddUser<User>({
-  data: {},
   onBefore() {
     Snackbar.loading('Adding!')
   },
@@ -43,7 +38,6 @@ const [addedUser, addUser] = useAddUser<User>({
 })
 
 const [updatedUser, updateUser] = useUpdateUser<User>({
-  data: {},
   onBefore() {
     Snackbar.loading('Updating!')
   },
@@ -55,7 +49,6 @@ const [updatedUser, updateUser] = useUpdateUser<User>({
 })
 
 const [patchedUser] = usePatchUser<User>({
-  data: {},
   onBefore() {
     Snackbar.loading('Patching!')
   },
@@ -67,7 +60,6 @@ const [patchedUser] = usePatchUser<User>({
 })
 
 const [deletedUser, deleteUser] = useDeleteUser<User>({
-  data: {},
   onBefore() {
     Snackbar.loading('Deleting!')
   },
@@ -79,14 +71,12 @@ const [deletedUser, deleteUser] = useDeleteUser<User>({
 })
 
 const [file, downloadBlob, { downloadProgress }] = useDownloadFile<Blob | null>({
-  data: null,
   onTransform: (response) => response,
 })
 
 const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError({
-  data: {},
   onBefore(refs) {
-    refs.data.value = {}
+    refs.value.value = {}
   },
   retry: 3,
 })
@@ -95,20 +85,18 @@ const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError(
 const [usersOne, getUsersOne, { loading: isUsersLoadingOne, downloadProgress: userDownloadProgressOne }] = useGetUsers<
   User[]
 >({
-  data: [],
   immediate: true,
 })
 
 const [usersTwo, getUsersTwo, { loading: isUsersLoadingTwo, downloadProgress: userDownloadProgressTwo }] = useGetUsers<
   User[]
 >({
-  data: [],
   immediate: true,
 })
 
 const usersAverageDownloadProgress = useAverageProgress(userDownloadProgressOne, userDownloadProgressTwo)
 const hasUsersLoading = useHasLoading(isUsersLoadingOne, isUsersLoadingTwo)
-const allUsers = useAllData(usersOne, usersTwo)
+const allUsers = useValues(usersOne, usersTwo)
 
 const userRecord = reactive<User>({
   id: '',
@@ -121,7 +109,7 @@ function runAll() {
 }
 
 async function handleSubmit() {
-  const options = { params: user }
+  const options = { params: userRecord }
   userRecord.id ? await updateUser(options) : await addUser(options)
 }
 

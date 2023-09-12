@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue'
-import { type AxleRequestConfig, createFetchHelper, createModifyHelper } from './instance.js'
+import { type AxleRequestConfig, type RunnerMethod, type AxleInstance } from './instance.js'
 
 export interface RunOptions<P> {
   url?: string
@@ -10,31 +10,31 @@ export interface RunOptions<P> {
 
 export type Run<R, P> = (options?: RunOptions<P>) => Promise<R>
 
-export interface UseAxleRefs<D> {
-  data: Ref<D>
+export interface UseAxleRefs<V> {
+  value: Ref<V>
   loading: Ref<boolean>
   error: Ref<Error | undefined>
   uploadProgress: Ref<number>
   downloadProgress: Ref<number>
 }
 
-export interface UseAxleOptions<D = any, R = any, P = Record<string, any>> {
+export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   url: string
-  runner: ReturnType<typeof createFetchHelper> | ReturnType<typeof createModifyHelper>
-  data: D
+  method: RunnerMethod
+  value?: V
   params?: P
   retry?: number
   config?: AxleRequestConfig
   immediate?: boolean
-  onBefore?(refs: UseAxleRefs<D>): void
-  onAfter?(refs: UseAxleRefs<D>): void
-  onTransform?(response: R, refs: UseAxleRefs<D>): D
-  onSuccess?(response: R, refs: UseAxleRefs<D>): void
-  onError?(error: Error, refs: UseAxleRefs<D>): void
+  onBefore?(refs: UseAxleRefs<V>): void
+  onAfter?(refs: UseAxleRefs<V>): void
+  onTransform?(response: R, refs: UseAxleRefs<V>): V
+  onSuccess?(response: R, refs: UseAxleRefs<V>): void
+  onError?(error: Error, refs: UseAxleRefs<V>): void
 }
 
-export type UseAxleInstance<D, R, P> = [
-  data: Ref<D>,
+export type UseAxleInstance<V, R, P> = [
+  value: Ref<V>,
   run: Run<R, P>,
   extra: {
     uploadProgress: Ref<number>
@@ -46,41 +46,42 @@ export type UseAxleInstance<D, R, P> = [
 ]
 
 export interface CreateUseAxleOptions {
+  axle: AxleInstance
   onTransform?(response: any, refs: any): any
 }
 
-export function createUseAxle(options: CreateUseAxleOptions = {}) {
-  const { onTransform: defaultOnTransform } = options
+export function createUseAxle(options: CreateUseAxleOptions) {
+  const { axle, onTransform: defaultOnTransform } = options
 
-  const useAxle = <D = any, R = any, P = Record<string, any>>(
-    options: UseAxleOptions<D, R, P>
-  ): UseAxleInstance<D, R, P> => {
+  const useAxle = <V = any, R = any, P = Record<string, any>>(
+    options: UseAxleOptions<V, R, P>
+  ): UseAxleInstance<V, R, P> => {
     const {
       url,
-      runner,
+      method,
       immediate,
-      data: initialData,
+      value: initialValue,
       params: initialParams,
       config: initialConfig,
       retry = 0,
       onBefore = () => {},
       onAfter = () => {},
-      onTransform = (defaultOnTransform as UseAxleOptions<D, R, P>['onTransform']) ??
-        ((response) => response as unknown as D),
+      onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
+        ((response) => response as unknown as V),
       onSuccess = () => {},
       onError = () => {},
     } = options
 
     const initialUrl = url
-    const data = ref<D>(initialData) as Ref<D>
+    const value = ref(initialValue) as Ref<V>
     const loading = ref(false)
     const error = ref<Error>()
     const downloadProgress = ref(0)
     const uploadProgress = ref(0)
     const shouldRetry = retry > 0
 
-    const refs: UseAxleRefs<D> = {
-      data,
+    const refs: UseAxleRefs<V> = {
+      value,
       loading,
       error,
       downloadProgress,
@@ -104,7 +105,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
       loading.value = true
 
       try {
-        const response = await runner(url, options.params, {
+        const response = await axle[method](url, options.params, {
           signal: controller.signal,
 
           onUploadProgress(event) {
@@ -118,7 +119,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
           ...options.config,
         })
 
-        data.value = onTransform(response as R, refs)
+        value.value = onTransform(response as R, refs)
         error.value = undefined
         onSuccess(response as R, refs)
         loading.value = false
@@ -154,7 +155,7 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
     }
 
     return [
-      data,
+      value,
       run,
       {
         loading,
@@ -169,6 +170,6 @@ export function createUseAxle(options: CreateUseAxleOptions = {}) {
   return useAxle
 }
 
-export * from './useAllData.js'
+export * from './useValues.js'
 export * from './useHasLoading.js'
 export * from './useAverageProgress.js'

@@ -7,62 +7,64 @@ export type AxleRequestConfig = AxiosRequestConfig & {
   exceptionMessage?: any
 }
 
-export type FetchHelper = <T = any, R = AxiosResponse<T>>(
+export type FetchRunner = <T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,
   config?: AxleRequestConfig
 ) => Promise<R>
 
-export type ModifyHelper = <T = any, R = AxiosResponse<T>>(
+export type ModifyRunner = <T = any, R = AxiosResponse<T>>(
   url: string,
   params?: any,
   config?: AxleRequestConfig
 ) => Promise<R>
 
-export type FetchMethods = 'get' | 'delete' | 'options' | 'head'
+export type FetchMethod = 'get' | 'delete' | 'options' | 'head'
 
-export type ModifyMethods = 'post' | 'put' | 'patch'
+export type ModifyMethod = 'post' | 'put' | 'patch'
+
+export type RunnerMethod = keyof Omit<AxleInstance, 'axios' | 'getHeaders' | 'setHeader' | 'removeHeader'>
 
 export type AxleInstance = {
-  get: FetchHelper
-  getBlob: FetchHelper
-  getDocument: FetchHelper
-  getText: FetchHelper
-  getArrayBuffer: FetchHelper
-  getStream: FetchHelper
+  get: FetchRunner
+  getBlob: FetchRunner
+  getDocument: FetchRunner
+  getText: FetchRunner
+  getArrayBuffer: FetchRunner
+  getStream: FetchRunner
 
-  head: FetchHelper
-  headBlob: FetchHelper
-  headDocument: FetchHelper
-  headText: FetchHelper
-  headArrayBuffer: FetchHelper
-  headStream: FetchHelper
+  head: FetchRunner
+  headBlob: FetchRunner
+  headDocument: FetchRunner
+  headText: FetchRunner
+  headArrayBuffer: FetchRunner
+  headStream: FetchRunner
 
-  options: FetchHelper
-  optionsBlob: FetchHelper
-  optionsDocument: FetchHelper
-  optionsText: FetchHelper
-  optionsArrayBuffer: FetchHelper
-  optionsStream: FetchHelper
+  options: FetchRunner
+  optionsBlob: FetchRunner
+  optionsDocument: FetchRunner
+  optionsText: FetchRunner
+  optionsArrayBuffer: FetchRunner
+  optionsStream: FetchRunner
 
-  delete: FetchHelper
-  deleteBlob: FetchHelper
-  deleteDocument: FetchHelper
-  deleteText: FetchHelper
-  deleteArrayBuffer: FetchHelper
-  deleteStream: FetchHelper
+  delete: FetchRunner
+  deleteBlob: FetchRunner
+  deleteDocument: FetchRunner
+  deleteText: FetchRunner
+  deleteArrayBuffer: FetchRunner
+  deleteStream: FetchRunner
 
-  post: ModifyHelper
-  postUrlEncode: ModifyHelper
-  postMultipart: ModifyHelper
+  post: ModifyRunner
+  postUrlEncode: ModifyRunner
+  postMultipart: ModifyRunner
 
-  put: ModifyHelper
-  putUrlEncode: ModifyHelper
-  putMultipart: ModifyHelper
+  put: ModifyRunner
+  putUrlEncode: ModifyRunner
+  putMultipart: ModifyRunner
 
-  patch: ModifyHelper
-  patchUrlEncode: ModifyHelper
-  patchMultipart: ModifyHelper
+  patch: ModifyRunner
+  patchUrlEncode: ModifyRunner
+  patchMultipart: ModifyRunner
 
   getHeaders(): HeadersDefaults['common']
   setHeader(key: string, value: string): void
@@ -71,7 +73,7 @@ export type AxleInstance = {
   axios: AxiosInstance
 }
 
-export function createFetchHelper(service: AxiosInstance, method: FetchMethods, responseType: ResponseType) {
+export function createFetchRunner(service: AxiosInstance, method: FetchMethod, responseType: ResponseType) {
   return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
     return service[method](url, {
       params,
@@ -81,9 +83,9 @@ export function createFetchHelper(service: AxiosInstance, method: FetchMethods, 
   }
 }
 
-export function createModifyHelper(
+export function createModifyRunner(
   service: AxiosInstance,
-  method: ModifyMethods,
+  method: ModifyMethod,
   contentType: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded'
 ) {
   return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
@@ -142,45 +144,45 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
   }
 
   return {
-    get: createFetchHelper(service, 'get', 'json'),
-    getBlob: createFetchHelper(service, 'get', 'blob'),
-    getDocument: createFetchHelper(service, 'get', 'document'),
-    getArrayBuffer: createFetchHelper(service, 'get', 'arraybuffer'),
-    getText: createFetchHelper(service, 'get', 'text'),
-    getStream: createFetchHelper(service, 'get', 'stream'),
+    get: createFetchRunner(service, 'get', 'json'),
+    getBlob: createFetchRunner(service, 'get', 'blob'),
+    getDocument: createFetchRunner(service, 'get', 'document'),
+    getArrayBuffer: createFetchRunner(service, 'get', 'arraybuffer'),
+    getText: createFetchRunner(service, 'get', 'text'),
+    getStream: createFetchRunner(service, 'get', 'stream'),
 
-    head: createFetchHelper(service, 'head', 'json'),
-    headBlob: createFetchHelper(service, 'head', 'blob'),
-    headDocument: createFetchHelper(service, 'head', 'document'),
-    headArrayBuffer: createFetchHelper(service, 'head', 'arraybuffer'),
-    headText: createFetchHelper(service, 'head', 'text'),
-    headStream: createFetchHelper(service, 'head', 'stream'),
+    head: createFetchRunner(service, 'head', 'json'),
+    headBlob: createFetchRunner(service, 'head', 'blob'),
+    headDocument: createFetchRunner(service, 'head', 'document'),
+    headArrayBuffer: createFetchRunner(service, 'head', 'arraybuffer'),
+    headText: createFetchRunner(service, 'head', 'text'),
+    headStream: createFetchRunner(service, 'head', 'stream'),
 
-    options: createFetchHelper(service, 'options', 'json'),
-    optionsBlob: createFetchHelper(service, 'options', 'blob'),
-    optionsDocument: createFetchHelper(service, 'options', 'document'),
-    optionsArrayBuffer: createFetchHelper(service, 'options', 'arraybuffer'),
-    optionsText: createFetchHelper(service, 'options', 'text'),
-    optionsStream: createFetchHelper(service, 'options', 'stream'),
+    options: createFetchRunner(service, 'options', 'json'),
+    optionsBlob: createFetchRunner(service, 'options', 'blob'),
+    optionsDocument: createFetchRunner(service, 'options', 'document'),
+    optionsArrayBuffer: createFetchRunner(service, 'options', 'arraybuffer'),
+    optionsText: createFetchRunner(service, 'options', 'text'),
+    optionsStream: createFetchRunner(service, 'options', 'stream'),
 
-    delete: createFetchHelper(service, 'delete', 'json'),
-    deleteBlob: createFetchHelper(service, 'delete', 'blob'),
-    deleteDocument: createFetchHelper(service, 'delete', 'document'),
-    deleteArrayBuffer: createFetchHelper(service, 'delete', 'arraybuffer'),
-    deleteText: createFetchHelper(service, 'delete', 'text'),
-    deleteStream: createFetchHelper(service, 'delete', 'stream'),
+    delete: createFetchRunner(service, 'delete', 'json'),
+    deleteBlob: createFetchRunner(service, 'delete', 'blob'),
+    deleteDocument: createFetchRunner(service, 'delete', 'document'),
+    deleteArrayBuffer: createFetchRunner(service, 'delete', 'arraybuffer'),
+    deleteText: createFetchRunner(service, 'delete', 'text'),
+    deleteStream: createFetchRunner(service, 'delete', 'stream'),
 
-    post: createModifyHelper(service, 'post', 'application/json'),
-    postUrlEncode: createModifyHelper(service, 'post', 'application/x-www-form-urlencoded'),
-    postMultipart: createModifyHelper(service, 'post', 'multipart/form-data'),
+    post: createModifyRunner(service, 'post', 'application/json'),
+    postUrlEncode: createModifyRunner(service, 'post', 'application/x-www-form-urlencoded'),
+    postMultipart: createModifyRunner(service, 'post', 'multipart/form-data'),
 
-    put: createModifyHelper(service, 'put', 'application/json'),
-    putUrlEncode: createModifyHelper(service, 'put', 'application/x-www-form-urlencoded'),
-    putMultipart: createModifyHelper(service, 'put', 'multipart/form-data'),
+    put: createModifyRunner(service, 'put', 'application/json'),
+    putUrlEncode: createModifyRunner(service, 'put', 'application/x-www-form-urlencoded'),
+    putMultipart: createModifyRunner(service, 'put', 'multipart/form-data'),
 
-    patch: createModifyHelper(service, 'patch', 'application/json'),
-    patchUrlEncode: createModifyHelper(service, 'patch', 'application/x-www-form-urlencoded'),
-    patchMultipart: createModifyHelper(service, 'patch', 'multipart/form-data'),
+    patch: createModifyRunner(service, 'patch', 'application/json'),
+    patchUrlEncode: createModifyRunner(service, 'patch', 'application/x-www-form-urlencoded'),
+    patchMultipart: createModifyRunner(service, 'patch', 'multipart/form-data'),
 
     getHeaders,
     setHeader,

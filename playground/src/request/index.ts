@@ -6,6 +6,7 @@ const axle = createAxle({
 })
 
 const useAxle = createUseAxle({
+  axle,
   onTransform: (response) => response.data,
 })
 

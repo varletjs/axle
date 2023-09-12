@@ -1,4 +1,4 @@
-import { useAxle, axle } from '@/request'
+import { useAxle } from '@/request'
 import { UseAxleOptions } from '@varlet/axle/use'
 
 export type Response<T> = {
@@ -12,69 +12,68 @@ export interface User {
   name?: string
 }
 
-export type Options<D, R = any, P = Record<string, any>> = Partial<Omit<UseAxleOptions<D, R, P>, 'data'>> &
-  Pick<UseAxleOptions<D, R, P>, 'data'>
+export type Options<V, R = any, P = Record<string, any>> = Partial<UseAxleOptions<V, R, P>>
 
-export function useGetUsers<D>(options: Options<D, Response<User[]>>) {
+export function useGetUsers<V>(options: Options<V, Response<User[]>>) {
   return useAxle({
     url: '/user/list-user',
-    runner: axle.get,
+    runner: 'get',
     ...options,
   })
 }
 
-export function useGetUser<D>(options: Options<D, Response<User>>) {
+export function useGetUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/get-user',
-    runner: axle.get,
+    runner: 'get',
     ...options,
   })
 }
 
-export function useAddUser<D>(options: Options<D, Response<User>>) {
+export function useAddUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/add-user',
-    runner: axle.post,
+    runner: 'post',
     ...options,
   })
 }
 
-export function useDeleteUser<D>(options: Options<D, Response<User>>) {
+export function useDeleteUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/delete-user',
-    runner: axle.delete,
+    runner: 'delete',
     ...options,
   })
 }
 
-export function useUpdateUser<D>(options: Options<D, Response<User>>) {
+export function useUpdateUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/update-user',
-    runner: axle.put,
+    runner: 'put',
     ...options,
   })
 }
 
-export function usePatchUser<D>(options: Options<D, Response<User>>) {
+export function usePatchUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/patch-user',
-    runner: axle.patch,
+    runner: 'patch',
     ...options,
   })
 }
 
-export function useDownloadFile<D>(options: Options<D, Blob>) {
+export function useDownloadFile<V>(options: Options<V, Blob>) {
   return useAxle({
     url: 'http://localhost:5173/logo.png',
-    runner: axle.getBlob,
+    runner: 'getBlob',
     ...options,
   })
 }
 
-export function useThrowError<D>(options: Options<D, Response<User>>) {
+export function useThrowError<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/throw-error',
-    runner: axle.get,
+    runner: 'get',
     ...options,
   })
 }

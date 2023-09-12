@@ -202,15 +202,16 @@ import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({
+  axle,
   // Optional value: Default onTransform of the useAxle 
   onTransform: response => response
 })
 
 const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
-  // Request initial data
-  data: [],
-  // Request runner
-  runner: axle.get,
+  // Request initial value
+  value: [],
+  // Request method
+  method: 'get',
   // Request url
   url: '/user',
   // Whether to send the request immediately, defaults false
@@ -267,20 +268,20 @@ Axle provides some parallel request processing tools, please refer to the follow
 ```html
 <script setup>
 import { createAxle } from '@varlet/axle'
-import { createUseAxle, useAllData, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
+const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  data: [],
-  runner: axle.get,
+  value: [],
+  method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  data: [],
-  runner: axle.get,
+  value: [],
+  method: 'get',
   url: '/role',
 })
 
@@ -296,7 +297,7 @@ const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownload
 //   Ref<[{ name: 'foo' }, { name: 'bar' }]>, 
 //   Ref<[{ role: 'admin' }, { role: 'user' }]>
 // ]
-const usersRoles = useAllData(users, roles)
+const usersRoles = useValues(users, roles)
 
 function sendAllRequest() {
   // parallel

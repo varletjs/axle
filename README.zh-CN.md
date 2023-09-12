@@ -202,15 +202,16 @@ import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({
+  axle,
   // 可选项: useAxle 的默认 onTransform
   onTransform: response => response
 })
 
 const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
   // 请求初始化数据
-  data: [],
-  // 请求函数
-  runner: axle.get,
+  value: [],
+  // 请求方法
+  method: 'get',
   // 请求地址
   url: '/user',
   // 是否立即发送请求, 默认值: false
@@ -267,20 +268,20 @@ Axle 提供了一些并行请求处理工具，请参考以下示例。
 ```html
 <script setup>
 import { createAxle } from '@varlet/axle'
-import { createUseAxle, useAllData, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
 
 const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle()
+const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
   data: [],
-  runner: axle.get,
+  method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
   data: [],
-  runner: axle.get,
+  method: 'get',
   url: '/role',
 })
 
@@ -296,7 +297,7 @@ const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownload
 //   Ref<[{ name: 'foo' }, { name: 'bar' }]>, 
 //   Ref<[{ role: 'admin' }, { role: 'user' }]>
 // ]
-const usersRoles = useAllData(users, roles)
+const usersRoles = useValues(users, roles)
 
 function sendAllRequest() {
   // parallel

@@ -274,13 +274,13 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  data: [],
+  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  data: [],
+  value: [],
   method: 'get',
   url: '/role',
 })

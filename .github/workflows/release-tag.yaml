@@ -20,5 +20,5 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           body: |
-            更新内容请查看[CHANGELOG](https://github.com/varletjs/axle/blob/dev/CHANGELOG.md)。
-            Please refer to [CHANGELOG](https://github.com/varletjs/axle/blob/dev/CHANGELOG.md) for details.
+            更新内容请查看[CHANGELOG](https://github.com/varletjs/axle/blob/main/CHANGELOG.md)。
+            Please refer to [CHANGELOG](https://github.com/varletjs/axle/blob/main/CHANGELOG.md) for details.

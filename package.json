@@ -35,13 +35,13 @@
     "release": "pnpm build && varlet-cli release"
   },
   "dependencies": {
-    "@varlet/shared": "^2.11.8",
+    "@varlet/shared": "^2.16.5",
     "axios": "^1.4.0",
     "qs": "^6.11.0"
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@varlet/cli": "^2.15.0",
+    "@varlet/cli": "^2.16.5",
     "rimraf": "^5.0.1",
     "typescript": "^5.1.5",
     "vue": "3.3.4"
@@ -53,7 +53,7 @@
   "bugs": {
     "url": "https://github.com/varletjs/axle/issues"
   },
-  "packageManager": "pnpm@8.0.0",
+  "packageManager": "pnpm@8.7.5",
   "engines": {
     "pnpm": ">=8.0"
   }

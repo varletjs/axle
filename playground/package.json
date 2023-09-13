@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "@varlet/axle": "link:..",
-    "@varlet/touch-emulator": "2.13.1",
-    "@varlet/ui": "^2.15.0",
-    "@varlet/use": "^2.15.0",
+    "@varlet/touch-emulator": "2.16.5",
+    "@varlet/ui": "^2.16.5",
+    "@varlet/use": "^2.16.5",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-router": "^12.0.0",

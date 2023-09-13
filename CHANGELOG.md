@@ -1,3 +1,12 @@
+## [0.2.1](https://github.com/varletjs/axle/compare/v0.2.0...v0.2.1) (2023-09-13)
+
+
+### Bug Fixes
+
+* fix playground api invoke ([8535023](https://github.com/varletjs/axle/commit/8535023b54aa9d0da30224e385c936f53019f764))
+
+
+
 # [0.2.0](https://github.com/varletjs/axle/compare/v0.1.2...v0.2.0) (2023-09-12)
 
 

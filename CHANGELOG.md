@@ -1,3 +1,12 @@
+## [0.2.2](https://github.com/varletjs/axle/compare/v0.2.1...v0.2.2) (2023-11-29)
+
+
+### Features
+
+* support params getter ([3552ec7](https://github.com/varletjs/axle/commit/3552ec7cb92f4ca317394b511e6122e661c5bbc2))
+
+
+
 ## [0.2.1](https://github.com/varletjs/axle/compare/v0.2.0...v0.2.1) (2023-09-13)
 
 

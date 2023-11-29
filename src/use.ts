@@ -1,5 +1,6 @@
 import { ref, type Ref } from 'vue'
 import { type AxleRequestConfig, type RunnerMethod, type AxleInstance } from './instance.js'
+import { isFunction } from '@varlet/shared'
 
 export interface RunOptions<P> {
   url?: string
@@ -22,7 +23,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   url: string
   method: RunnerMethod
   value?: V
-  params?: P
+  params?: P | (() => P)
   retry?: number
   config?: AxleRequestConfig
   immediate?: boolean
@@ -61,7 +62,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       method,
       immediate,
       value: initialValue,
-      params: initialParams,
+      params: initialParamsOrGetter,
       config: initialConfig,
       retry = 0,
       onBefore = () => {},
@@ -105,19 +106,24 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       loading.value = true
 
       try {
-        const response = await axle[method](url, options.params, {
-          signal: controller.signal,
+        const getterParams = isFunction(initialParamsOrGetter) ? initialParamsOrGetter() : {}
+        const response = await axle[method](
+          url,
+          { ...getterParams, ...options.params },
+          {
+            signal: controller.signal,
 
-          onUploadProgress(event) {
-            uploadProgress.value = event.progress ?? 0
-          },
+            onUploadProgress(event) {
+              uploadProgress.value = event.progress ?? 0
+            },
 
-          onDownloadProgress(event) {
-            downloadProgress.value = event.progress ?? 0
-          },
+            onDownloadProgress(event) {
+              downloadProgress.value = event.progress ?? 0
+            },
 
-          ...options.config,
-        })
+            ...options.config,
+          }
+        )
 
         value.value = onTransform(response as R, refs)
         error.value = undefined
@@ -149,7 +155,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     if (immediate) {
       run({
         url: initialUrl,
-        params: initialParams,
+        params: isFunction(initialParamsOrGetter) ? ({} as P) : initialParamsOrGetter,
         config: initialConfig,
       })
     }

@@ -32,16 +32,16 @@
     "bootstrap": "pnpm i && pnpm build && pnpm --filter ./playground i",
     "dev": "tsc -w",
     "build": "rimraf ./es && tsc",
-    "release": "pnpm build && varlet-cli release"
+    "release": "pnpm build && vr release"
   },
   "dependencies": {
-    "@varlet/shared": "^2.16.5",
+    "@varlet/shared": "^2.19.2",
     "axios": "^1.4.0",
     "qs": "^6.11.0"
   },
   "devDependencies": {
     "@types/qs": "^6.9.7",
-    "@varlet/cli": "^2.16.5",
+    "@varlet/release": "0.0.3",
     "rimraf": "^5.0.1",
     "typescript": "^5.1.5",
     "vue": "3.3.4"

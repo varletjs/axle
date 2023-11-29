@@ -218,6 +218,8 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   immediate: true,
   // The number of retries after a failed request, defaults 0
   retry: 3,
+  // Whether the value needs to be reset before requesting, defaults false
+  resetValue: true,
   // Request params, defaults {}
   // When params is an object, it will be carried when sending the first request (immediate)
   // When params is a function, it will be carried every time a request is sent.

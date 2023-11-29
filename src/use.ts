@@ -6,6 +6,7 @@ export interface RunOptions<P> {
   url?: string
   params?: P
   config?: AxleRequestConfig
+  resetValue?: boolean
   _retryCount?: number
 }
 
@@ -25,6 +26,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   value?: V
   params?: P | (() => P)
   retry?: number
+  resetValue?: boolean
   config?: AxleRequestConfig
   immediate?: boolean
   onBefore?(refs: UseAxleRefs<V>): void
@@ -62,6 +64,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       method,
       immediate,
       value: initialValue,
+      resetValue: initialResetValue,
       params: initialParamsOrGetter,
       config: initialConfig,
       retry = 0,
@@ -94,6 +97,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     const run: Run<R, P> = async (options: RunOptions<P> = {}) => {
       if (controller.signal.aborted) {
         controller = new AbortController()
+      }
+
+      const resetValue = options.resetValue ?? initialResetValue ?? false
+      if (resetValue === true) {
+        value.value = initialValue as V
       }
 
       uploadProgress.value = 0

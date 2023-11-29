@@ -1,3 +1,12 @@
+## [0.2.3](https://github.com/varletjs/axle/compare/v0.2.2...v0.2.3) (2023-11-29)
+
+
+### Features
+
+* support resetValue ([f67b1c0](https://github.com/varletjs/axle/commit/f67b1c0af17c36e05a628d42bcdf1ce77ecef73c))
+
+
+
 ## [0.2.2](https://github.com/varletjs/axle/compare/v0.2.1...v0.2.2) (2023-11-29)
 
 

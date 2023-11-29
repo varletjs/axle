@@ -219,6 +219,8 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   // The number of retries after a failed request, defaults 0
   retry: 3,
   // Request params, defaults {}
+  // When params is an object, it will be carried when sending the first request (immediate)
+  // When params is a function, it will be carried every time a request is sent.
   params: { current: 1, pageSize: 10 },
   // Axios config, see https://axios-http.com
   config: { headers: {} },

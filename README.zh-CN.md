@@ -219,6 +219,8 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   // 错误重试次数, 默认值: 0
   retry: 3,
   // 请求参数, 默认值: {}
+  // 当参数是一个对象时，发送第一个请求（immediate）时将携带它
+  // 当参数是一个函数时，每次发送请求时都会携带它。
   params: { current: 1, pageSize: 10 },
   // Axios 配置, see https://axios-http.com
   config: { headers: {} },

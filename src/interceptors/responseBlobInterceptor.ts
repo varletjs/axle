@@ -12,7 +12,7 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
         return options.data?.(response) ?? response
       }
 
-			return response
+      return response
     },
     onRejected(error) {
       return Promise.reject(error)

@@ -9,17 +9,17 @@ export function requestHeadersInterceptor(options: RequestHeadersInterceptorOpti
   const { headers: headersOrGetter } = options
 
   return {
-		onFulfilled(config) {
-			const headers = (isFunction(headersOrGetter) ? headersOrGetter() : headersOrGetter) ?? {}
+    onFulfilled(config) {
+      const headers = (isFunction(headersOrGetter) ? headersOrGetter() : headersOrGetter) ?? {}
 
-			Object.entries(headers).forEach(([key, value]) => {
-				config.headers[key] = value
-			})
-     
+      Object.entries(headers).forEach(([key, value]) => {
+        config.headers[key] = value
+      })
+
       return config
-		},
-		onRejected(error) {
-			return Promise.reject(error)
-		}
-	}
+    },
+    onRejected(error) {
+      return Promise.reject(error)
+    },
+  }
 }

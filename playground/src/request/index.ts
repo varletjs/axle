@@ -1,4 +1,4 @@
-import { createAxle } from '@varlet/axle'
+import { createAxle, AxleTIMEOUTInterceptor } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle({
@@ -10,6 +10,8 @@ const useAxle = createUseAxle({
   onTransform: (response) => response.data,
 })
 
+axle.axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+
 axle.axios.interceptors.response.use(
   (response) => {
     if (response.data.code !== 200 && response.data.message) {
@@ -19,7 +21,6 @@ axle.axios.interceptors.response.use(
     return response.data
   },
   (error) => {
-    console.log(error)
     Snackbar.error(error.message)
     return Promise.reject(error)
   }

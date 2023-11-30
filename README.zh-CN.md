@@ -69,6 +69,27 @@ axios.interceptors.response.use((response) => {
 })
 ```
 
+#### 拦截器
+
+Axle 为业务内置了一些拦截器
+
+```js
+import { AxleTIMEOUTInterceptor } from '@varlet/axle'
+
+//添加
+axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+
+axios.interceptors.response.use((response) => {
+  return response
+}, (error) => {
+  if(error.code === 'TIMEOUT') {
+    console.error('这个请求超时啦')
+  }
+  return Promise.reject(error)
+})
+
+```
+
 ## Axle & Axios 请求函数
 
 `Axle` 提供的请求函数可以帮助您更轻松地发送请求。 以下是一些示例，包括与 `axios` 的比较。

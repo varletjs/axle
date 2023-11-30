@@ -29,10 +29,13 @@
   "author": "haoziqaq <357229046@qq.com>",
   "license": "MIT",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "bootstrap": "pnpm i && pnpm build && pnpm --filter ./playground i",
+    "play": " pnpm --filter ./playground dev",
     "dev": "tsc -w",
-    "build": "rimraf ./es && tsc",
-    "release": "pnpm build && vr release"
+    "build": "pnpm clear && tsc",
+    "release": "pnpm build && vr release",
+    "clean": "rimraf ./es"
   },
   "dependencies": {
     "@varlet/shared": "^2.19.2",

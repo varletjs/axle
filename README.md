@@ -69,6 +69,27 @@ axios.interceptors.response.use((response) => {
 })
 ```
 
+#### Interceptor
+
+Axle add some built-in interceptor
+
+```js
+import { AxleTIMEOUTInterceptor } from '@varlet/axle'
+
+// Add a response timeout interceptor
+axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+
+axios.interceptors.response.use((response) => {
+  return response
+}, (error) => {
+  if(error.code === 'TIMEOUT') {
+    console.error('This fetch is Timeout')
+  }
+  return Promise.reject(error)
+})
+
+```
+
 ## Axle & Axios Request Functions
 
 The request function provided by Axle can help you send requests more easily. Here are some examples including comparison with axios.

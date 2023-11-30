@@ -12,6 +12,13 @@ import {
   useThrowError,
   User,
 } from './apis'
+import { axle } from './request';
+
+const testTimeout = () => {
+  axle.get('/user/get-user?id=1', undefined, {
+    timeout: 1000,
+  })
+}
 
 const id = ref('1')
 const deleteId = ref('1')
@@ -141,6 +148,7 @@ watch(
       <var-input type="number" variant="outlined" v-model="id" />
       <var-button type="primary" @click="getUser({ params: { id } })">Search</var-button>
       <var-button type="warning" @click="abort">Abort</var-button>
+      <var-button type="info" @click="testTimeout">Timeout</var-button>
     </var-space>
 
     <var-cell>name: getUser</var-cell>

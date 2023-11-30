@@ -32,7 +32,10 @@ export type FetchMethod = 'get' | 'delete' | 'options' | 'head'
 
 export type ModifyMethod = 'post' | 'put' | 'patch'
 
-export type RunnerMethod = keyof Omit<AxleInstance, 'axios' | 'getHeaders' | 'setHeader' | 'removeHeader' | 'useRequestInterceptor' | 'useResponseInterceptor'>
+export type RunnerMethod = keyof Omit<
+  AxleInstance,
+  'axios' | 'getHeaders' | 'setHeader' | 'removeHeader' | 'useRequestInterceptor' | 'useResponseInterceptor'
+>
 
 export interface Interceptor<V> {
   onFulfilled?: ((value: V) => any) | null
@@ -89,8 +92,8 @@ export type AxleInstance = {
   setHeader(key: string, value: string): void
   removeHeader(key: string | string[]): void
 
-  useRequestInterceptor(interceptor: RequestInterceptor): void
-  useResponseInterceptor(interceptor: ResponseInterceptor): void
+  useRequestInterceptor(...interceptors: RequestInterceptor[]): void
+  useResponseInterceptor(...interceptors: ResponseInterceptor[]): void
 
   axios: AxiosInstance
 }
@@ -165,12 +168,16 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     key.forEach((k) => Reflect.deleteProperty(service.defaults.headers['common'] as AxiosRequestHeaders, k))
   }
 
-  function useRequestInterceptor(interceptor: RequestInterceptor) {
-    service.interceptors.request.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+  function useRequestInterceptor(...interceptors: RequestInterceptor[]) {
+    interceptors.forEach((interceptor) => {
+      service.interceptors.request.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+    })
   }
 
-  function useResponseInterceptor(interceptor: ResponseInterceptor) {
-    service.interceptors.response.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+  function useResponseInterceptor(...interceptors: ResponseInterceptor[]) {
+    interceptors.forEach((interceptor) => {
+      service.interceptors.response.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+    })
   }
 
   return {

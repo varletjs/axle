@@ -1,6 +1,15 @@
 import axios from 'axios'
 import qs from 'qs'
-import type { AxiosInstance, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse, HeadersDefaults, ResponseType } from 'axios'
+import type {
+  AxiosInstance,
+  AxiosInterceptorOptions,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  HeadersDefaults,
+  InternalAxiosRequestConfig,
+  ResponseType,
+} from 'axios'
 import { inBrowser } from '@varlet/shared'
 
 export type AxleRequestConfig = AxiosRequestConfig & {
@@ -24,6 +33,16 @@ export type FetchMethod = 'get' | 'delete' | 'options' | 'head'
 export type ModifyMethod = 'post' | 'put' | 'patch'
 
 export type RunnerMethod = keyof Omit<AxleInstance, 'axios' | 'getHeaders' | 'setHeader' | 'removeHeader'>
+
+export interface Interceptor<V> {
+  onFulfilled?: ((value: V) => any) | null
+  onRejected?: ((error: any) => any) | null
+  options?: AxiosInterceptorOptions
+}
+
+export type RequestInterceptor = Interceptor<InternalAxiosRequestConfig>
+
+export type ResponseInterceptor<V = AxiosResponse<any, any>> = Interceptor<V>
 
 export type AxleInstance = {
   get: FetchRunner
@@ -69,6 +88,9 @@ export type AxleInstance = {
   getHeaders(): HeadersDefaults['common']
   setHeader(key: string, value: string): void
   removeHeader(key: string | string[]): void
+
+  useRequestInterceptor(interceptor: RequestInterceptor): void
+  useResponseInterceptor(interceptor: ResponseInterceptor): void
 
   axios: AxiosInstance
 }
@@ -143,6 +165,14 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     key.forEach((k) => Reflect.deleteProperty(service.defaults.headers['common'] as AxiosRequestHeaders, k))
   }
 
+  function useRequestInterceptor(interceptor: RequestInterceptor) {
+    service.interceptors.request.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+  }
+
+  function useResponseInterceptor(interceptor: ResponseInterceptor) {
+    service.interceptors.response.use(interceptor.onFulfilled, interceptor.onRejected, interceptor.options)
+  }
+
   return {
     get: createFetchRunner(service, 'get', 'json'),
     getBlob: createFetchRunner(service, 'get', 'blob'),
@@ -187,6 +217,9 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
     getHeaders,
     setHeader,
     removeHeader,
+
+    useRequestInterceptor,
+    useResponseInterceptor,
 
     axios: service,
   }

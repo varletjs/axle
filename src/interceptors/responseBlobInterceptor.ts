@@ -2,7 +2,7 @@ import type { AxiosInterceptorOptions, AxiosResponse } from 'axios'
 import type { ResponseInterceptor } from '../instance'
 
 export interface ResponseBlobInterceptorOptions {
-  data?: (response: AxiosResponse<any, any>) => any
+  onResponse?: (response: AxiosResponse<any, any>) => any
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
@@ -10,7 +10,7 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
   return {
     onFulfilled(response) {
       if (response.request.responseType === 'blob') {
-        return options.data?.(response) ?? response
+        return options.onResponse?.(response) ?? response
       }
 
       return response

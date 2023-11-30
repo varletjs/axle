@@ -32,7 +32,7 @@ export type FetchMethod = 'get' | 'delete' | 'options' | 'head'
 
 export type ModifyMethod = 'post' | 'put' | 'patch'
 
-export type RunnerMethod = keyof Omit<AxleInstance, 'axios' | 'getHeaders' | 'setHeader' | 'removeHeader'>
+export type RunnerMethod = keyof Omit<AxleInstance, 'axios' | 'getHeaders' | 'setHeader' | 'removeHeader' | 'useRequestInterceptor' | 'useResponseInterceptor'>
 
 export interface Interceptor<V> {
   onFulfilled?: ((value: V) => any) | null

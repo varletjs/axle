@@ -1,3 +1,12 @@
+## [0.2.5](https://github.com/varletjs/axle/compare/v0.2.4...v0.2.5) (2023-11-30)
+
+
+### Features
+
+* support rest args for interceptor ([74cf8bf](https://github.com/varletjs/axle/commit/74cf8bf60bc796a6f7567463c0587db588fb86c7))
+
+
+
 ## [0.2.4](https://github.com/varletjs/axle/compare/v0.2.3...v0.2.4) (2023-11-30)
 
 

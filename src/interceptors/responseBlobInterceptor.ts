@@ -1,8 +1,9 @@
-import type { AxiosResponse } from 'axios'
+import type { AxiosInterceptorOptions, AxiosResponse } from 'axios'
 import type { ResponseInterceptor } from '../instance'
 
 export interface ResponseBlobInterceptorOptions {
   data?: (response: AxiosResponse<any, any>) => any
+  axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
 export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions = {}): ResponseInterceptor {
@@ -17,5 +18,6 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
     onRejected(error) {
       return Promise.reject(error)
     },
+    options: options.axiosInterceptorOptions,
   }
 }

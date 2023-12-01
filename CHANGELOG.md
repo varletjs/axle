@@ -1,3 +1,17 @@
+## [0.2.6](https://github.com/varletjs/axle/compare/v0.2.5...v0.2.6) (2023-12-01)
+
+
+### Bug Fixes
+
+* replace || with ?? ([34fd2c8](https://github.com/varletjs/axle/commit/34fd2c88b906bbdfa337b7483a72617f84791730))
+
+
+### Features
+
+* add built-in timeout interceptor ([#4](https://github.com/varletjs/axle/issues/4)) ([255236f](https://github.com/varletjs/axle/commit/255236f1796eeb31fb6c15864396b640719a2feb))
+
+
+
 ## [0.2.5](https://github.com/varletjs/axle/compare/v0.2.4...v0.2.5) (2023-11-30)
 
 

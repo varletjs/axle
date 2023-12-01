@@ -1,4 +1,4 @@
-import { createAxle, AxleTIMEOUTInterceptor } from '@varlet/axle'
+import { createAxle, TimeoutInterceptor } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle({
@@ -10,7 +10,7 @@ const useAxle = createUseAxle({
   onTransform: (response) => response.data,
 })
 
-axle.axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+axle.axios.interceptors.response.use(...TimeoutInterceptor())
 
 axle.axios.interceptors.response.use(
   (response) => {

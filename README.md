@@ -74,10 +74,10 @@ axios.interceptors.response.use((response) => {
 Axle add some built-in interceptor
 
 ```js
-import { AxleTIMEOUTInterceptor } from '@varlet/axle'
+import { TimeoutInterceptor } from '@varlet/axle'
 
 // Add a response timeout interceptor
-axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+axios.interceptors.response.use(...TimeoutInterceptor())
 
 axios.interceptors.response.use((response) => {
   return response

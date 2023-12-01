@@ -74,10 +74,10 @@ axios.interceptors.response.use((response) => {
 Axle 为业务内置了一些拦截器
 
 ```js
-import { AxleTIMEOUTInterceptor } from '@varlet/axle'
+import { TimeoutInterceptor } from '@varlet/axle'
 
 //添加
-axios.interceptors.response.use(...AxleTIMEOUTInterceptor())
+axios.interceptors.response.use(...TimeoutInterceptor())
 
 axios.interceptors.response.use((response) => {
   return response

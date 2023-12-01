@@ -1,3 +1,27 @@
+## [0.2.5](https://github.com/varletjs/axle/compare/v0.2.4...v0.2.5) (2023-11-30)
+
+
+### Features
+
+* support rest args for interceptor ([74cf8bf](https://github.com/varletjs/axle/commit/74cf8bf60bc796a6f7567463c0587db588fb86c7))
+
+
+
+## [0.2.4](https://github.com/varletjs/axle/compare/v0.2.3...v0.2.4) (2023-11-30)
+
+
+### Bug Fixes
+
+* rename data to onResponse ([d153a79](https://github.com/varletjs/axle/commit/d153a79033954aeb283f96ba11eae8ffbac61e32))
+
+
+### Features
+
+* support interceptors system ([76b5fb5](https://github.com/varletjs/axle/commit/76b5fb57dbd76986e881bff9de0ad4f61738bf65))
+* support options.axiosInterceptorOptions ([7a53a4e](https://github.com/varletjs/axle/commit/7a53a4ee21ff1045cc8be467209e9491a65e2342))
+
+
+
 ## [0.2.3](https://github.com/varletjs/axle/compare/v0.2.2...v0.2.3) (2023-11-29)
 
 

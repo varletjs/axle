@@ -1,5 +1,5 @@
 {
   "root": true,
   "extends": ["@varlet"],
-  "exclude": ["node_modules", "es"]
+  "ignorePatterns": ["node_modules", "es"]
 }

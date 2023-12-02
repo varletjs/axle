@@ -31,15 +31,19 @@
   "scripts": {
     "bootstrap": "pnpm i && pnpm build && pnpm --filter ./playground i",
     "dev": "tsc -w",
+    "dev:play": "pnpm --dir ./playground dev",
     "build": "rimraf ./es && tsc",
     "release": "pnpm build && vr release"
   },
   "dependencies": {
     "@varlet/shared": "^2.19.2",
     "axios": "^1.4.0",
+    "micromatch": "^4.0.5",
+    "minimatch": "^9.0.3",
     "qs": "^6.11.0"
   },
   "devDependencies": {
+    "@types/minimatch": "^5.1.2",
     "@types/qs": "^6.9.7",
     "@varlet/release": "0.0.3",
     "rimraf": "^5.0.1",

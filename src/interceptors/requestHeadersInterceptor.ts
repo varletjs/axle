@@ -1,10 +1,13 @@
 import { isFunction } from '@varlet/shared'
+import { createMatcher } from '../matcher'
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions } from 'axios'
 
 export interface RequestHeadersInterceptorOptions {
   headers?: Record<string, string> | (() => Record<string, string>)
   axiosInterceptorOptions?: AxiosInterceptorOptions
+  include?: string[]
+  exclude?: string[]
 }
 
 export function requestHeadersInterceptor(options: RequestHeadersInterceptorOptions = {}): RequestInterceptor {
@@ -12,6 +15,11 @@ export function requestHeadersInterceptor(options: RequestHeadersInterceptorOpti
 
   return {
     onFulfilled(config) {
+      const matcher = createMatcher(options.include, options.exclude)
+      if (!matcher(config.method ?? '', config.url ?? '')) {
+        return config
+      }
+
       const headers = (isFunction(headersOrGetter) ? headersOrGetter() : headersOrGetter) ?? {}
 
       Object.entries(headers).forEach(([key, value]) => {

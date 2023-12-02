@@ -52,7 +52,6 @@
   "dependencies": {
     "@varlet/shared": "^2.19.2",
     "axios": "^1.4.0",
-    "micromatch": "^4.0.5",
     "minimatch": "^9.0.3",
     "qs": "^6.11.0"
   },

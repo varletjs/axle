@@ -13,6 +13,5 @@
     "lib": ["esnext", "dom"],
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve"
-  },
-  "include": ["src"]
+  }
 }

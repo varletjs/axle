@@ -199,7 +199,7 @@ axle.removeHeader('TOKEN')
 
 ## Vue 组合式 API
 
-Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`错误重试`，`生命周期` 等等，并继承了 `axios` 的所有配置。
+Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`生命周期` 等等，并继承了 `axios` 的所有配置。
 
 ```html
 <script setup>
@@ -223,8 +223,6 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   url: '/user',
   // 是否立即发送请求, 默认值: false
   immediate: true,
-  // 错误重试次数, 默认值: 0
-  retry: 3,
   // 请求前是否需要重置 value, 默认值: false
   resetValue: true,
   // 请求参数, 默认值: {}

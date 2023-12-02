@@ -7,7 +7,6 @@ export interface RunOptions<P> {
   params?: P
   config?: AxleRequestConfig
   resetValue?: boolean
-  _retryCount?: number
 }
 
 export type Run<R, P> = (options?: RunOptions<P>) => Promise<R>
@@ -25,7 +24,6 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   method: RunnerMethod
   value?: V
   params?: P | (() => P)
-  retry?: number
   resetValue?: boolean
   config?: AxleRequestConfig
   immediate?: boolean
@@ -67,7 +65,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       resetValue: initialResetValue,
       params: initialParamsOrGetter,
       config: initialConfig,
-      retry = 0,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -82,7 +79,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     const error = ref<Error>()
     const downloadProgress = ref(0)
     const uploadProgress = ref(0)
-    const shouldRetry = retry > 0
 
     const refs: UseAxleRefs<V> = {
       value,
@@ -140,13 +136,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         onAfter(refs)
 
         return response as R
-      } catch (responseError: unknown) {
-        const currentRetryCount = options._retryCount == null ? 0 : options._retryCount
-
-        if (shouldRetry && currentRetryCount < retry) {
-          return run({ ...options, _retryCount: currentRetryCount + 1 })
-        }
-
+      } catch (responseError: any) {
         error.value = responseError as Error
         onError(responseError as Error, refs)
         loading.value = false

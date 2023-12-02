@@ -57,7 +57,7 @@ router.get('/user/get-user', async (ctx) => {
 })
 
 router.get('/user/throw-error', async (ctx) => {
-  await delay(200)
+  await delay(1000)
 
   count++
 

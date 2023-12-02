@@ -5,9 +5,9 @@ import type { AxiosInterceptorOptions } from 'axios'
 
 export interface RequestHeadersInterceptorOptions {
   headers?: Record<string, string> | (() => Record<string, string>)
-  axiosInterceptorOptions?: AxiosInterceptorOptions
   include?: string[]
   exclude?: string[]
+  axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
 export function requestHeadersInterceptor(options: RequestHeadersInterceptorOptions = {}): RequestInterceptor {
@@ -28,9 +28,7 @@ export function requestHeadersInterceptor(options: RequestHeadersInterceptorOpti
 
       return config
     },
-    onRejected(error) {
-      return Promise.reject(error)
-    },
+    onRejected: (error) => Promise.reject(error),
     options: options.axiosInterceptorOptions,
   }
 }

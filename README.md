@@ -199,7 +199,7 @@ axle.removeHeader('TOKEN')
 
 ## Vue Composition API
 
-Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `error retry`, `lifecycle`, etc., And inherit all the configuration of `axios`.
+Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `lifecycle`, etc., And inherit all the configuration of `axios`.
 
 ```html
 <script setup>
@@ -223,8 +223,6 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   url: '/user',
   // Whether to send the request immediately, defaults false
   immediate: true,
-  // The number of retries after a failed request, defaults 0
-  retry: 3,
   // Whether the value needs to be reset before requesting, defaults false
   resetValue: true,
   // Request params, defaults {}

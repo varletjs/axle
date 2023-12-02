@@ -4,9 +4,9 @@ import { createMatcher } from '../matcher'
 
 export interface ResponseBlobInterceptorOptions {
   onResponse?: (response: AxiosResponse<any, any>) => any
-  axiosInterceptorOptions?: AxiosInterceptorOptions
   include?: string[]
   exclude?: string[]
+  axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
 export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions = {}): ResponseInterceptor {
@@ -23,9 +23,7 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
 
       return response
     },
-    onRejected(error) {
-      return Promise.reject(error)
-    },
+    onRejected: (error) => Promise.reject(error),
     options: options.axiosInterceptorOptions,
   }
 }

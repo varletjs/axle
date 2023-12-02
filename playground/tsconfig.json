@@ -12,10 +12,9 @@
     "esModuleInterop": true,
     "strictNullChecks": true,
     "lib": ["esnext", "dom"],
-    "types": ["vue/macros-global", "vite/client"],
+    "types": ["vite/client"],
     "paths": {
       "@/*": ["./src/*"]
     }
-  },
-  "exclude": ["dist", "node_modules"]
+  }
 }

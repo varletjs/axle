@@ -62,7 +62,7 @@ export function usePatchUser<V>(options: Options<V, Response<User>>) {
   })
 }
 
-export function useDownloadFile<V>(options: Options<V, Blob>) {
+export function useDownloadFile<V>(options: Options<V, Response<Blob>>) {
   return useAxle({
     url: 'http://localhost:5173/logo.png',
     method: 'getBlob',

@@ -4,19 +4,16 @@ import { createMatcher } from '../matcher'
 
 export interface ResponseTimeoutInterceptorOptions {
   normalizeErrorCode?: string
-  axiosInterceptorOptions?: AxiosInterceptorOptions
   include?: string[]
   exclude?: string[]
+  axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
 export function responseTimeoutInterceptor(options: ResponseTimeoutInterceptorOptions = {}): ResponseInterceptor {
   return {
-    onFulfilled(response) {
-      return response
-    },
+    onFulfilled: (response) => response,
     onRejected(error) {
       const matcher = createMatcher(options.include, options.exclude)
-
       if (!matcher(error.config.method ?? '', error.config.url ?? '')) {
         return Promise.reject(error)
       }

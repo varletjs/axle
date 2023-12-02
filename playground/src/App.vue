@@ -70,15 +70,12 @@ const [deletedUser, deleteUser] = useDeleteUser<User>({
   },
 })
 
-const [file, downloadBlob, { downloadProgress }] = useDownloadFile<Blob | null>({
-  onTransform: (response) => response,
-})
+const [file, downloadBlob, { downloadProgress }] = useDownloadFile<Blob | null>({})
 
 const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError({
   onBefore(refs) {
     refs.value.value = {}
   },
-  retry: 3,
 })
 
 // parallel
@@ -118,7 +115,10 @@ async function handleDelete() {
 }
 
 async function downloadFile() {
-  download(await downloadBlob(), 'logo.png')
+  const { code, data } = await downloadBlob()
+  if (code === 200) {
+    download(data, 'logo.png')
+  }
 }
 
 watch(

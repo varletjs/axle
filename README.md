@@ -203,55 +203,56 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
 
 ```html
 <script setup>
-  import { createAxle } from '@varlet/axle'
-  import { createUseAxle } from '@varlet/axle/use'
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
 
-  const axle = createAxle(/** @see https://axios-http.com **/)
-  const useAxle = createUseAxle({
-    axle,
-    // Optional value: Default onTransform of the useAxle
-    onTransform: (response) => response,
-  })
+const axle = createAxle(/** @see https://axios-http.com **/)
 
-  const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
-    // Request initial value
-    value: [],
-    // Request method
-    method: 'get',
-    // Request url
-    url: '/user',
-    // Whether to send the request immediately, defaults false
-    immediate: true,
-    // The number of retries after a failed request, defaults 0
-    retry: 3,
-    // Whether the value needs to be reset before requesting, defaults false
-    resetValue: true,
-    // Request params, defaults {}
-    // When params is an object, it will be carried when sending the first request (immediate)
-    // When params is a function, it will be carried every time a request is sent.
-    params: { current: 1, pageSize: 10 },
-    // Axios config, see https://axios-http.com
-    config: { headers: {} },
-    // lifecycle
-    onBefore(refs) {
-      const { data, loading, error, uploadProgress, downloadProgress } = refs
-      console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
-      // Do request before
-    },
-    onTransform(response, refs) {
-      // Handle data transform, The transformed data will be the value of users.
-      return response.data
-    },
-    onSuccess(response, refs) {
-      // Do request success
-    },
-    onError(error, refs) {
-      // Do request error
-    },
-    onAfter(refs) {
-      // Do request after
-    },
-  })
+const useAxle = createUseAxle({
+  axle,
+  // Optional value: Default onTransform of the useAxle
+  onTransform: (response) => response,
+})
+
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+  // Request initial value
+  value: [],
+  // Request method
+  method: 'get',
+  // Request url
+  url: '/user',
+  // Whether to send the request immediately, defaults false
+  immediate: true,
+  // The number of retries after a failed request, defaults 0
+  retry: 3,
+  // Whether the value needs to be reset before requesting, defaults false
+  resetValue: true,
+  // Request params, defaults {}
+  // When params is an object, it will be carried when sending the first request (immediate)
+  // When params is a function, it will be carried every time a request is sent.
+  params: { current: 1, pageSize: 10 },
+  // Axios config, see https://axios-http.com
+  config: { headers: {} },
+  // lifecycle
+  onBefore(refs) {
+    const { data, loading, error, uploadProgress, downloadProgress } = refs
+    console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
+    // Do request before
+  },
+  onTransform(response, refs) {
+    // Handle data transform, The transformed data will be the value of users.
+    return response.data
+  },
+  onSuccess(response, refs) {
+    // Do request success
+  },
+  onError(error, refs) {
+    // Do request error
+  },
+  onAfter(refs) {
+    // Do request after
+  },
+})
 </script>
 
 <template>
@@ -271,43 +272,44 @@ Axle provides some parallel request processing tools, please refer to the follow
 
 ```html
 <script setup>
-  import { createAxle } from '@varlet/axle'
-  import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+import { createAxle } from '@varlet/axle'
+import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
 
-  const axle = createAxle(/** @see https://axios-http.com **/)
-  const useAxle = createUseAxle({ axle })
+const axle = createAxle(/** @see https://axios-http.com **/)
 
-  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-    value: [],
-    method: 'get',
-    url: '/user',
-  })
+const useAxle = createUseAxle({ axle })
 
-  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-    value: [],
-    method: 'get',
-    url: '/role',
-  })
+const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/user',
+})
 
-  // At the end of all requests, loading is false
-  const loading = useHasLoading(isUsersLoading, isRolesLoading)
-  // At the end of all requests, downloadProgress is 1
-  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-  // Ref<[
-  //   [{ name: 'foo' }, { name: 'bar' }],
-  //   [{ role: 'admin' }, { role: 'user' }]
-  // ]> <-
-  // [
-  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
-  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
-  // ]
-  const usersRoles = useValues(users, roles)
+const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/role',
+})
 
-  function sendAllRequest() {
-    // parallel
-    getUsers()
-    getRoles()
-  }
+// At the end of all requests, loading is false
+const loading = useHasLoading(isUsersLoading, isRolesLoading)
+// At the end of all requests, downloadProgress is 1
+const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+// Ref<[
+//   [{ name: 'foo' }, { name: 'bar' }],
+//   [{ role: 'admin' }, { role: 'user' }]
+// ]> <-
+// [
+//   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
+//   Ref<[{ role: 'admin' }, { role: 'user' }]>
+// ]
+const usersRoles = useValues(users, roles)
+
+function sendAllRequest() {
+  // parallel
+  getUsers()
+  getRoles()
+}
 </script>
 
 <template>

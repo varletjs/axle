@@ -21,7 +21,7 @@ export function responseTimeoutInterceptor(options: ResponseTimeoutInterceptorOp
         return Promise.reject(error)
       }
 
-      if ((error.code == 'ECONNABORTED' && error.message.includes('timeout')) || error.code === 'ETIMEDOUT') {
+      if ((error.code === 'ECONNABORTED' && error.message.includes('timeout')) || error.code === 'ETIMEDOUT') {
         error.code = options?.normalizeErrorCode ?? 'TIMEOUT'
       }
 

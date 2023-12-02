@@ -152,20 +152,20 @@ export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
   const service = axios.create(config)
 
   function getHeaders() {
-    return service.defaults.headers['common']
+    return service.defaults.headers.common
   }
 
   function setHeader(key: string, value: string | number | boolean) {
-    ;(service.defaults.headers['common'] as AxiosRequestHeaders)[key] = value
+    ;(service.defaults.headers.common as AxiosRequestHeaders)[key] = value
   }
 
   function removeHeader(key: string | string[]) {
     if (typeof key === 'string') {
-      Reflect.deleteProperty(service.defaults.headers['common'] as AxiosRequestHeaders, key)
+      Reflect.deleteProperty(service.defaults.headers.common as AxiosRequestHeaders, key)
       return
     }
 
-    key.forEach((k) => Reflect.deleteProperty(service.defaults.headers['common'] as AxiosRequestHeaders, k))
+    key.forEach((k) => Reflect.deleteProperty(service.defaults.headers.common as AxiosRequestHeaders, k))
   }
 
   function useRequestInterceptor(...interceptors: RequestInterceptor[]) {

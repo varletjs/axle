@@ -49,24 +49,30 @@ axios.defaults.headers.common['TOKEN'] = TOKEN
 axios.defaults.timeout = 2500
 
 // 添加请求前拦截器
-axios.interceptors.request.use((config) => {
-  // 请求前处理
-  return config
-}, (error) => {
-  // 请求错误处理
-  return Promise.reject(error)
-})
+axios.interceptors.request.use(
+  (config) => {
+    // 请求前处理
+    return config
+  },
+  (error) => {
+    // 请求错误处理
+    return Promise.reject(error)
+  }
+)
 
 // 添加请求后返回拦截器
-axios.interceptors.response.use((response) => {
-  // 任何位于 2xx 范围内的状态码都会导致该函数触发
-  // 对响应数据做一些事情
-  return response
-}, (error) => {
-  // 任何超出 2xx 范围的状态代码都会导致此函数触发
-  // 对响应错误做一些事情
-  return Promise.reject(error)
-})
+axios.interceptors.response.use(
+  (response) => {
+    // 任何位于 2xx 范围内的状态码都会导致该函数触发
+    // 对响应数据做一些事情
+    return response
+  },
+  (error) => {
+    // 任何超出 2xx 范围的状态代码都会导致此函数触发
+    // 对响应错误做一些事情
+    return Promise.reject(error)
+  }
+)
 ```
 
 ## Axle & Axios 请求函数
@@ -147,10 +153,10 @@ axle.post('/url', { name: 'foo' })
 
 ```js
 // axios
-axios.post('/url', qs.stringify({ name: 'foo' }), { 
-  headers: { 
-    'Content-Type': 'application/x-www-form-urlencoded'
-  }
+axios.post('/url', qs.stringify({ name: 'foo' }), {
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded',
+  },
 })
 // axle
 axle.postUrlEncode('/url', { name: 'foo' })
@@ -164,10 +170,10 @@ const formData = new FormData()
 formData.append('name', 'foo')
 formData.append('file', new File())
 
-axios.post('/url', formData, { 
-  headers: { 
-    'Content-Type': 'multipart/form-data'
-  }
+axios.post('/url', formData, {
+  headers: {
+    'Content-Type': 'multipart/form-data',
+  },
 })
 // axle
 axle.postMultipart('/url', { name: 'foo', file: new File() })
@@ -197,61 +203,55 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle({
-  axle,
-  // 可选项: useAxle 的默认 onTransform
-  onTransform: response => response
-})
+  const axle = createAxle(/** @see https://axios-http.com **/)
+  const useAxle = createUseAxle({
+    axle,
+    // 可选项: useAxle 的默认 onTransform
+    onTransform: (response) => response,
+  })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
-  // 请求初始化数据
-  value: [],
-  // 请求方法
-  method: 'get',
-  // 请求地址
-  url: '/user',
-  // 是否立即发送请求, 默认值: false
-  immediate: true,
-  // 错误重试次数, 默认值: 0
-  retry: 3,
-  // 请求前是否需要重置 value, 默认值: false
-  resetValue: true,
-  // 请求参数, 默认值: {}
-  // 当参数是一个对象时，发送第一个请求（immediate）时将携带它
-  // 当参数是一个函数时，每次发送请求时都会携带它。
-  params: { current: 1, pageSize: 10 },
-  // Axios 配置, see https://axios-http.com
-  config: { headers: {} },
-  // 生命周期
-  onBefore(refs) {
-    const { data, loading, error, uploadProgress, downloadProgress } = refs
-    console.log(
-      data.value, 
-      loading.value,
-      error.value, 
-      uploadProgress.value, 
-      downloadProgress.value
-    )
-    // 处理请求前逻辑
-  },
-  onTransform(response, refs) {
-    // 处理数据转换，转换后的数据将成为 users 的值。
-    return response.data
-  },
-  onSuccess(response, refs) {
-    // 处理请求成功逻辑
-  },
-  onError(error, refs) {
-    // 处理请求错误逻辑
-  },
-  onAfter(refs) {
-    // 处理请求结束逻辑，无论成功失败都会触发。
-  }
-})
+  const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+    // 请求初始化数据
+    value: [],
+    // 请求方法
+    method: 'get',
+    // 请求地址
+    url: '/user',
+    // 是否立即发送请求, 默认值: false
+    immediate: true,
+    // 错误重试次数, 默认值: 0
+    retry: 3,
+    // 请求前是否需要重置 value, 默认值: false
+    resetValue: true,
+    // 请求参数, 默认值: {}
+    // 当参数是一个对象时，发送第一个请求（immediate）时将携带它
+    // 当参数是一个函数时，每次发送请求时都会携带它。
+    params: { current: 1, pageSize: 10 },
+    // Axios 配置, see https://axios-http.com
+    config: { headers: {} },
+    // 生命周期
+    onBefore(refs) {
+      const { data, loading, error, uploadProgress, downloadProgress } = refs
+      console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
+      // 处理请求前逻辑
+    },
+    onTransform(response, refs) {
+      // 处理数据转换，转换后的数据将成为 users 的值。
+      return response.data
+    },
+    onSuccess(response, refs) {
+      // 处理请求成功逻辑
+    },
+    onError(error, refs) {
+      // 处理请求错误逻辑
+    },
+    onAfter(refs) {
+      // 处理请求结束逻辑，无论成功失败都会触发。
+    },
+  })
 </script>
 
 <template>
@@ -271,43 +271,43 @@ Axle 提供了一些并行请求处理工具，请参考以下示例。
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
-const useAxle = createUseAxle({ axle })
+  const axle = createAxle(/** @see https://axios-http.com **/)
+  const useAxle = createUseAxle({ axle })
 
-const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  value: [],
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+    value: [],
+    method: 'get',
+    url: '/user',
+  })
 
-const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  value: [],
-  method: 'get',
-  url: '/role',
-})
+  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+    value: [],
+    method: 'get',
+    url: '/role',
+  })
 
-// 所有请求结束时，loading 为 false
-const loading = useHasLoading(isUsersLoading, isRolesLoading)
-// 所有请求结束时，downloadProgress 为 1
-const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-// Ref<[
-//   [{ name: 'foo' }, { name: 'bar' }], 
-//   [{ role: 'admin' }, { role: 'user' }]
-// ]> <-
-// [
-//   Ref<[{ name: 'foo' }, { name: 'bar' }]>, 
-//   Ref<[{ role: 'admin' }, { role: 'user' }]>
-// ]
-const usersRoles = useValues(users, roles)
+  // 所有请求结束时，loading 为 false
+  const loading = useHasLoading(isUsersLoading, isRolesLoading)
+  // 所有请求结束时，downloadProgress 为 1
+  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+  // Ref<[
+  //   [{ name: 'foo' }, { name: 'bar' }],
+  //   [{ role: 'admin' }, { role: 'user' }]
+  // ]> <-
+  // [
+  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
+  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
+  // ]
+  const usersRoles = useValues(users, roles)
 
-function sendAllRequest() {
-  // parallel
-  getUsers()
-  getRoles()
-}
+  function sendAllRequest() {
+    // parallel
+    getUsers()
+    getRoles()
+  }
 </script>
 
 <template>
@@ -317,7 +317,3 @@ function sendAllRequest() {
   <button @click="sendAllRequest">发送全部请求</button>
 </template>
 ```
-
-
-
-

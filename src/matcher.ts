@@ -1,11 +1,9 @@
 import { minimatch } from 'minimatch'
 
 export function matchPattern(pattern: string, method: string, url: string) {
-  if (pattern.startsWith('method:')) {
-    return pattern.replace('method:', '').trim() === method
-  } else {
-    return minimatch(url ?? '', pattern)
-  }
+  return pattern.startsWith('method:')
+    ? pattern.replace('method:', '').trim() === method
+    : minimatch(url ?? '', pattern)
 }
 
 export function createMatcher(include?: string[], exclude?: string[]) {

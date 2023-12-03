@@ -1,3 +1,12 @@
+## [0.2.9](https://github.com/varletjs/axle/compare/v0.2.8...v0.2.9) (2023-12-03)
+
+
+### Features
+
+* support matcher ([d50c5ce](https://github.com/varletjs/axle/commit/d50c5ced3c9e97b502c24a3c4246ca7b73cd06e2))
+
+
+
 ## [0.2.8](https://github.com/varletjs/axle/compare/v0.2.7...v0.2.8) (2023-12-03)
 
 

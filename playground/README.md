@@ -30,6 +30,8 @@ yarn dev
 
 ## Features
 
+<span>English</span> |
+<a href="https://github.com/varletjs/axle/blob/main/playground/README.zh-CN.md">中文</a>
 ### Varlet UI
 
 [Varlet](https://varlet.gitee.io/varlet-ui/#/en-US/home) is a Material design mobile component library developed based on Vue3,

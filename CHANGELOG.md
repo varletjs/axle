@@ -1,3 +1,12 @@
+## [0.2.8](https://github.com/varletjs/axle/compare/v0.2.7...v0.2.8) (2023-12-03)
+
+
+### Features
+
+* support retry interceptor and fix types error ([f47a462](https://github.com/varletjs/axle/commit/f47a4629454d6b1db013d7f0f7fdb88b85babb88))
+
+
+
 ## [0.2.7](https://github.com/varletjs/axle/compare/v0.2.6...v0.2.7) (2023-12-02)
 
 

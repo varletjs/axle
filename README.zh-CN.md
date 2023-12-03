@@ -197,6 +197,80 @@ axle.setHeader('TOKEN', TOKEN)
 axle.removeHeader('TOKEN')
 ```
 
+## 内置拦截器
+
+Axle 提供了一些实用的请求/响应拦截器，并且兼容 axle 和 axios。
+
+### axios
+
+```ts
+import { requestHeadersInterceptor, responseTimeoutInterceptor } from '@varlet/axle'
+
+const headersInterceptor = requestHeadersInterceptor({
+  headers: () => ({
+    token: localStorage.getItem('token'),
+    'Axle-Custom-Header': 'Axle-Custom-Header',
+  })
+})
+
+const retryInterceptor = responseRetryInterceptor({ count: 3 })
+
+axios.interceptors.request.use(
+  headersInterceptor.onFulfilled, 
+  headersInterceptor.onRejected, 
+  headersInterceptor.options
+)
+axios.interceptors.response.use(
+  retryInterceptor.onFulfilled,
+  retryInterceptor.onRejected, 
+  retryInterceptor.options
+)
+```
+
+### axle
+
+```ts
+import { requestHeadersInterceptor, responseTimeoutInterceptor } from '@varlet/axle'
+
+axle.useRequestInterceptor(
+  requestHeadersInterceptor({
+    headers: () => ({
+      token: localStorage.getItem('token'),
+      'Axle-Custom-Header': 'Axle-Custom-Header',
+    }),
+  }),
+)
+
+axle.useResponseInterceptor(responseRetryInterceptor({ count: 3 }))
+```
+
+### 拦截器通用参数
+
+每个内置拦截器都支持 `include` `exclude` `axiosInterceptorOptions (与 axios 拦截器一致)`。
+
+#### include & exclude
+
+用于请求过滤，以确定什么请求应该应用该拦截器，支持指定 method 或是 glob 语法，使用方式如下。
+
+```ts
+axle.useResponseInterceptor(
+  responseRetryInterceptor({ 
+    count: 3,
+    include: ['method:put', 'method:post'],
+    exclude: ['/system/**', '/user/addUser']
+  }),
+)
+```
+
+### 内置拦截器一览
+
+| 名称 | 描述 |
+| --- | --- |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/requestHeadersInterceptor.ts) | 用于自定义请求头 |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseRetryInterceptor.ts) | 用于实现请求异常重试 |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseBlobInterceptor.ts) | 用于拦截 blob 类型 |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseTimeoutInterceptor.ts) | 用于归一化超时异常 |
+
 ## Vue 组合式 API
 
 Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载状态`, `错误状态`, `请求的上下行进度`，`返回数据`，`生命周期` 等等，并继承了 `axios` 的所有配置。

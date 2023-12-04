@@ -267,6 +267,7 @@ axle.useResponseInterceptor(
 | 名称 | 描述 |
 | --- | --- |
 | [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/requestHeadersInterceptor.ts) | 用于自定义请求头 |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/requestMockInterceptor.ts) | 用于模拟数据 |
 | [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseRetryInterceptor.ts) | 用于实现请求异常重试 |
 | [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseBlobInterceptor.ts) | 用于拦截 blob 类型 |
 | [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseTimeoutInterceptor.ts) | 用于归一化超时异常 |

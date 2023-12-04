@@ -22,6 +22,14 @@ export function useGetUsers<V>(options: Options<V, Response<User[]>>) {
   })
 }
 
+export function useGetMockUsers<V>(options: Options<V, Response<User[]>>) {
+  return useAxle({
+    url: '/mock/list-user',
+    method: 'get',
+    ...options,
+  })
+}
+
 export function useGetUser<V>(options: Options<V, Response<User>>) {
   return useAxle({
     url: '/user/get-user',

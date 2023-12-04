@@ -10,6 +10,7 @@ import {
   usePatchUser,
   useDownloadFile,
   useThrowError,
+  useGetMockUsers,
   User,
 } from './apis'
 
@@ -17,6 +18,8 @@ const id = ref('1')
 const deleteId = ref('1')
 
 const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>({ immediate: true })
+
+const [mockUsers, , { loading: isMockUsersLoading }] = useGetMockUsers<User[]>({ immediate: true })
 
 const [user, getUser, { loading: isUserLoading, abort }] = useGetUser({
   onSuccess(response) {
@@ -132,6 +135,10 @@ watch(
     <var-cell>name: getUsers</var-cell>
     <var-cell>loading: {{ isUsersLoading }}</var-cell>
     <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
+
+    <var-cell>name: getMockUsers</var-cell>
+    <var-cell>loading: {{ isMockUsersLoading }}</var-cell>
+    <var-cell>data: {{ mockUsers ?? 'No Data' }}</var-cell>
   </var-space>
 
   <var-divider margin="30px 0" />

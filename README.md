@@ -266,11 +266,11 @@ axle.useResponseInterceptor(
 
 | Name | Description |
 | --- | --- |
-| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/requestHeadersInterceptor.ts) | Used to customize the request header |
-| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/requestMockInterceptor.ts) | Used to mock data |
-| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseRetryInterceptor.ts) | Used to realize the request abnormal retry |
-| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseBlobInterceptor.ts) | Used to intercept blob type |
-| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/responseTimeoutInterceptor.ts) | Used to abnormal timeout |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/requestHeadersInterceptor.md) | Used to customize the request header |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/requestMockInterceptor.md) | Used to mock data |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseRetryInterceptor.md) | Used to realize the request abnormal retry |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseBlobInterceptor.md) | Used to intercept blob type |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout |
 
 ## Vue Composition API
 

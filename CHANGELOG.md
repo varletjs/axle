@@ -1,3 +1,12 @@
+## [0.2.11](https://github.com/varletjs/axle/compare/v0.2.10...v0.2.11) (2023-12-06)
+
+
+### Features
+
+* support requestMockInterceptor ([3138a7f](https://github.com/varletjs/axle/commit/3138a7fea17431b399f433707260ac69bd904587))
+
+
+
 ## [0.2.10](https://github.com/varletjs/axle/compare/v0.2.9...v0.2.10) (2023-12-03)
 
 

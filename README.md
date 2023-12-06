@@ -197,6 +197,81 @@ axle.setHeader('TOKEN', TOKEN)
 axle.removeHeader('TOKEN')
 ```
 
+## Built-in interceptor
+
+axle provides some practical requests/response interceptors, and is compatible with `axle` and `axios`.
+
+### axios
+
+```ts
+import { requestHeadersInterceptor, responseTimeoutInterceptor } from '@varlet/axle'
+
+const headersInterceptor = requestHeadersInterceptor({
+  headers: () => ({
+    token: localStorage.getItem('token'),
+    'Axle-Custom-Header': 'Axle-Custom-Header',
+  })
+})
+
+const retryInterceptor = responseRetryInterceptor({ count: 3 })
+
+axios.interceptors.request.use(
+  headersInterceptor.onFulfilled, 
+  headersInterceptor.onRejected, 
+  headersInterceptor.options
+)
+axios.interceptors.response.use(
+  retryInterceptor.onFulfilled,
+  retryInterceptor.onRejected, 
+  retryInterceptor.options
+)
+```
+
+### axle
+
+```ts
+import { requestHeadersInterceptor, responseTimeoutInterceptor } from '@varlet/axle'
+
+axle.useRequestInterceptor(
+  requestHeadersInterceptor({
+    headers: () => ({
+      token: localStorage.getItem('token'),
+      'Axle-Custom-Header': 'Axle-Custom-Header',
+    }),
+  }),
+)
+
+axle.useResponseInterceptor(responseRetryInterceptor({ count: 3 }))
+```
+
+### General parameter of the interceptor
+
+Each built-in interceptor supports `include` `exclude` `axiosInterceptorOptions (same with Axios interceptor)`.
+
+#### include & exclude
+
+It is used to request filtering to determine what request should apply the interceptor and support specifying the `method` or `glob` syntax. The usage method is as follows.
+
+```ts
+axle.useResponseInterceptor(
+  responseRetryInterceptor({ 
+    count: 3,
+    include: ['method:put', 'method:post'],
+    exclude: ['/system/**', '/user/addUser']
+  }),
+)
+```
+
+### List of built-in interceptor
+
+| Name | Description |
+| --- | --- |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/requestHeadersInterceptor.md) | Used to customize the request header |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/requestMockInterceptor.md) | Used to mock data |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseRetryInterceptor.md) | Used to realize the request abnormal retry |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseBlobInterceptor.md) | Used to intercept blob type |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout |
+
 ## Vue Composition API
 
 Axle provides the usage of Vue Composition API style, which encapsulates the `loading status`, `error status`, `upload and download progress` of the request, `return data`, `lifecycle`, etc., And inherit all the configuration of `axios`.

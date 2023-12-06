@@ -1,4 +1,5 @@
 export * from './requestHeadersInterceptor'
+export * from './requestMockInterceptor'
 export * from './responseBlobInterceptor'
 export * from './responseTimeoutInterceptor'
 export * from './responseRetryInterceptor'

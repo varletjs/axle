@@ -5,6 +5,7 @@ import {
   responseBlobInterceptor,
   responseTimeoutInterceptor,
   responseStatusInterceptor,
+  requestMockInterceptor,
 } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
@@ -21,6 +22,30 @@ axle.useRequestInterceptor(
   requestHeadersInterceptor({
     headers: {
       'Axle-Custom-Header': 'Axle-Custom-Header',
+    },
+  }),
+
+  requestMockInterceptor({
+    mapping: {
+      '/mock/**': {
+        delay: 1000,
+        handler: () => ({
+          data: {
+            code: 200,
+            data: [
+              {
+                id: 1,
+                name: 'Mock Jack Ma',
+              },
+              {
+                id: 2,
+                name: 'Mock Tom',
+              },
+            ],
+            message: 'success',
+          },
+        }),
+      },
     },
   })
 )
@@ -70,7 +95,6 @@ axle.useResponseInterceptor(
       return response.data
     },
     onRejected(error) {
-      console.log(error)
       Snackbar.error(error.message)
       return Promise.reject(error)
     },

@@ -15,18 +15,14 @@ export function responseRetryInterceptor(options: ResponseRetryInterceptorOption
     onFulfilled: (response) => response,
     async onRejected(error) {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(error.config.method ?? '', error.config.url ?? '')) {
+      if (!matcher(error.config.method ?? '', error.config.url ?? '') || isCancel(error)) {
         return Promise.reject(error)
       }
 
       const { count = 1 } = options
       let retryCount = 0
 
-      if (isCancel(error)) {
-        return Promise.reject(error)
-      }
-
-      async function loop() {
+      async function retry() {
         try {
           retryCount++
           return await axios.create()(error.config)
@@ -35,11 +31,11 @@ export function responseRetryInterceptor(options: ResponseRetryInterceptorOption
             return Promise.reject(error)
           }
 
-          return loop()
+          return retry()
         }
       }
 
-      return loop()
+      return retry()
     },
     options: options.axiosInterceptorOptions,
   }

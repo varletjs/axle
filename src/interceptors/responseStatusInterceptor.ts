@@ -26,9 +26,8 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
       if (!handlerCode[key as unknown as number] && !isFunction(handlerCode[key as unknown as number])) {
         throw Error(`[Axle] ${key} handler should be a function`)
       }
-      handlerCode[key as unknown as number](response)
-
-      return response
+      const responseData = handlerCode[key as unknown as number](response)
+      return responseData || response
     },
 
     onRejected: (error: any) => {
@@ -44,8 +43,8 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
       if (!handlerCode[key as unknown as number] && !isFunction(handlerCode[key as unknown as number])) {
         throw Error(`[Axle] ${key} handler should be a function`)
       }
-      handlerCode[key as unknown as number](error)
-      return error
+      const errorData = handlerCode[key as unknown as number](error)
+      return errorData || error
     },
     options: options.axiosInterceptorOptions,
   }

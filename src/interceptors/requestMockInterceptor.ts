@@ -75,7 +75,7 @@ export function requestMockInterceptor(options: RequestMockInterceptorOptions = 
 
       return config
     },
-    onRejected: (error) => Promise.reject(error),
+    onRejected: Promise.reject,
     options: options.axiosInterceptorOptions,
   }
 }

@@ -23,7 +23,7 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
 
       return response
     },
-    onRejected: (error) => Promise.reject(error),
+    onRejected: Promise.reject,
     options: options.axiosInterceptorOptions,
   }
 }

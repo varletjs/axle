@@ -28,7 +28,7 @@ export function requestHeadersInterceptor(options: RequestHeadersInterceptorOpti
 
       return config
     },
-    onRejected: (error) => Promise.reject(error),
+    onRejected: Promise.reject,
     options: options.axiosInterceptorOptions,
   }
 }

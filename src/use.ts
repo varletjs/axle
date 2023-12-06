@@ -174,6 +174,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
   return useAxle
 }
 
-export * from './composables/composable.js'
+export * from './composables/useValues.js'
 export * from './composables/useHasLoading.js'
 export * from './composables/useAverageProgress.js'

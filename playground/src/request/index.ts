@@ -52,19 +52,23 @@ axle.useRequestInterceptor(
 
 axle.useResponseInterceptor(
   responseStatusInterceptor({
-    handler: {
-      300: (error) => {
-        console.log('300', 300)
-        return error
+    handlerCode: {
+      300: (response) => {
+        console.log('300', 300, response)
+        return response
       },
-      400: (error) => {
-        console.log('400', 400)
-        return error
+      400: (response) => {
+        console.log('400', 400, response)
+        return response
       },
-      500: (error) => {
-        console.log('500', 500)
-        return error
+      500: (response) => {
+        console.log('500', 500, response)
+        return response
       },
+    },
+    handlerError: (error) => {
+      console.log(error, 'error')
+      return error
     },
   }),
 

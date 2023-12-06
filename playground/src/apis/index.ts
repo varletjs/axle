@@ -77,3 +77,11 @@ export function useThrowError<V>(options: Options<V, Response<User>>) {
     ...options,
   })
 }
+
+export function useProxyError<V>(options: Options<V, Response<User>>) {
+  return useAxle({
+    url: '/user/throw-error-code',
+    method: 'get',
+    ...options,
+  })
+}

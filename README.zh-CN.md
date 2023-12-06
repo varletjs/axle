@@ -317,3 +317,9 @@ function sendAllRequest() {
   <button @click="sendAllRequest">发送全部请求</button>
 </template>
 ```
+
+### HTTP Code 错误拦截
+对接口的各种报错进行拦截，并返回
+
+```html
+```

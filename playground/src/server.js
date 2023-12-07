@@ -69,10 +69,8 @@ router.get('/user/throw-error', async (ctx) => {
   ctx.status = 500
 })
 
-router.get('/user/throw-error-code', async (ctx) => {
+router.get('/user/always-throw-error', async (ctx) => {
   await delay(1000)
-
-  response(ctx, 400, null, 'Parameter error')
 
   ctx.status = 500
 })

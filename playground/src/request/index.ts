@@ -51,30 +51,24 @@ axle.useRequestInterceptor(
 )
 
 axle.useResponseInterceptor(
-  responseStatusInterceptor({
-    handlerCode: {
-      300: (response) => {
-        console.log('300', 300, response)
-        return response
-      },
-      400: (response) => {
-        console.log('400', 400, response)
-        return response
-      },
-      500: (response) => {
-        console.log('500', 500, response)
-        return response
-      },
-    },
-    handlerError: (error) => {
-      console.log(error, 'error')
-      return error
-    },
-  }),
+  responseTimeoutInterceptor(),
 
   responseRetryInterceptor({
     count: 3,
     include: ['/user/throw-error'],
+  }),
+
+  responseStatusInterceptor({
+    validateHandler: {
+      200: (response) => {
+        console.log('validate handler status 200:', response)
+      },
+    },
+    invalidateHandler: {
+      500: (error) => {
+        console.log('invalidate handler status 500:', error)
+      },
+    },
   }),
 
   responseBlobInterceptor({
@@ -87,8 +81,6 @@ axle.useResponseInterceptor(
       },
     }),
   }),
-
-  responseTimeoutInterceptor(),
 
   {
     onFulfilled(response) {

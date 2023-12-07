@@ -7,23 +7,15 @@ const axle = createAxle()
 
 axle.useResponseInterceptor(
   responseStatusInterceptor({
-    handlerCode: {
-      300: (response) => {
-        console.log('300', 300, response)
-        return response
-      },
-      400: (response) => {
-        console.log('400', 400, response)
-        return response
-      },
-      500: (response) => {
-        console.log('500', 500, response)
-        return response
+    validateHandler: {
+      200: (response) => {
+        console.log('validate handler status 200:', response)
       },
     },
-    handlerError: (error) => {
-      console.log(error, 'error')
-      return error
+    invalidateHandler: {
+      500: (error) => {
+        console.log('invalidate handler status 500:', error)
+      },
     },
 
     // optional filtering options that determine whether the interceptor intercepts

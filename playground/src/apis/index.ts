@@ -85,3 +85,11 @@ export function useThrowError<V>(options: Options<V, Response<User>>) {
     ...options,
   })
 }
+
+export function useAlwaysThrowError<V>(options: Options<V, Response<User>>) {
+  return useAxle({
+    url: '/user/always-throw-error',
+    method: 'get',
+    ...options,
+  })
+}

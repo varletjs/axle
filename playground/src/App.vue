@@ -12,6 +12,7 @@ import {
   useThrowError,
   useGetMockUsers,
   User,
+  useAlwaysThrowError,
 } from './apis'
 
 const id = ref('1')
@@ -75,11 +76,11 @@ const [deletedUser, deleteUser] = useDeleteUser<User>({
 
 const [file, downloadBlob, { downloadProgress }] = useDownloadFile<Blob | null>({})
 
-const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError({
-  onBefore(refs) {
-    refs.value.value = {}
-  },
+const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError<User>({
+  resetValue: true,
 })
+
+const [, alwaysThrowError, { loading: isAlwaysThrowErrorLoading }] = useAlwaysThrowError({})
 
 // parallel
 const [usersOne, getUsersOne, { loading: isUsersLoadingOne, downloadProgress: userDownloadProgressOne }] = useGetUsers<
@@ -188,7 +189,15 @@ watch(
     <var-cell>name: throw error</var-cell>
     <var-cell>loading: {{ isThrowErrorLoading }}</var-cell>
     <var-cell>data: {{ errorUser ?? 'No Data' }}</var-cell>
-    <var-button type="primary" @click="() => throwError()">Retry</var-button>
+    <var-button type="danger" @click="() => throwError()">Throw Error And Retry</var-button>
+  </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-space direction="column">
+    <var-cell>name: always throw error</var-cell>
+    <var-cell>loading: {{ isAlwaysThrowErrorLoading }}</var-cell>
+    <var-button type="danger" @click="() => alwaysThrowError()">Always Throw Error</var-button>
   </var-space>
 
   <var-divider margin="30px 0" />

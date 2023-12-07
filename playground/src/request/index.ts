@@ -4,6 +4,7 @@ import {
   requestHeadersInterceptor,
   responseBlobInterceptor,
   responseTimeoutInterceptor,
+  responseStatusInterceptor,
   requestMockInterceptor,
 } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
@@ -50,6 +51,27 @@ axle.useRequestInterceptor(
 )
 
 axle.useResponseInterceptor(
+  responseStatusInterceptor({
+    handlerCode: {
+      300: (response) => {
+        console.log('300', 300, response)
+        return response
+      },
+      400: (response) => {
+        console.log('400', 400, response)
+        return response
+      },
+      500: (response) => {
+        console.log('500', 500, response)
+        return response
+      },
+    },
+    handlerError: (error) => {
+      console.log(error, 'error')
+      return error
+    },
+  }),
+
   responseRetryInterceptor({
     count: 3,
     include: ['/user/throw-error'],

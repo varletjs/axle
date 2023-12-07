@@ -69,6 +69,14 @@ router.get('/user/throw-error', async (ctx) => {
   ctx.status = 500
 })
 
+router.get('/user/throw-error-code', async (ctx) => {
+  await delay(1000)
+
+  response(ctx, 400, null, 'Parameter error')
+
+  ctx.status = 500
+})
+
 router.post('/user/add-user', async (ctx) => {
   await delay(300)
 

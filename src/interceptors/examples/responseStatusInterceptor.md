@@ -7,6 +7,7 @@ const axle = createAxle()
 
 axle.useResponseInterceptor(
   responseStatusInterceptor({
+    // by default, axios define status >= 200 && status < 300 to be validate status
     validateHandler: {
       200: (response) => {
         console.log('validate handler status 200:', response)

@@ -6,7 +6,7 @@ import { createAxle, responseStatusInterceptor } from '@varlet/axle'
 const axle = createAxle()
 
 axle.useResponseInterceptor(
-    responseStatusInterceptor({
+  responseStatusInterceptor({
     handlerCode: {
       300: (response) => {
         console.log('300', 300, response)

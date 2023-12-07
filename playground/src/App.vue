@@ -12,7 +12,6 @@ import {
   useThrowError,
   useGetMockUsers,
   User,
-  useProxyError,
 } from './apis'
 
 const id = ref('1')
@@ -82,15 +81,6 @@ const [errorUser, throwError, { loading: isThrowErrorLoading }] = useThrowError(
   },
 })
 
-const [_, proxyError, { loading: isProxyEroorLoading }] = useProxyError({
-  onBefore() {
-    Snackbar.loading('Proxy!')
-  },
-  onError(error) {
-    Snackbar.error(error.toString())
-  },
-})
-
 // parallel
 const [usersOne, getUsersOne, { loading: isUsersLoadingOne, downloadProgress: userDownloadProgressOne }] = useGetUsers<
   User[]
@@ -132,11 +122,6 @@ async function downloadFile() {
   if (code === 200) {
     download(data, 'logo.png')
   }
-}
-
-async function proxyCode() {
-  const options = {}
-  await proxyError(options)
 }
 
 watch(
@@ -204,14 +189,6 @@ watch(
     <var-cell>loading: {{ isThrowErrorLoading }}</var-cell>
     <var-cell>data: {{ errorUser ?? 'No Data' }}</var-cell>
     <var-button type="primary" @click="() => throwError()">Retry</var-button>
-  </var-space>
-
-  <var-divider margin="30px 0" />
-
-  <var-space direction="column">
-    <var-cell>name: intercept error codes</var-cell>
-    <var-cell>loading: {{ isProxyEroorLoading }}</var-cell>
-    <var-button type="primary" @click="proxyCode">Error Proxy</var-button>
   </var-space>
 
   <var-divider margin="30px 0" />

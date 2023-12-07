@@ -1,3 +1,12 @@
+## [0.2.12](https://github.com/varletjs/axle/compare/v0.2.11...v0.2.12) (2023-12-07)
+
+
+### Features
+
+* support responseStatusInterceptor ([#8](https://github.com/varletjs/axle/issues/8)) ([04f3778](https://github.com/varletjs/axle/commit/04f37781ca8fbbc088cec9ea2f22982757077f1f))
+
+
+
 ## [0.2.11](https://github.com/varletjs/axle/compare/v0.2.10...v0.2.11) (2023-12-06)
 
 

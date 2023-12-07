@@ -31,7 +31,7 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
       const { validateHandler, invalidateHandler, include, exclude } = options
 
       const matcher = createMatcher(include, exclude)
-      if (!matcher(error.method ?? '', error.url ?? '')) {
+      if (matcher(error.method ?? '', error.url ?? '')) {
         return invalidateHandler(error) ?? error
       }
 

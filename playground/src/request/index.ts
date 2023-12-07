@@ -59,12 +59,12 @@ axle.useResponseInterceptor(
   }),
 
   responseStatusInterceptor({
-    validateHandler: {
+    validStatusHandler: {
       200: (response) => {
         console.log('validate handler status 200:', response)
       },
     },
-    invalidateHandler: {
+    invalidStatusHandler: {
       500: (error) => {
         console.log('invalidate handler status 500:', error)
       },

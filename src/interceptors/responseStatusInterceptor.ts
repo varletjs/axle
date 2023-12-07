@@ -3,8 +3,8 @@ import type { ResponseInterceptor } from '../instance'
 import { createMatcher } from '../matcher'
 
 export interface ResponseStatusInterceptorOptions {
-  validateHandler?: Record<number | string, (response: AxiosResponse<any, any>) => any>
-  invalidateHandler?: Record<number | string, (error: any) => any>
+  validStatusHandler?: Record<number | string, (response: AxiosResponse<any, any>) => any>
+  invalidStatusHandler?: Record<number | string, (error: any) => any>
   include?: string[]
   exclude?: string[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
@@ -18,7 +18,7 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
         return response
       }
 
-      const handler = (options.validateHandler ?? {})[response.status]
+      const handler = (options.validStatusHandler ?? {})[response.status]
       if (!handler) {
         return response
       }
@@ -34,7 +34,7 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
         return Promise.reject(error)
       }
 
-      const handler = (options.invalidateHandler ?? {})[error.response.status]
+      const handler = (options.invalidStatusHandler ?? {})[error.response.status]
       if (!handler) {
         return Promise.reject(error)
       }

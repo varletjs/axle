@@ -23,9 +23,6 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
 
       const keys = Object.keys(validateHandler)
       const key = keys.find((currentKey) => currentKey === response.status.toString())
-      if (!validateHandler[key as unknown as number] && !isFunction(validateHandler[key as unknown as number])) {
-        throw Error(`[Axle] ${key} handler should be a function`)
-      }
       const responseData = validateHandler[key as unknown as number](response)
       return responseData ?? response
     },

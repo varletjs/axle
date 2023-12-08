@@ -31,8 +31,6 @@
   "author": "haoziqaq <357229046@qq.com>",
   "license": "MIT",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "postinstall": "simple-git-hooks",
     "bootstrap": "pnpm i && pnpm build && pnpm --filter ./playground i",
     "dev": "tsup src/index.ts src/use.ts --format esm --out-dir=es --watch --dts",
     "build": "tsup src/index.ts src/use.ts --format esm --out-dir=es --dts --clean",

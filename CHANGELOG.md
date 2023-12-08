@@ -1,3 +1,12 @@
+## [0.2.15](https://github.com/varletjs/axle/compare/v0.2.14...v0.2.15) (2023-12-08)
+
+
+### Bug Fixes
+
+* move vue to optionalDependencies ([8e227db](https://github.com/varletjs/axle/commit/8e227db0f243b49624a9d6e8fbd02a0a002eaa7a))
+
+
+
 ## [0.2.14](https://github.com/varletjs/axle/compare/v0.2.13...v0.2.14) (2023-12-08)
 
 

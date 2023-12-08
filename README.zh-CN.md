@@ -286,6 +286,8 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
+  // 可选项: useAxle 的默认 immediate
+  immediate: true,
   // 可选项: useAxle 的默认 onTransform
   onTransform: (response) => response,
 })

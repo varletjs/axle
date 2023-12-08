@@ -286,6 +286,8 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
+  // Optional value: Default immediate of the useAxle
+  immediate: true,
   // Optional value: Default onTransform of the useAxle
   onTransform: (response) => response,
 })

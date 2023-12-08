@@ -48,11 +48,12 @@ export type UseAxleInstance<V, R, P> = [
 
 export interface CreateUseAxleOptions {
   axle: AxleInstance
+  immediate?: boolean
   onTransform?(response: any, refs: any): any
 }
 
 export function createUseAxle(options: CreateUseAxleOptions) {
-  const { axle, onTransform: defaultOnTransform } = options
+  const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = false } = options
 
   const useAxle = <V = any, R = any, P = Record<string, any>>(
     options: UseAxleOptions<V, R, P>
@@ -60,7 +61,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     const {
       url,
       method,
-      immediate,
+      immediate = defaultImmediate,
       value: initialValue,
       resetValue: initialResetValue,
       params: initialParamsOrGetter,

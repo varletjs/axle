@@ -1,3 +1,12 @@
+## [0.2.16](https://github.com/varletjs/axle/compare/v0.2.15...v0.2.16) (2023-12-08)
+
+
+### Bug Fixes
+
+* restore peer ([4c6d0ce](https://github.com/varletjs/axle/commit/4c6d0cea83899c7287ef5db61111a3abd422af58))
+
+
+
 ## [0.2.15](https://github.com/varletjs/axle/compare/v0.2.14...v0.2.15) (2023-12-08)
 
 

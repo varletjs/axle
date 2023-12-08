@@ -1,3 +1,12 @@
+## [0.2.14](https://github.com/varletjs/axle/compare/v0.2.13...v0.2.14) (2023-12-08)
+
+
+### Features
+
+* support default immediate config ([02d16eb](https://github.com/varletjs/axle/commit/02d16eb05e3c513332b5f5297015f2a71bed439c))
+
+
+
 ## [0.2.13](https://github.com/varletjs/axle/compare/v0.2.12...v0.2.13) (2023-12-07)
 
 

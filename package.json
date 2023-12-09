@@ -1,7 +1,6 @@
 {
   "private": true,
   "version": "0.2.17",
-  "description": "Progressive request tool based on axios",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "postinstall": "simple-git-hooks",

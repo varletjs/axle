@@ -1,6 +1,6 @@
 {
   "private": true,
-  "name": "axle-playground",
+  "name": "@varlet/axle-playground",
   "version": "0.0.0",
   "type": "module",
   "scripts": {
@@ -9,10 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@varlet/axle": "link:..",
-    "@varlet/touch-emulator": "2.16.5",
-    "@varlet/ui": "^2.17.0",
-    "@varlet/use": "^2.17.0",
+    "@varlet/axle": "workspace:*",
+    "@varlet/touch-emulator": "^2.20.0",
+    "@varlet/ui": "^2.20.0",
+    "@varlet/use": "^2.20.0",
+    "vue": "3.3.4",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-router": "^12.0.0",

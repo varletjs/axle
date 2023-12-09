@@ -1,0 +1,60 @@
+{
+  "name": "@varlet/axle",
+  "version": "0.2.16",
+  "description": "Progressive request tool based on axios",
+  "type": "module",
+  "main": "es/index.js",
+  "module": "es/index.js",
+  "types": "index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./es/*"
+      ]
+    }
+  },
+  "exports": {
+    ".": "./es/index.js",
+    "./use": "./es/use.js",
+    "./*": "./*"
+  },
+  "files": [
+    "es"
+  ],
+  "keywords": [
+    "axle",
+    "axios",
+    "helpers",
+    "vue3",
+    "composition api"
+  ],
+  "author": "haoziqaq <357229046@qq.com>",
+  "license": "MIT",
+  "scripts": {
+    "dev": "tsup src/index.ts src/use.ts --format esm --out-dir=es --watch --dts",
+    "build": "tsup src/index.ts src/use.ts --format esm --out-dir=es --dts --clean"
+  },
+  "dependencies": {
+    "@varlet/shared": "^2.19.2",
+    "axios": "^1.4.0",
+    "minimatch": "^9.0.3",
+    "qs": "^6.11.0"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
+  },
+  "devDependencies": {
+    "tsup": "7.2.0",
+    "typescript": "^5.1.5",
+    "vue": "3.3.4",
+    "@types/minimatch": "^5.1.2",
+    "@types/qs": "^6.9.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varletjs/axle.git"
+  },
+  "bugs": {
+    "url": "https://github.com/varletjs/axle/issues"
+  }
+}

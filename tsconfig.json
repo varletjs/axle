@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "strict": true,
-    "outDir": "es",
     "baseUrl": ".",
     "downlevelIteration": true,
     "declaration": true,

@@ -1,12 +1,12 @@
 {
-	"private": true,
-  "version": "0.2.16",
+  "private": true,
+  "version": "0.2.17",
   "description": "Progressive request tool based on axios",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "postinstall": "simple-git-hooks",
     "bootstrap": "pnpm i && pnpm build",
-		"clean": "rimraf ./node_modules ./packages/*/node_modules",
+    "clean": "rimraf ./node_modules ./packages/*/node_modules",
     "dev": "pnpm --dir ./packages/axle dev",
     "build": "pnpm --dir ./packages/axle build",
     "dev:play": "pnpm --dir ./packages/playground dev",
@@ -36,7 +36,7 @@
   "engines": {
     "pnpm": ">=8.0"
   },
-	"pnpm": {
+  "pnpm": {
     "overrides": {
       "array-includes": "npm:@nolyfill/array-includes@latest",
       "array.prototype.flat": "npm:@nolyfill/array.prototype.flat@latest",

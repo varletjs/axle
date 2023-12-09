@@ -1,3 +1,7 @@
+## [0.2.17](https://github.com/varletjs/axle/compare/v0.2.16...v0.2.17) (2023-12-09)
+
+
+
 ## [0.2.16](https://github.com/varletjs/axle/compare/v0.2.15...v0.2.16) (2023-12-08)
 
 

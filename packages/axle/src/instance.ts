@@ -11,6 +11,7 @@ import type {
   ResponseType,
 } from 'axios'
 import { inBrowser } from '@varlet/shared'
+import { objectToFormData } from './utils'
 
 export type AxleRequestConfig = AxiosRequestConfig & {
   exceptionMessage?: any
@@ -119,9 +120,7 @@ export function createModifyRunner(
     }
 
     if (contentType === 'multipart/form-data') {
-      const formData = new FormData()
-      Object.keys(params).forEach((key) => formData.append(key, params[key]))
-      params = formData
+      params = objectToFormData(params)
     }
 
     return service[method](url, params, {

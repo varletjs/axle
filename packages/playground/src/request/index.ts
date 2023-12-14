@@ -6,6 +6,7 @@ import {
   responseTimeoutInterceptor,
   responseStatusInterceptor,
   requestMockInterceptor,
+  requestMd5Interceptor,
 } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
@@ -45,6 +46,18 @@ axle.useRequestInterceptor(
             message: 'success',
           },
         }),
+      },
+    },
+  }),
+
+  requestMd5Interceptor({
+    mapping: {
+      '/user/add-user': {
+        path: ['data.name'],
+        method: 'post',
+      },
+      '/user/get-user': {
+        path: ['params.id'],
       },
     },
   })

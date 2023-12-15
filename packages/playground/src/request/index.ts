@@ -56,9 +56,6 @@ axle.useRequestInterceptor(
         path: ['data.name'],
         method: 'post',
       },
-      '/user/get-user': {
-        path: ['params.id'],
-      },
     },
   })
 )

@@ -1,3 +1,17 @@
+## [0.2.18](https://github.com/varletjs/axle/compare/v0.2.17...v0.2.18) (2023-12-15)
+
+
+### Bug Fixes
+
+* clone ctx fields ([03ed3db](https://github.com/varletjs/axle/commit/03ed3db94fcd9bc824064eee476daa64805e4d82))
+
+
+### Features
+
+* support requestMd5Interceptor ([313ae02](https://github.com/varletjs/axle/commit/313ae022acb81dd6869c4a06a412a9947ea9fbe5))
+
+
+
 ## [0.2.17](https://github.com/varletjs/axle/compare/v0.2.16...v0.2.17) (2023-12-09)
 
 

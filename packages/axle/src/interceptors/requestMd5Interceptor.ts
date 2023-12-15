@@ -20,31 +20,48 @@ export interface RequestMd5InterceptorOptions {
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
-function withConfigMd5(config: AxiosRequestConfig, mappingValue: RequestMd5InterceptorMappingValue) {
+function withCtxMd5(
+  ctx: Pick<AxiosRequestConfig, 'data' | 'params' | 'headers'>,
+  mappingValue: RequestMd5InterceptorMappingValue
+) {
   mappingValue.path.forEach((path) => {
-    const targetValue = get(config, path)
+    const targetValue = get(ctx, path)
     if (targetValue != null) {
-      set(config, path, MD5(String(targetValue)).toString())
+      set(ctx, path, MD5(String(targetValue)).toString())
     }
   })
 }
 
 function withMd5(config: AxiosRequestConfig, mappingValue: RequestMd5InterceptorMappingValue): AxiosRequestConfig {
-  const { data, headers = {} } = config
+  const { data = {}, params = {}, headers = {} } = config
 
-  if (isString(data) && data.length > 0 && headers['Content-Type'] === 'application/x-www-form-urlencoded') {
-    config.data = qs.parse(config.data)
-    withConfigMd5(config, mappingValue)
-    config.data = qs.stringify(config.data)
-  } else if (isFormData(data)) {
-    config.data = formDataToObject(data)
-    withConfigMd5(config, mappingValue)
-    config.data = objectToFormData(config.data)
-  } else {
-    withConfigMd5(config, mappingValue)
+  // clone ctx fields
+  const ctx = {
+    data: isFormData(data) ? data : JSON.parse(JSON.stringify(data)),
+    params: JSON.parse(JSON.stringify(params)),
+    headers: JSON.parse(JSON.stringify(headers)),
   }
 
-  return config
+  if (
+    isString(ctx.data) &&
+    ctx.data.length > 0 &&
+    ctx.headers['Content-Type'] === 'application/x-www-form-urlencoded'
+  ) {
+    ctx.data = qs.parse(ctx.data)
+    withCtxMd5(ctx, mappingValue)
+    ctx.data = qs.stringify(ctx.data)
+  } else if (isFormData(ctx.data)) {
+    ctx.data = formDataToObject(ctx.data)
+    withCtxMd5(ctx, mappingValue)
+    ctx.data = objectToFormData(ctx.data)
+  } else {
+    withCtxMd5(ctx, mappingValue)
+  }
+
+  return {
+    ...config,
+    ...ctx,
+  }
 }
 
 export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}): RequestInterceptor {

@@ -266,13 +266,13 @@ axle.useResponseInterceptor(
 
 | Name | Description |
 | --- | --- |
-| [requestHeadersInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/requestHeadersInterceptor.md) | Used to customize the request header |
-| [requestMockInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/requestMockInterceptor.md) | Used to mock data |
-| [requestMd5Interceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/requestMd5Interceptor.md) | Used for md encryption of parameters and headers |
-| [responseRetryInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/responseRetryInterceptor.md) | Used to realize the request abnormal retry |
-| [responseStatusInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/responseStatusInterceptor.md) | Used to intercept status code |
-| [responseBlobInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/responseBlobInterceptor.md) | Used to intercept blob type |
-| [responseTimeoutInterceptor](https://github.com/varletjs/axle/packages/axle/blob/main/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/requestHeadersInterceptor.md) | Used to customize the request header |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/requestMockInterceptor.md) | Used to mock data |
+| [requestMd5Interceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/requestMd5Interceptor.md) | Used for md encryption of parameters and headers |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/responseRetryInterceptor.md) | Used to realize the request abnormal retry |
+| [responseStatusInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/responseStatusInterceptor.md) | Used to intercept status code |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/responseBlobInterceptor.md) | Used to intercept blob type |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/packages/axle/main/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout |
 
 ## Vue Composition API
 

@@ -9,12 +9,25 @@ axle.useRequestInterceptor(
   requestMockInterceptor({
     // url and handler mapping
     mapping: {
+      '/user/getUser': () => ({
+        data: {
+          code: 200,
+          message: 'success',
+          data: {
+            id: 1,
+            name: 'Mock Jack Ma',
+          },
+        }
+      }),
+
       '/user/getUsers': {
         // request delay time (ms)
         delay: 1000,
+        method: 'get',
         handler: () => ({
           data: {
             code: 200,
+            message: 'success',
             data: [
               {
                 id: 1,
@@ -25,7 +38,6 @@ axle.useRequestInterceptor(
                 name: 'Mock Tom',
               },
             ],
-            message: 'success',
           },
         }),
       },

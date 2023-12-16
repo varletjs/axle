@@ -28,25 +28,22 @@ axle.useRequestInterceptor(
 
   requestMockInterceptor({
     mapping: {
-      '/mock/**': {
-        delay: 1000,
-        handler: () => ({
-          data: {
-            code: 200,
-            data: [
-              {
-                id: 1,
-                name: 'Mock Jack Ma',
-              },
-              {
-                id: 2,
-                name: 'Mock Tom',
-              },
-            ],
-            message: 'success',
-          },
-        }),
-      },
+      '/mock/**': () => ({
+        data: {
+          code: 200,
+          data: [
+            {
+              id: 1,
+              name: 'Mock Jack Ma',
+            },
+            {
+              id: 2,
+              name: 'Mock Tom',
+            },
+          ],
+          message: 'success',
+        },
+      }),
     },
   }),
 

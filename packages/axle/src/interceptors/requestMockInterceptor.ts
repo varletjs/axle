@@ -3,6 +3,7 @@ import { AxiosError } from 'axios'
 import { minimatch } from 'minimatch'
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { isFunction } from '@varlet/shared'
 
 export type RequestMockInterceptorMappingValue = {
   handler: (config: AxiosRequestConfig) => { data: any; status?: number; statusText?: string }
@@ -11,7 +12,7 @@ export type RequestMockInterceptorMappingValue = {
 }
 
 export interface RequestMockInterceptorOptions {
-  mapping?: Record<string, RequestMockInterceptorMappingValue>
+  mapping?: Record<string, RequestMockInterceptorMappingValue | RequestMockInterceptorMappingValue['handler']>
   include?: string[]
   exclude?: string[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
@@ -37,6 +38,14 @@ function settle(
   }
 }
 
+function normalizeMapping(mapping: RequestMockInterceptorOptions['mapping']) {
+  return Object.entries(mapping ?? {}).reduce((normalizedMapping, [key, value]) => {
+    const normalizedValue: RequestMockInterceptorMappingValue = isFunction(value) ? { handler: value } : value
+    normalizedMapping[key] = normalizedValue
+    return normalizedMapping
+  }, {} as Record<string, RequestMockInterceptorMappingValue>)
+}
+
 export function requestMockInterceptor(options: RequestMockInterceptorOptions = {}): RequestInterceptor {
   return {
     onFulfilled(config) {
@@ -45,10 +54,14 @@ export function requestMockInterceptor(options: RequestMockInterceptorOptions = 
         return config
       }
 
+      const mapping = normalizeMapping(options.mapping)
+
       const findMappingRecord = () =>
-        Object.entries(options.mapping ?? {}).find(
-          ([key, value]) => minimatch(config.url ?? '', key) && config.method === (value.method ?? 'get')
-        )
+        Object.entries(mapping).find(([key, value]) => {
+          const isMatchUrl = minimatch(config.url ?? '', key)
+          const isMatchMethod = value.method != null ? config.method === value.method : true
+          return isMatchUrl && isMatchMethod
+        })
 
       const mappingRecord = findMappingRecord()
       if (!mappingRecord) {

@@ -3,16 +3,16 @@ import { AxiosError } from 'axios'
 import { minimatch } from 'minimatch'
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { isFunction } from '@varlet/shared'
 
-export type RequestMockInterceptorMappingValue = {
+export type RequestMockInterceptorMapping = {
+  url: string
   handler: (config: AxiosRequestConfig) => { data: any; status?: number; statusText?: string }
   method?: string
   delay?: number
 }
 
 export interface RequestMockInterceptorOptions {
-  mapping?: Record<string, RequestMockInterceptorMappingValue | RequestMockInterceptorMappingValue['handler']>
+  mappings?: RequestMockInterceptorMapping[]
   include?: string[]
   exclude?: string[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
@@ -38,14 +38,6 @@ function settle(
   }
 }
 
-function normalizeMapping(mapping: RequestMockInterceptorOptions['mapping']) {
-  return Object.entries(mapping ?? {}).reduce((normalizedMapping, [key, value]) => {
-    const normalizedValue: RequestMockInterceptorMappingValue = isFunction(value) ? { handler: value } : value
-    normalizedMapping[key] = normalizedValue
-    return normalizedMapping
-  }, {} as Record<string, RequestMockInterceptorMappingValue>)
-}
-
 export function requestMockInterceptor(options: RequestMockInterceptorOptions = {}): RequestInterceptor {
   return {
     onFulfilled(config) {
@@ -54,23 +46,20 @@ export function requestMockInterceptor(options: RequestMockInterceptorOptions = 
         return config
       }
 
-      const mapping = normalizeMapping(options.mapping)
-
-      const findMappingRecord = () =>
-        Object.entries(mapping).find(([key, value]) => {
-          const isMatchUrl = minimatch(config.url ?? '', key)
-          const isMatchMethod = value.method != null ? config.method === value.method : true
+      const findMapping = () =>
+        (options.mappings ?? []).find((mapping) => {
+          const isMatchUrl = minimatch(config.url ?? '', mapping.url)
+          const isMatchMethod = mapping.method != null ? config.method === mapping.method : true
           return isMatchUrl && isMatchMethod
         })
 
-      const mappingRecord = findMappingRecord()
-      if (!mappingRecord) {
+      const mapping = findMapping()
+      if (!mapping) {
         return config
       }
 
-      const [, mappingValue] = mappingRecord
       config.adapter = () => {
-        const partialResponse = mappingValue.handler(config)
+        const partialResponse = mapping.handler(config)
         const response: AxiosResponse<any, any> = {
           ...partialResponse,
           headers: config.headers,
@@ -82,7 +71,7 @@ export function requestMockInterceptor(options: RequestMockInterceptorOptions = 
         }
 
         return new Promise((resolve, reject) => {
-          settle(response, resolve, reject, mappingValue.delay)
+          settle(response, resolve, reject, mapping.delay)
         })
       }
 

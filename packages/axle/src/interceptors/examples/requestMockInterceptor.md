@@ -8,22 +8,24 @@ const axle = createAxle()
 axle.useRequestInterceptor(
   requestMockInterceptor({
     // url and handler mapping
-    mapping: {
-      '/user/getUser': () => ({
-        data: {
-          code: 200,
-          message: 'success',
+    mappings: [
+      {
+        url: '/user/getUser',
+        handler: () => ({
           data: {
-            id: 1,
-            name: 'Mock Jack Ma',
-          },
-        }
-      }),
-
-      '/user/getUsers': {
-        // request delay time (ms)
-        delay: 1000,
+            code: 200,
+            message: 'success',
+            data: {
+              id: 1,
+              name: 'Mock Jack Ma',
+            },
+          }
+        })
+      },
+      {
+        url: '/user/getUsers',
         method: 'get',
+        delay: 1000,
         handler: () => ({
           data: {
             code: 200,
@@ -41,8 +43,8 @@ axle.useRequestInterceptor(
           },
         }),
       },
-
-      '/error/**': {
+      {
+        url: '/error/**',
         delay: 1000,
         handler: () => ({
           // status defaults 200
@@ -50,11 +52,11 @@ axle.useRequestInterceptor(
           data: null
         }),
       }
-    },
+    ],
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
-    exclude: ['/user/**'],
+    exclude: ['/other/**'],
   })
 )
 ```

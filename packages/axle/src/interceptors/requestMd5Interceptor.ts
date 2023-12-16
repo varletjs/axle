@@ -8,13 +8,14 @@ import { MD5 } from 'crypto-js'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
 import { isArray, isString } from '@varlet/shared'
 
-export type RequestMd5InterceptorMappingValue = {
+export type RequestMd5InterceptorMapping = {
+  url: string
   path: string[]
   method?: string
 }
 
 export interface RequestMd5InterceptorOptions {
-  mapping?: Record<string, RequestMd5InterceptorMappingValue | RequestMd5InterceptorMappingValue['path']>
+  mappings?: RequestMd5InterceptorMapping[]
   include?: string[]
   exclude?: string[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
@@ -22,9 +23,9 @@ export interface RequestMd5InterceptorOptions {
 
 function withCtxMd5(
   ctx: Pick<AxiosRequestConfig, 'data' | 'params' | 'headers'>,
-  mappingValue: RequestMd5InterceptorMappingValue
+  mapping: RequestMd5InterceptorMapping
 ) {
-  mappingValue.path.forEach((path) => {
+  mapping.path.forEach((path) => {
     const targetValue = get(ctx, path)
     if (targetValue != null) {
       set(ctx, path, MD5(String(targetValue)).toString())
@@ -32,7 +33,7 @@ function withCtxMd5(
   })
 }
 
-function withMd5(config: AxiosRequestConfig, mappingValue: RequestMd5InterceptorMappingValue): AxiosRequestConfig {
+function withMd5(config: AxiosRequestConfig, mapping: RequestMd5InterceptorMapping): AxiosRequestConfig {
   const { data = {}, params = {}, headers = {} } = config
 
   // clone ctx fields
@@ -48,28 +49,20 @@ function withMd5(config: AxiosRequestConfig, mappingValue: RequestMd5Interceptor
     ctx.headers['Content-Type'] === 'application/x-www-form-urlencoded'
   ) {
     ctx.data = qs.parse(ctx.data)
-    withCtxMd5(ctx, mappingValue)
+    withCtxMd5(ctx, mapping)
     ctx.data = qs.stringify(ctx.data)
   } else if (isFormData(ctx.data)) {
     ctx.data = formDataToObject(ctx.data)
-    withCtxMd5(ctx, mappingValue)
+    withCtxMd5(ctx, mapping)
     ctx.data = objectToFormData(ctx.data)
   } else {
-    withCtxMd5(ctx, mappingValue)
+    withCtxMd5(ctx, mapping)
   }
 
   return {
     ...config,
     ...ctx,
   }
-}
-
-function normalizeMapping(mapping: RequestMd5InterceptorOptions['mapping']) {
-  return Object.entries(mapping ?? {}).reduce((normalizedMapping, [key, value]) => {
-    const normalizedValue: RequestMd5InterceptorMappingValue = isArray(value) ? { path: value } : value
-    normalizedMapping[key] = normalizedValue
-    return normalizedMapping
-  }, {} as Record<string, RequestMd5InterceptorMappingValue>)
 }
 
 export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}): RequestInterceptor {
@@ -80,23 +73,19 @@ export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}
         return config
       }
 
-      const mapping = normalizeMapping(options.mapping)
-
-      const findMappingRecord = () =>
-        Object.entries(mapping).find(([key, value]) => {
-          const isMatchUrl = minimatch(config.url ?? '', key)
-          const isMatchMethod = value.method != null ? config.method === value.method : true
+      const findMapping = () =>
+        (options.mappings ?? []).find((mapping) => {
+          const isMatchUrl = minimatch(config.url ?? '', mapping.url)
+          const isMatchMethod = mapping.method != null ? config.method === mapping.method : true
           return isMatchUrl && isMatchMethod
         })
 
-      const mappingRecord = findMappingRecord()
-      if (!mappingRecord) {
+      const mapping = findMapping()
+      if (!mapping) {
         return config
       }
 
-      const [, mappingValue] = mappingRecord
-
-      return withMd5(config, mappingValue)
+      return withMd5(config, mapping)
     },
     onRejected: (error) => Promise.reject(error),
     options: options.axiosInterceptorOptions,

@@ -27,30 +27,36 @@ axle.useRequestInterceptor(
   }),
 
   requestMockInterceptor({
-    mapping: {
-      '/mock/**': () => ({
-        data: {
-          code: 200,
-          data: [
-            {
-              id: 1,
-              name: 'Mock Jack Ma',
-            },
-            {
-              id: 2,
-              name: 'Mock Tom',
-            },
-          ],
-          message: 'success',
-        },
-      }),
-    },
+    mappings: [
+      {
+        url: '/mock/**',
+        handler: () => ({
+          data: {
+            code: 200,
+            data: [
+              {
+                id: 1,
+                name: 'Mock Jack Ma',
+              },
+              {
+                id: 2,
+                name: 'Mock Tom',
+              },
+            ],
+            message: 'success',
+          },
+        }),
+      },
+    ],
   }),
 
   requestMd5Interceptor({
-    mapping: {
-      '/user/add-user': ['data.name'],
-    },
+    mappings: [
+      {
+        url: '/user/add-user',
+        path: ['data.name'],
+      },
+    ],
   })
 )
 

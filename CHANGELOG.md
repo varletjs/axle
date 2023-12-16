@@ -1,3 +1,24 @@
+# [0.3.0](https://github.com/varletjs/axle/compare/v0.2.18...v0.3.0) (2023-12-16)
+
+
+### Code Refactoring
+
+* refactor mapping option to mappings ([ccaf7f5](https://github.com/varletjs/axle/commit/ccaf7f53f843e5a7b5fe68cd3ee0221f0e767140))
+
+
+### Features
+
+* **requestMd5Interceptor:** support path overload ([19acb60](https://github.com/varletjs/axle/commit/19acb604dc4c43398a8fed9c88a80dd92a2d4776))
+* **requestMockInterceptor:** support handler overload ([9b2ccaa](https://github.com/varletjs/axle/commit/9b2ccaaf4a9a3531d886d8a6fd9690f5376c4cb5))
+
+
+### BREAKING CHANGES
+
+* Mapping option is deprecated, please use mappings instead. affected interceptors are:
+requestMd5Interceptor, requestMockInterceptor
+
+
+
 ## [0.2.18](https://github.com/varletjs/axle/compare/v0.2.17...v0.2.18) (2023-12-15)
 
 

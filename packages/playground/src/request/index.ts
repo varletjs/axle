@@ -49,10 +49,7 @@ axle.useRequestInterceptor(
 
   requestMd5Interceptor({
     mapping: {
-      '/user/add-user': {
-        path: ['data.name'],
-        method: 'post',
-      },
+      '/user/add-user': ['data.name'],
     },
   })
 )

@@ -12,3 +12,5 @@ package-lock.json
 lib
 es
 site
+auto-imports.d.ts
+components.d.ts

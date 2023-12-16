@@ -9,6 +9,8 @@ axle.useRequestInterceptor(
   requestMd5Interceptor({
     // url and data/params/headers path mapping
     mapping: {
+      '/user/login': ['data.password'],
+
       '/user/add-user': {
         path: ['data.name'],
         method: 'post'

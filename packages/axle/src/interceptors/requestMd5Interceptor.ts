@@ -6,7 +6,7 @@ import { minimatch } from 'minimatch'
 import { set, get } from 'lodash-es'
 import { MD5 } from 'crypto-js'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
-import { isString } from '@varlet/shared'
+import { isArray, isString } from '@varlet/shared'
 
 export type RequestMd5InterceptorMappingValue = {
   path: string[]
@@ -14,7 +14,7 @@ export type RequestMd5InterceptorMappingValue = {
 }
 
 export interface RequestMd5InterceptorOptions {
-  mapping?: Record<string, RequestMd5InterceptorMappingValue>
+  mapping?: Record<string, RequestMd5InterceptorMappingValue | RequestMd5InterceptorMappingValue['path']>
   include?: string[]
   exclude?: string[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
@@ -64,6 +64,14 @@ function withMd5(config: AxiosRequestConfig, mappingValue: RequestMd5Interceptor
   }
 }
 
+function normalizeMapping(mapping: RequestMd5InterceptorOptions['mapping']) {
+  return Object.entries(mapping ?? {}).reduce((normalizedMapping, [key, value]) => {
+    const normalizedValue: RequestMd5InterceptorMappingValue = isArray(value) ? { path: value } : value
+    normalizedMapping[key] = normalizedValue
+    return normalizedMapping
+  }, {} as Record<string, RequestMd5InterceptorMappingValue>)
+}
+
 export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}): RequestInterceptor {
   return {
     onFulfilled(config) {
@@ -72,10 +80,14 @@ export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}
         return config
       }
 
+      const mapping = normalizeMapping(options.mapping)
+
       const findMappingRecord = () =>
-        Object.entries(options.mapping ?? {}).find(
-          ([key, value]) => minimatch(config.url ?? '', key) && config.method === (value.method ?? 'get')
-        )
+        Object.entries(mapping).find(([key, value]) => {
+          const isMatchUrl = minimatch(config.url ?? '', key)
+          const isMatchMethod = value.method != null ? config.method === value.method : true
+          return isMatchUrl && isMatchMethod
+        })
 
       const mappingRecord = findMappingRecord()
       if (!mappingRecord) {

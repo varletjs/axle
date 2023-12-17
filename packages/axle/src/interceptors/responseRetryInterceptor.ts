@@ -15,7 +15,7 @@ export function responseRetryInterceptor(options: ResponseRetryInterceptorOption
     onFulfilled: (response) => response,
     async onRejected(error) {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(error.config.method ?? '', error.config.url ?? '') || isCancel(error)) {
+      if (!matcher(error.config.method ?? '', error.config.url ?? '', error?.response?.status) || isCancel(error)) {
         return Promise.reject(error)
       }
 

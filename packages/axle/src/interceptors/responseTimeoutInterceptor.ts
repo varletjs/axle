@@ -14,7 +14,7 @@ export function responseTimeoutInterceptor(options: ResponseTimeoutInterceptorOp
     onFulfilled: (response) => response,
     onRejected(error) {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(error.config.method ?? '', error.config.url ?? '')) {
+      if (!matcher(error.config.method ?? '', error.config.url ?? '', error?.response?.status)) {
         return Promise.reject(error)
       }
 

@@ -6,7 +6,7 @@ import { minimatch } from 'minimatch'
 import { set, get } from 'lodash-es'
 import { MD5 } from 'crypto-js'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
-import { isArray, isString } from '@varlet/shared'
+import { isString } from '@varlet/shared'
 
 export type RequestMd5InterceptorMapping = {
   url: string

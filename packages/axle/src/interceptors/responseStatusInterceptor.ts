@@ -14,7 +14,7 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
   return {
     onFulfilled: (response) => {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(response.config.method ?? '', response.config.url ?? '')) {
+      if (!matcher(response.config.method ?? '', response.config.url ?? '', response.status)) {
         return response
       }
 
@@ -30,7 +30,7 @@ export function responseStatusInterceptor(options: ResponseStatusInterceptorOpti
 
     onRejected: (error) => {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(error.config.method ?? '', error.config.url ?? '')) {
+      if (!matcher(error.config.method ?? '', error.config.url ?? '', error?.response?.status)) {
         return Promise.reject(error)
       }
 

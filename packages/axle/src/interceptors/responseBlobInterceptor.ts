@@ -13,7 +13,7 @@ export function responseBlobInterceptor(options: ResponseBlobInterceptorOptions 
   return {
     onFulfilled(response) {
       const matcher = createMatcher(options.include, options.exclude)
-      if (!matcher(response.config.method ?? '', response.config.url ?? '')) {
+      if (!matcher(response.config.method ?? '', response.config.url ?? '', response.status)) {
         return response
       }
 

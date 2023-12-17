@@ -2,7 +2,7 @@ import { minimatch } from 'minimatch'
 
 export function matchPattern(pattern: string, method: string, url: string, status?: number | null | undefined) {
   if (pattern.startsWith('status:')) {
-    return status != null ? pattern.replace('status:', '').trim() === status.toString() : false
+    return pattern.replace('status:', '').trim() === String(status)
   }
 
   return pattern.startsWith('method:')

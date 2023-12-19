@@ -1,10 +1,10 @@
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
+import md5 from 'crypto-js/md5'
 import { createMatcher } from '../matcher'
 import { minimatch } from 'minimatch'
 import { set, get } from 'lodash-es'
-import { MD5 } from 'crypto-js'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
 import { isString } from '@varlet/shared'
 
@@ -28,7 +28,7 @@ function withCtxMd5(
   mapping.path.forEach((path) => {
     const targetValue = get(ctx, path)
     if (targetValue != null) {
-      set(ctx, path, MD5(String(targetValue)).toString())
+      set(ctx, path, md5(String(targetValue)).toString())
     }
   })
 }

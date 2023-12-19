@@ -1,6 +1,6 @@
 {
   "name": "@varlet/axle",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "Progressive request tool based on axios",
   "type": "module",
   "main": "es/index.js",

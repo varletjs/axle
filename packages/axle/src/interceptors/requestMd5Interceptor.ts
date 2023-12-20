@@ -4,7 +4,7 @@ import qs from 'qs'
 import md5 from 'crypto-js/md5'
 import { createMatcher } from '../matcher'
 import { minimatch } from 'minimatch'
-import { set, get } from 'lodash-es'
+import { set, get } from 'lodash'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
 import { isString } from '@varlet/shared'
 

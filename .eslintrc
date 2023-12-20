@@ -1,5 +1,5 @@
 {
   "root": true,
   "extends": ["@varlet"],
-  "ignorePatterns": ["node_modules", "es", "dist", "playground"]
+  "ignorePatterns": ["node_modules", "es", "cjs", "lib", "dist", "playground"]
 }

@@ -11,6 +11,7 @@ package-lock.json
 
 lib
 es
+cjs
 site
 auto-imports.d.ts
 components.d.ts

@@ -2,6 +2,9 @@ package.json
 *.md
 .github/**
 .history/**
+lib/**
+es/**
+cjs/**
 
 pnpm-lock.yaml
 pnpm-workspace.yaml

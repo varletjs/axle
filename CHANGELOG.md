@@ -1,3 +1,12 @@
+## [0.3.3](https://github.com/varletjs/axle/compare/v0.3.2...v0.3.3) (2023-12-20)
+
+
+### Features
+
+* support cjs format ([2c135f3](https://github.com/varletjs/axle/commit/2c135f370b6d6a33f83c87a60825079f39ab43fb))
+
+
+
 ## [0.3.2](https://github.com/varletjs/axle/compare/v0.3.1...v0.3.2) (2023-12-19)
 
 

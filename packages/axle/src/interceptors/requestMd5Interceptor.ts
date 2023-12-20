@@ -1,10 +1,11 @@
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions, AxiosRequestConfig } from 'axios'
 import qs from 'qs'
-import md5 from 'crypto-js/md5'
+import md5 from 'crypto-js/md5.js'
+import get from 'lodash/get.js'
+import set from 'lodash/set.js'
 import { createMatcher } from '../matcher'
 import { minimatch } from 'minimatch'
-import { set, get } from 'lodash'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
 import { isString } from '@varlet/shared'
 

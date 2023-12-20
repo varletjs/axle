@@ -44,8 +44,8 @@ importers:
   packages/axle:
     dependencies:
       '@varlet/shared':
-        specifier: 2.20.3-alpha.1703057787821
-        version: 2.20.3-alpha.1703057787821
+        specifier: 2.20.3
+        version: 2.20.3
       axios:
         specifier: ^1.4.0
         version: 1.4.0
@@ -807,8 +807,8 @@ packages:
     resolution: {integrity: sha512-VobWP3Q2OcL6jpsr76MsSW9QcduiX28HRJrUiPSt/SLaMGtaj/oKGiP7XgkbPsWkJzeITzWgCQJEdu/Pvl8YyQ==}
     dev: false
 
-  /@varlet/shared@2.20.3-alpha.1703057787821:
-    resolution: {integrity: sha512-tYMI8GHhYg9msKV/yZNoL8x9JJoKauUSuAz6IFRg55JHR4XdnSIJcwWZUKTls8mso38lgJPGQ1BUNdKoxFRmhA==}
+  /@varlet/shared@2.20.3:
+    resolution: {integrity: sha512-MgLDRYfrGgKqu8Vg2kfRVRGRZE2d8CH0f75vph5h4AG+Clm+A7FgUZLaVTriMWuS6wXrrrceSgX5kNmb/lFShQ==}
     dev: false
 
   /@varlet/touch-emulator@2.20.0:

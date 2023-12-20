@@ -34,7 +34,7 @@
     "build": "tsup src/index.ts src/use.ts --format esm,cjs --out-dir=lib --dts --clean"
   },
   "dependencies": {
-    "@varlet/shared": "2.20.3-alpha.1703057787821",
+    "@varlet/shared": "2.20.3",
     "axios": "^1.4.0",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",

@@ -108,8 +108,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       downloadProgress.value = 0
 
       const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
-      const params = { ...normalizeValueGetter(initialParamsOrGetter), ...options.params }
-      const config = { ...normalizeValueGetter(initialConfigOrGetter), ...options.config }
+      const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
+      const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
 
       onBefore(refs)
 

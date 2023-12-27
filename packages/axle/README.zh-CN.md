@@ -298,17 +298,15 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   value: [],
   // 请求方法
   method: 'get',
-  // 请求地址
+  // 请求地址, 可以是 getter 函数
   url: '/user',
   // 是否立即发送请求, 默认值: false
   immediate: true,
   // 请求前是否需要重置 value, 默认值: false
   resetValue: true,
-  // 请求参数, 默认值: {}
-  // 当参数是一个对象时，发送第一个请求（immediate）时将携带它
-  // 当参数是一个函数时，每次发送请求时都会携带它。
+  // 请求参数, 默认值: {}, 可以是 getter 函数
   params: { current: 1, pageSize: 10 },
-  // Axios 配置, see https://axios-http.com
+  // Axios 配置, see https://axios-http.com, 可以是 getter 函数
   config: { headers: {} },
   // 生命周期
   onBefore(refs) {

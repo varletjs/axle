@@ -298,17 +298,15 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   value: [],
   // Request method
   method: 'get',
-  // Request url
+  // Request url can be a getter function
   url: '/user',
   // Whether to send the request immediately, defaults false
   immediate: true,
   // Whether the value needs to be reset before requesting, defaults false
   resetValue: true,
-  // Request params, defaults {}
-  // When params is an object, it will be carried when sending the first request (immediate)
-  // When params is a function, it will be carried every time a request is sent.
+  // Request params, defaults {}, can be a getter function
   params: { current: 1, pageSize: 10 },
-  // Axios config, see https://axios-http.com
+  // Axios config, see https://axios-http.com can be a getter function
   config: { headers: {} },
   // lifecycle
   onBefore(refs) {

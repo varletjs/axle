@@ -20,12 +20,12 @@ export interface UseAxleRefs<V> {
 }
 
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
-  url: string
+  url: string | (() => string)
   method: RunnerMethod
   value?: V
   params?: P | (() => P)
   resetValue?: boolean
-  config?: AxleRequestConfig
+  config?: () => AxleRequestConfig
   immediate?: boolean
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
@@ -52,6 +52,10 @@ export interface CreateUseAxleOptions {
   onTransform?(response: any, refs: any): any
 }
 
+export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
+  return isFunction(valueGetter) ? valueGetter() : valueGetter
+}
+
 export function createUseAxle(options: CreateUseAxleOptions) {
   const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = false } = options
 
@@ -59,13 +63,13 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     options: UseAxleOptions<V, R, P>
   ): UseAxleInstance<V, R, P> => {
     const {
-      url,
+      url: initialUrlOrGetter,
       method,
       immediate = defaultImmediate,
       value: initialValue,
       resetValue: initialResetValue,
       params: initialParamsOrGetter,
-      config: initialConfig,
+      config: initialConfigOrGetter,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -74,7 +78,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       onError = () => {},
     } = options
 
-    const initialUrl = url
     const value = ref(initialValue) as Ref<V>
     const loading = ref(false)
     const error = ref<Error>()
@@ -104,31 +107,28 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       uploadProgress.value = 0
       downloadProgress.value = 0
 
-      const url = options.url ?? initialUrl
+      const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
+      const params = { ...normalizeValueGetter(initialParamsOrGetter), ...options.params }
+      const config = { ...normalizeValueGetter(initialConfigOrGetter), ...options.config }
 
       onBefore(refs)
 
       loading.value = true
 
       try {
-        const getterParams = isFunction(initialParamsOrGetter) ? initialParamsOrGetter() : {}
-        const response = await axle[method](
-          url,
-          { ...getterParams, ...options.params },
-          {
-            signal: controller.signal,
+        const response = await axle[method](url, params, {
+          signal: controller.signal,
 
-            onUploadProgress(event) {
-              uploadProgress.value = event.progress ?? 0
-            },
+          onUploadProgress(event) {
+            uploadProgress.value = event.progress ?? 0
+          },
 
-            onDownloadProgress(event) {
-              downloadProgress.value = event.progress ?? 0
-            },
+          onDownloadProgress(event) {
+            downloadProgress.value = event.progress ?? 0
+          },
 
-            ...options.config,
-          }
-        )
+          ...config,
+        })
 
         value.value = onTransform(response as R, refs)
         error.value = undefined
@@ -153,9 +153,9 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     if (immediate) {
       run({
-        url: initialUrl,
-        params: isFunction(initialParamsOrGetter) ? ({} as P) : initialParamsOrGetter,
-        config: initialConfig,
+        url: normalizeValueGetter(initialUrlOrGetter),
+        params: normalizeValueGetter(initialParamsOrGetter),
+        config: normalizeValueGetter(initialConfigOrGetter),
       })
     }
 

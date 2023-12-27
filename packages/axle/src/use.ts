@@ -25,8 +25,8 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   value?: V
   params?: P | (() => P)
   resetValue?: boolean
-  config?: () => AxleRequestConfig
   immediate?: boolean
+  config?: AxleRequestConfig | (() => AxleRequestConfig)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V

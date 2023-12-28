@@ -1,3 +1,22 @@
+# [0.4.0](https://github.com/varletjs/axle/compare/v0.3.5...v0.4.0) (2023-12-28)
+
+
+### Bug Fixes
+
+* **use:** modify getter value behavior ([4dc8a56](https://github.com/varletjs/axle/commit/4dc8a56a42642c64ad4c4d4344197bbaf52377da))
+
+
+### Features
+
+* **use:** support url getter and config getter ([5b0365b](https://github.com/varletjs/axle/commit/5b0365b081517a1edbd71ef97c15fad035356a40))
+
+
+### BREAKING CHANGES
+
+* **use:** options.params, options.config behavior changes from merging to overriding
+
+
+
 ## [0.3.5](https://github.com/varletjs/axle/compare/v0.3.4...v0.3.5) (2023-12-21)
 
 

@@ -293,7 +293,7 @@ const useAxle = createUseAxle({
   onTransform: (response) => response,
 })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort, resetValue }] = useAxle({
   // Request initial value
   value: [],
   // Request method
@@ -304,6 +304,10 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   immediate: true,
   // Whether the value needs to be reset before requesting, defaults false
   resetValue: true,
+  // Whether to clone when resetting value, defaults false
+  // When set to true, use JSON.parse(JSON.stringify(value)) cloned
+  // When set to a function, the set function will be used as the clone function, such as v => _.cloneDeep(v)
+  cloneResetValue: true,
   // Request params, defaults {}, can be a getter function
   params: { current: 1, pageSize: 10 },
   // Axios config, see https://axios-http.com can be a getter function

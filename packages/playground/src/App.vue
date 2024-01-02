@@ -22,7 +22,10 @@ const [users, getUsers, { loading: isUsersLoading }] = useGetUsers<User[]>({ imm
 
 const [mockUsers, , { loading: isMockUsersLoading }] = useGetMockUsers<User[]>({ immediate: true })
 
-const [user, getUser, { loading: isUserLoading, abort }] = useGetUser({
+const [user, getUser, { loading: isUserLoading, abort, resetValue }] = useGetUser<User>({
+  value: { id: 'test' },
+  resetValue: true,
+  cloneResetValue: true,
   onSuccess(response) {
     if (response.code === 200) {
       Snackbar.success('Getting Success!')
@@ -148,6 +151,7 @@ watch(
     <var-space align="center">
       <var-input type="number" variant="outlined" v-model="id" />
       <var-button type="primary" @click="getUser({ params: { id } })">Search</var-button>
+      <var-button type="primary" @click="resetValue">Reset Value</var-button>
       <var-button type="warning" @click="abort">Abort</var-button>
     </var-space>
 

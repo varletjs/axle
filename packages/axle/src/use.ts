@@ -2,14 +2,15 @@ import { ref, type Ref } from 'vue'
 import { type AxleRequestConfig, type RunnerMethod, type AxleInstance } from './instance.js'
 import { isFunction } from '@varlet/shared'
 
-export interface RunOptions<P> {
+export interface RunOptions<V, P> {
   url?: string
   params?: P
   config?: AxleRequestConfig
   resetValue?: boolean
+  cloneResetValue?: boolean | ((value: V) => V)
 }
 
-export type Run<R, P> = (options?: RunOptions<P>) => Promise<R>
+export type Run<V, R, P> = (options?: RunOptions<V, P>) => Promise<R>
 
 export interface UseAxleRefs<V> {
   value: Ref<V>
@@ -25,6 +26,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   value?: V
   params?: P | (() => P)
   resetValue?: boolean
+  cloneResetValue?: boolean | ((value: V) => V)
   immediate?: boolean
   config?: AxleRequestConfig | (() => AxleRequestConfig)
   onBefore?(refs: UseAxleRefs<V>): void
@@ -34,15 +36,20 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   onError?(error: Error, refs: UseAxleRefs<V>): void
 }
 
+export interface ResetValueOptions<V> {
+  cloneResetValue?: boolean | ((value: V) => V)
+}
+
 export type UseAxleInstance<V, R, P> = [
   value: Ref<V>,
-  run: Run<R, P>,
+  run: Run<V, R, P>,
   extra: {
     uploadProgress: Ref<number>
     downloadProgress: Ref<number>
     loading: Ref<boolean>
     error: Ref<Error | undefined>
     abort(): void
+    resetValue(options: ResetValueOptions<V>): void
   }
 ]
 
@@ -68,6 +75,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       immediate = defaultImmediate,
       value: initialValue,
       resetValue: initialResetValue,
+      cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
       onBefore = () => {},
@@ -94,14 +102,25 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
 
-    const run: Run<R, P> = async (options: RunOptions<P> = {}) => {
+    const resetValue = (options: ResetValueOptions<V> = {}) => {
+      const cloneResetValue = options.cloneResetValue ?? initialCloneResetValue ?? false
+      const cloneFn =
+        cloneResetValue === true
+          ? (v: V) => (v == null ? null : JSON.parse(JSON.stringify(v)))
+          : isFunction(initialCloneResetValue)
+          ? initialCloneResetValue
+          : (v: V) => v
+      value.value = cloneFn(initialValue as V)
+    }
+
+    const run: Run<V, R, P> = async (options: RunOptions<V, P> = {}) => {
       if (controller.signal.aborted) {
         controller = new AbortController()
       }
 
-      const resetValue = options.resetValue ?? initialResetValue ?? false
-      if (resetValue === true) {
-        value.value = initialValue as V
+      const resetValueOption = options.resetValue ?? initialResetValue ?? false
+      if (resetValueOption === true) {
+        resetValue(options)
       }
 
       uploadProgress.value = 0
@@ -168,6 +187,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         uploadProgress,
         downloadProgress,
         abort,
+        resetValue,
       },
     ]
   }

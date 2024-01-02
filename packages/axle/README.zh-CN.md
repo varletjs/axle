@@ -304,6 +304,10 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   immediate: true,
   // 请求前是否需要重置 value, 默认值: false
   resetValue: true,
+  // 重置 value 是否对 value 进行拷贝
+  // 设置为 true 时, 使用 JSON.parse(JSON.stringify(value)) 进行拷贝
+  // 设置为一个函数时, 该函数将作为拷贝函数对 value 进行拷贝， 如 v => _.cloneDeep(v)
+  cloneResetValue: true,
   // 请求参数, 默认值: {}, 可以是 getter 函数
   params: { current: 1, pageSize: 10 },
   // Axios 配置, see https://axios-http.com, 可以是 getter 函数

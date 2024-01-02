@@ -49,7 +49,7 @@ export type UseAxleInstance<V, R, P> = [
     loading: Ref<boolean>
     error: Ref<Error | undefined>
     abort(): void
-    resetValue(options: ResetValueOptions<V>): void
+    resetValue(options?: ResetValueOptions<V>): void
   }
 ]
 

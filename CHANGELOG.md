@@ -1,3 +1,12 @@
+# [0.5.0](https://github.com/varletjs/axle/compare/v0.4.0...v0.5.0) (2024-01-02)
+
+
+### Features
+
+* **use:** support resetValue method and cloneResetValue option ([e4e7bed](https://github.com/varletjs/axle/commit/e4e7bedf04c0ac99936a1136b4f61ae25699f234))
+
+
+
 # [0.4.0](https://github.com/varletjs/axle/compare/v0.3.5...v0.4.0) (2023-12-28)
 
 

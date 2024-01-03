@@ -13,6 +13,7 @@
       ]
     }
   },
+  "sideEffects": false,
   "exports": {
     ".": {
       "import": "./lib/index.js",

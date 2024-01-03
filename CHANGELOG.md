@@ -1,3 +1,12 @@
+## [0.5.2](https://github.com/varletjs/axle/compare/v0.5.1...v0.5.2) (2024-01-03)
+
+
+### Features
+
+* support treeshaking ([8c05476](https://github.com/varletjs/axle/commit/8c0547652397be8759a84a472568cab7c8113e56))
+
+
+
 ## [0.5.1](https://github.com/varletjs/axle/compare/v0.5.0...v0.5.1) (2024-01-02)
 
 

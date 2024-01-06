@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
-import { type AxleRequestConfig, type RunnerMethod, type AxleInstance } from './instance.js'
 import { isFunction } from '@varlet/shared'
+import { type RunnerMethod, type AxleInstance, type AxleRequestConfig } from './instance.js'
 
 export interface RunOptions<V, P> {
   url?: string

@@ -13,19 +13,17 @@ import type {
 import { inBrowser } from '@varlet/shared'
 import { objectToFormData } from './utils'
 
-export type AxleRequestConfig = AxiosRequestConfig & {
-  exceptionMessage?: any
-}
+export interface AxleRequestConfig extends AxiosRequestConfig {}
 
-export type FetchRunner = <T = any, R = AxiosResponse<T>>(
+export type FetchRunner = <R = AxiosResponse, P = Record<string, any>>(
   url: string,
-  params?: any,
+  params?: P,
   config?: AxleRequestConfig
 ) => Promise<R>
 
-export type ModifyRunner = <T = any, R = AxiosResponse<T>>(
+export type ModifyRunner = <R = AxiosResponse, P = Record<string, any>>(
   url: string,
-  params?: any,
+  params?: P,
   config?: AxleRequestConfig
 ) => Promise<R>
 
@@ -100,7 +98,11 @@ export type AxleInstance = {
 }
 
 export function createFetchRunner(service: AxiosInstance, method: FetchMethod, responseType: ResponseType) {
-  return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
+  return function <R = AxiosResponse, P = Record<string, any>>(
+    url: string,
+    params?: P,
+    config?: AxleRequestConfig
+  ): Promise<R> {
     return service[method](url, {
       params,
       responseType,
@@ -114,16 +116,22 @@ export function createModifyRunner(
   method: ModifyMethod,
   contentType: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded'
 ) {
-  return function <T, R = AxiosResponse<T>>(url: string, params?: any, config?: AxleRequestConfig): Promise<R> {
+  return function <R = AxiosResponse, P = Record<string, any>>(
+    url: string,
+    params?: P,
+    config?: AxleRequestConfig
+  ): Promise<R> {
+    let normalizedParams: any = params ?? {}
+
     if (contentType === 'application/x-www-form-urlencoded') {
-      params = qs.stringify(params)
+      normalizedParams = qs.stringify(normalizedParams)
     }
 
     if (contentType === 'multipart/form-data') {
-      params = objectToFormData(params)
+      normalizedParams = objectToFormData(normalizedParams)
     }
 
-    return service[method](url, params, {
+    return service[method](url, normalizedParams, {
       headers: {
         'Content-Type': contentType,
       },
@@ -147,7 +155,7 @@ export function download(url: string | Blob, filename: string) {
   document.body.removeChild(a)
 }
 
-export function createAxle(config: AxiosRequestConfig = {}): AxleInstance {
+export function createAxle(config: AxleRequestConfig = {}): AxleInstance {
   const service = axios.create(config)
 
   function getHeaders() {

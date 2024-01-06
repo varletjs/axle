@@ -1,3 +1,17 @@
+# [0.6.0](https://github.com/varletjs/axle/compare/v0.5.2...v0.6.0) (2024-01-06)
+
+
+### types
+
+* refactor runner generic types ([e168ef2](https://github.com/varletjs/axle/commit/e168ef2c17b2831d3e1df819016c315d09178912))
+
+
+### BREAKING CHANGES
+
+* The first generic parameter of runner is changed to response, and the second parameter is changed to params.
+
+
+
 ## [0.5.2](https://github.com/varletjs/axle/compare/v0.5.1...v0.5.2) (2024-01-03)
 
 

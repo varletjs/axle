@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useHasLoading, useValues, useAverageProgress } from '@varlet/axle/use'
-import { download } from '@varlet/axle'
+import { download, withResponse } from '@varlet/axle'
 import {
   useGetUser,
   useGetUsers,
@@ -13,7 +13,9 @@ import {
   useGetMockUsers,
   User,
   useAlwaysThrowError,
+  Response,
 } from './apis'
+import { axle } from './request'
 
 const id = ref('1')
 const deleteId = ref('1')
@@ -107,6 +109,11 @@ const userRecord = reactive<User>({
   name: '',
 })
 
+watch(
+  () => [addedUser.value, updatedUser.value, deletedUser.value, patchedUser.value],
+  () => getUsers()
+)
+
 function runAll() {
   allUsers.value = [[], []]
   Promise.all([getUsersOne(), getUsersTwo()])
@@ -128,10 +135,10 @@ async function downloadFile() {
   }
 }
 
-watch(
-  () => [addedUser.value, updatedUser.value, deletedUser.value, patchedUser.value],
-  () => getUsers()
-)
+async function handleWithResponse() {
+  const { response, errorResponse } = await withResponse(axle.get<Response<any>>('/not-found-api'))
+  console.log(response?.code, errorResponse?.status)
+}
 </script>
 
 <template>
@@ -151,7 +158,7 @@ watch(
     <var-space align="center">
       <var-input type="number" variant="outlined" v-model="id" />
       <var-button type="primary" @click="getUser({ params: { id } })">Search</var-button>
-      <var-button type="primary" @click="resetValue">Reset Value</var-button>
+      <var-button type="primary" @click="() => resetValue()">Reset Value</var-button>
       <var-button type="warning" @click="abort">Abort</var-button>
     </var-space>
 
@@ -213,4 +220,8 @@ watch(
     <var-cell>data: {{ allUsers ?? 'No Data' }}</var-cell>
     <var-button type="primary" @click="runAll">Run All</var-button>
   </var-space>
+
+  <var-divider margin="30px 0" />
+
+  <var-button type="primary" @click="handleWithResponse">handleWithResponse</var-button>
 </template>

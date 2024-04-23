@@ -10,7 +10,6 @@ import type {
   InternalAxiosRequestConfig,
   ResponseType,
 } from 'axios'
-import { inBrowser } from '@varlet/shared'
 import { objectToFormData } from './utils'
 
 export interface AxleRequestConfig extends AxiosRequestConfig {}
@@ -111,18 +110,6 @@ export function createFetchRunner(service: AxiosInstance, method: FetchMethod, r
   }
 }
 
-export function withResponse<T>(pendingRes: Promise<T>): Promise<T> {
-  return new Promise<T>((resolve, reject) => {
-    pendingRes.then(resolve).catch((error) => {
-      if (error.response) {
-        resolve(error.response)
-      } else {
-        reject(error)
-      }
-    })
-  })
-}
-
 export function createModifyRunner(
   service: AxiosInstance,
   method: ModifyMethod,
@@ -150,21 +137,6 @@ export function createModifyRunner(
       ...config,
     })
   }
-}
-
-export function download(url: string | Blob, filename: string) {
-  if (!inBrowser()) {
-    return
-  }
-
-  const a = document.createElement('a')
-  a.download = filename
-  a.style.display = 'none'
-  a.href = typeof url === 'string' ? url : URL.createObjectURL(url)
-  document.body.appendChild(a)
-  a.click()
-  URL.revokeObjectURL(a.href)
-  document.body.removeChild(a)
 }
 
 export function createAxle(config: AxleRequestConfig = {}): AxleInstance {

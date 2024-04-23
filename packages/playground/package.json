@@ -10,22 +10,23 @@
   },
   "dependencies": {
     "@varlet/axle": "workspace:*",
-    "@varlet/touch-emulator": "^2.20.0",
-    "@varlet/ui": "^2.20.0",
-    "@varlet/use": "^2.20.0",
+    "@varlet/touch-emulator": "^3.2.5",
+    "@varlet/ui": "^3.2.5",
+    "@varlet/use": "^3.2.5",
+    "@varlet/import-resolver": "^3.2.5",
     "vue": "3.3.4",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-router": "^12.0.0",
-    "nodemon": "^2.0.15",
-    "unplugin-auto-import": "^0.16.2"
+    "nodemon": "^2.0.15"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",
     "@vitejs/plugin-vue": "^4.2.3",
     "less": "^4.1.2",
     "typescript": "^5.1.5",
-    "unplugin-vue-components": "^0.24.1",
+    "unplugin-auto-import": "^0.17.5",
+    "unplugin-vue-components": "^0.26.0",
     "vite": "^4.3.8",
     "vue-tsc": "^1.6.5"
   }

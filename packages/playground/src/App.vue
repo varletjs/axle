@@ -225,3 +225,10 @@ async function handleWithResponse() {
 
   <var-button type="primary" @click="handleWithResponse">handleWithResponse</var-button>
 </template>
+
+<style>
+body {
+  color: var(--color-text);
+  background-color: var(--color-body);
+}
+</style>

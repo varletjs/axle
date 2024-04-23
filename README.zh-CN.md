@@ -192,9 +192,9 @@ download(await axle.getBlob('/url', { id: 1 }), 'filename')
 #### 同时返回成功响应和错误响应
 
 ```js
-import { download } from '@varlet/axle'
+import { withResponse } from '@varlet/axle'
 
-const { response, errorResponse } = await axle.get('/url')
+const { response, errorResponse } = await withResponse(axle.get('/url'))
 ```
 
 #### 公共 header 操作

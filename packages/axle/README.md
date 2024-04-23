@@ -189,6 +189,14 @@ import { download } from '@varlet/axle'
 download(await axle.getBlob('/url', { id: 1 }), 'filename')
 ```
 
+#### Return both a success response and an error response
+
+```js
+import { download } from '@varlet/axle'
+
+const { response, errorResponse } = await axle.get('/url')
+```
+
 #### Common Header Operate
 
 ```js

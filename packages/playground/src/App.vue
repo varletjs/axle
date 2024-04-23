@@ -137,7 +137,7 @@ async function downloadFile() {
 
 async function handleWithResponse() {
   const { response, errorResponse } = await withResponse(axle.get<Response<any>>('/not-found-api'))
-  console.log(response?.code, errorResponse?.status)
+  console.log(response, errorResponse)
 }
 </script>
 

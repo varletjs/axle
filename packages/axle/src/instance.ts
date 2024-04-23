@@ -111,6 +111,18 @@ export function createFetchRunner(service: AxiosInstance, method: FetchMethod, r
   }
 }
 
+export function withResponse<T>(pendingRes: Promise<T>): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
+    pendingRes.then(resolve).catch((error) => {
+      if (error.response) {
+        resolve(error.response)
+      } else {
+        reject(error)
+      }
+    })
+  })
+}
+
 export function createModifyRunner(
   service: AxiosInstance,
   method: ModifyMethod,

@@ -1,3 +1,12 @@
+# [0.7.0](https://github.com/varletjs/axle/compare/v0.6.0...v0.7.0) (2024-04-23)
+
+
+### Features
+
+* add function withResponse ([#16](https://github.com/varletjs/axle/issues/16)) ([7bd290b](https://github.com/varletjs/axle/commit/7bd290ba7244feebad4f5ee42a5574e66f49589c))
+
+
+
 # [0.6.0](https://github.com/varletjs/axle/compare/v0.5.2...v0.6.0) (2024-01-06)
 
 

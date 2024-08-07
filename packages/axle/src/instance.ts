@@ -9,10 +9,23 @@ import type {
   HeadersDefaults,
   InternalAxiosRequestConfig,
   ResponseType,
+  AxiosError,
 } from 'axios'
 import { objectToFormData } from './utils'
 
 export interface AxleRequestConfig extends AxiosRequestConfig {}
+
+export type {
+  AxiosInstance,
+  AxiosInterceptorOptions,
+  AxiosRequestConfig,
+  AxiosRequestHeaders,
+  AxiosResponse,
+  HeadersDefaults,
+  InternalAxiosRequestConfig,
+  ResponseType,
+  AxiosError,
+}
 
 export type FetchRunner = <R = AxiosResponse, P = Record<string, any>>(
   url: string,

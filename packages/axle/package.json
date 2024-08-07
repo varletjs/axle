@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@varlet/shared": "2.20.3",
-    "axios": "^1.4.0",
+    "axios": "^1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",
     "minimatch": "^9.0.3",

@@ -90,17 +90,14 @@ export type AxleInstance = {
   post: ModifyRunner
   postUrlEncode: ModifyRunner
   postMultipart: ModifyRunner
-  postForm: ModifyRunner
 
   put: ModifyRunner
   putUrlEncode: ModifyRunner
   putMultipart: ModifyRunner
-  putForm: ModifyRunner
 
   patch: ModifyRunner
   patchUrlEncode: ModifyRunner
   patchMultipart: ModifyRunner
-  patchForm: ModifyRunner
 
   getHeaders(): HeadersDefaults['common']
   setHeader(key: string, value: string): void
@@ -219,17 +216,14 @@ export function createAxle(config: AxleRequestConfig = {}): AxleInstance {
     post: createModifyRunner(service, 'post', 'application/json'),
     postUrlEncode: createModifyRunner(service, 'post', 'application/x-www-form-urlencoded'),
     postMultipart: createModifyRunner(service, 'post', 'multipart/form-data'),
-    postForm: createModifyRunner(service, 'post', 'application/x-www-form-urlencoded'),
 
     put: createModifyRunner(service, 'put', 'application/json'),
     putUrlEncode: createModifyRunner(service, 'put', 'application/x-www-form-urlencoded'),
     putMultipart: createModifyRunner(service, 'put', 'multipart/form-data'),
-    putForm: createModifyRunner(service, 'put', 'application/x-www-form-urlencoded'),
 
     patch: createModifyRunner(service, 'patch', 'application/json'),
     patchUrlEncode: createModifyRunner(service, 'patch', 'application/x-www-form-urlencoded'),
     patchMultipart: createModifyRunner(service, 'patch', 'multipart/form-data'),
-    patchForm: createModifyRunner(service, 'put', 'application/x-www-form-urlencoded'),
 
     getHeaders,
     setHeader,

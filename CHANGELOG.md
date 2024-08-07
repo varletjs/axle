@@ -1,3 +1,12 @@
+# [0.8.0](https://github.com/varletjs/axle/compare/v0.7.1...v0.8.0) (2024-08-07)
+
+
+### Features
+
+* export type of axios ([d279beb](https://github.com/varletjs/axle/commit/d279beba1ca27c30c038e858a554bcacbc242d08))
+
+
+
 ## [0.7.1](https://github.com/varletjs/axle/compare/v0.7.0...v0.7.1) (2024-04-23)
 
 

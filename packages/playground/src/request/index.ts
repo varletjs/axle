@@ -7,6 +7,7 @@ import {
   responseStatusInterceptor,
   requestMockInterceptor,
   requestMd5Interceptor,
+  createApi,
 } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
 
@@ -18,6 +19,8 @@ const useAxle = createUseAxle({
   axle,
   onTransform: (response) => response.data,
 })
+
+const api = createApi(axle, useAxle)
 
 axle.useRequestInterceptor(
   requestHeadersInterceptor({
@@ -107,4 +110,4 @@ axle.useResponseInterceptor(
   }
 )
 
-export { axle, useAxle }
+export { axle, useAxle, api }

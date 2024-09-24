@@ -1,5 +1,4 @@
-import { useAxle } from '@/request'
-import { UseAxleOptions } from '@varlet/axle/use'
+import { api } from '@/request'
 
 export type Response<T> = {
   data: T
@@ -8,88 +7,26 @@ export type Response<T> = {
 }
 
 export interface User {
-  id?: string
-  name?: string
+  id: string
+  name: string
 }
 
-export type Options<V, R = any, P = Record<string, any>> = Partial<UseAxleOptions<V, R, P>>
-
-export function useGetUsers<V>(options: Options<V, Response<User[]>>) {
-  return useAxle({
-    url: '/user/list-user',
-    method: 'get',
-    ...options,
-  })
+export interface CreateUser {
+  name: string
 }
 
-export function useGetMockUsers<V>(options: Options<V, Response<User[]>>) {
-  return useAxle({
-    url: '/mock/list-user',
-    method: 'get',
-    ...options,
-  })
+export interface UpdateUser {
+  name: string
 }
 
-export function useGetUser<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/get-user',
-    method: 'get',
-    ...options,
-  })
-}
+export const apiGetUsers = api<Response<User[]>>('/user', 'get')
 
-export function useAddUser<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/add-user',
-    method: 'post',
-    ...options,
-  })
-}
+export const apiGetUser = api<Response<User>>('/user/:id', 'get')
 
-export function useDeleteUser<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/delete-user',
-    method: 'delete',
-    ...options,
-  })
-}
+export const apiCreateUser = api<Response<User>, CreateUser>('/user', 'post')
 
-export function useUpdateUser<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/update-user',
-    method: 'put',
-    ...options,
-  })
-}
+export const apiUpdateUser = api<Response<User>, UpdateUser>('/user/:id', 'put')
 
-export function usePatchUser<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/patch-user',
-    method: 'patch',
-    ...options,
-  })
-}
+export const apiDeleteUser = api<Response<User>>('/user/:id', 'delete')
 
-export function useDownloadFile<V>(options: Options<V, Response<Blob>>) {
-  return useAxle({
-    url: 'http://localhost:5173/logo.png',
-    method: 'getBlob',
-    ...options,
-  })
-}
-
-export function useThrowError<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/throw-error',
-    method: 'get',
-    ...options,
-  })
-}
-
-export function useAlwaysThrowError<V>(options: Options<V, Response<User>>) {
-  return useAxle({
-    url: '/user/always-throw-error',
-    method: 'get',
-    ...options,
-  })
-}
+export const apiGetMockUsers = api<Response<User[]>>('/mock/user', 'get')

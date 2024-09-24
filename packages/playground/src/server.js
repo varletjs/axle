@@ -36,17 +36,15 @@ const users = [
   },
 ]
 
-let count = 0
-
-router.get('/user/list-user', async (ctx) => {
-  await delay(300)
+router.get('/user', async (ctx) => {
+  await delay(100)
   response(ctx, 200, users)
 })
 
-router.get('/user/get-user', async (ctx) => {
-  await delay(2000)
+router.get('/user/:id', async (ctx) => {
+  await delay(100)
 
-  const user = users.find((user) => user.id === Number(ctx.request.query.id))
+  const user = users.find((user) => user.id === Number(ctx.request.params.id))
 
   if (!user) {
     response(ctx, 404, null, 'not found this user')
@@ -56,27 +54,8 @@ router.get('/user/get-user', async (ctx) => {
   response(ctx, 200, user)
 })
 
-router.get('/user/throw-error', async (ctx) => {
-  await delay(1000)
-
-  count++
-
-  if (count % 4 === 0) {
-    response(ctx, 200, users[0])
-    return
-  }
-
-  ctx.status = 500
-})
-
-router.get('/user/always-throw-error', async (ctx) => {
-  await delay(1000)
-
-  ctx.status = 500
-})
-
-router.post('/user/add-user', async (ctx) => {
-  await delay(300)
+router.post('/user', async (ctx) => {
+  await delay(100)
 
   const user = {
     id: id++,
@@ -88,10 +67,10 @@ router.post('/user/add-user', async (ctx) => {
   response(ctx, 200, user)
 })
 
-async function putOrPatch(ctx) {
-  await delay(300)
+router.put('/user/:id', async (ctx) => {
+  await delay(100)
 
-  const user = users.find((user) => user.id === Number(ctx.request.body.id))
+  const user = users.find((user) => user.id === Number(ctx.request.params.id))
   if (!user) {
     response(ctx, 404, null, 'not found this user')
     return
@@ -100,15 +79,12 @@ async function putOrPatch(ctx) {
   user.name = ctx.request.body.name
 
   response(ctx, 200, user)
-}
+})
 
-router.put('/user/update-user', putOrPatch)
-router.patch('/user/patch-user', putOrPatch)
+router.delete('/user/:id', async (ctx) => {
+  await delay(100)
 
-router.delete('/user/delete-user', async (ctx) => {
-  await delay(300)
-
-  const index = users.findIndex((user) => user.id === Number(ctx.request.query.id))
+  const index = users.findIndex((user) => user.id === Number(ctx.request.params.id))
 
   if (index === -1) {
     response(ctx, 404, null, 'not found this user')

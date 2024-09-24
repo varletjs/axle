@@ -6,14 +6,15 @@
   "scripts": {
     "dev": "vite & nodemon src/server.js",
     "build": "vue-tsc --noEmit && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "bump": "pnpm update @varlet/* --latest"
   },
   "dependencies": {
     "@varlet/axle": "workspace:*",
-    "@varlet/touch-emulator": "^3.2.5",
-    "@varlet/ui": "^3.2.5",
-    "@varlet/use": "^3.2.5",
-    "@varlet/import-resolver": "^3.2.5",
+    "@varlet/touch-emulator": "^3.5.2",
+    "@varlet/ui": "^3.5.2",
+    "@varlet/use": "^3.5.2",
+    "@varlet/import-resolver": "^3.5.2",
     "vue": "3.3.4",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",

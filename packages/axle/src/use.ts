@@ -59,14 +59,18 @@ export interface CreateUseAxleOptions {
   onTransform?(response: any, refs: any): any
 }
 
+export type UseAxle = <V = any, R = any, P = Record<string, any>>(
+  options: UseAxleOptions<V, R, P>
+) => UseAxleInstance<V, R, P>
+
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
 }
 
 export function createUseAxle(options: CreateUseAxleOptions) {
-  const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = false } = options
+  const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = true } = options
 
-  const useAxle = <V = any, R = any, P = Record<string, any>>(
+  const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>>(
     options: UseAxleOptions<V, R, P>
   ): UseAxleInstance<V, R, P> => {
     const {

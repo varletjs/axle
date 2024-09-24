@@ -463,9 +463,9 @@ export interface UpdateUser {
 ```ts
 const route = useRoute()
 
-const [users, getUsers] = apiGetUsers.use(/** 和 useAxle 一致并且扩展了 pathParams **/)
+const [users, getUsers] = apiGetUsers.use<Response<User[]>>(/** 和 useAxle 一致并且扩展了 pathParams **/)
 
-const [user, getUser] = apiGetUser.use<User>({
+const [user, getUser] = apiGetUser.use<Response<User>>({
   pathParams: () => ({ id: route.params.id }),
 })
 

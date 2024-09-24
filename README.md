@@ -463,9 +463,9 @@ export interface UpdateUser {
 ```ts
 const route = useRoute()
 
-const [users, getUsers] = apiGetUsers.use(/** same as useAxle and extends pathParams **/)
+const [users, getUsers] = apiGetUsers.use<Response<User[]>>(/** same as useAxle and extends pathParams **/)
 
-const [user, getUser] = apiGetUser.use<User>({
+const [user, getUser] = apiGetUser.use<Response<User>>({
   pathParams: () => ({ id: route.params.id }),
 })
 

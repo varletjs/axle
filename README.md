@@ -470,16 +470,16 @@ const [user, getUser] = apiGetUser.use<Response<User>>({
   pathParams: () => ({ id: route.params.id }),
 })
 
-async function handleCreate(payload: CreateUser) {
-  const { success } = await apiCreateUser.load(payload)
+async function handleCreate(params: CreateUser) {
+  const { success } = await apiCreateUser.load(params)
 
   if (success) {
     getUsers()
   }
 }
 
-async function handleUpdate(payload: UpdateUser, id: string) {
-  const { success } = await apiUpdateUser.load(payload, { id })
+async function handleUpdate(params: UpdateUser, id: string) {
+  const { success } = await apiUpdateUser.load(params, { id })
 
   if (success) {
     getUsers()

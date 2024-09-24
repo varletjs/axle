@@ -295,8 +295,8 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
-  // Optional value: Default immediate of the useAxle
-  immediate: true,
+  // Optional value: Default immediate of the useAxle, defaults true
+  immediate: false,
   // Optional value: Default onTransform of the useAxle
   onTransform: (response) => response,
 })
@@ -308,8 +308,8 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   method: 'get',
   // Request url can be a getter function
   url: '/user',
-  // Whether to send the request immediately, defaults false
-  immediate: true,
+  // Whether to send the request immediately, defaults true
+  immediate: false,
   // Whether the value needs to be reset before requesting, defaults false
   resetValue: true,
   // Whether to clone when resetting value, defaults false

@@ -295,8 +295,8 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
-  // 可选项: useAxle 的默认 immediate
-  immediate: true,
+  // 可选项: useAxle 的默认 immediate, 默认值: true
+  immediate: false,
   // 可选项: useAxle 的默认 onTransform
   onTransform: (response) => response,
 })
@@ -308,8 +308,8 @@ const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abor
   method: 'get',
   // 请求地址, 可以是 getter 函数
   url: '/user',
-  // 是否立即发送请求, 默认值: false
-  immediate: true,
+  // 是否立即发送请求, 默认值: true
+  immediate: false,
   // 请求前是否需要重置 value, 默认值: false
   resetValue: true,
   // 重置 value 是否对 value 进行拷贝

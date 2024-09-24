@@ -414,8 +414,9 @@ function sendAllRequest() {
 #### Define APIs
 
 ```ts
-import { createAxle, createApi } from '@varlet/axle'
+import { createAxle } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
+import { createApi } from '@varlet/axle/api'
 
 const axle = createAxle({
   baseURL: '/api',

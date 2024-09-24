@@ -7,9 +7,9 @@ import {
   responseStatusInterceptor,
   requestMockInterceptor,
   requestMd5Interceptor,
-  createApi,
 } from '@varlet/axle'
 import { createUseAxle } from '@varlet/axle/use'
+import { createApi } from '@varlet/axle/api'
 
 const axle = createAxle({
   baseURL: '/api',

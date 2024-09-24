@@ -1,6 +1,6 @@
 import { isFunction } from '@varlet/shared'
-import { AxleInstance, AxleRequestConfig, RunnerMethod } from './instance'
-import { UseAxle, UseAxleOptions } from './use'
+import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
+import { type UseAxle, type UseAxleOptions } from './use'
 
 export type ApiPathParams = Record<string, any> | (() => Record<string, any>)
 

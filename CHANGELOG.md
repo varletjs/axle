@@ -1,3 +1,17 @@
+# [0.9.0](https://github.com/varletjs/axle/compare/v0.8.0...v0.9.0) (2024-09-27)
+
+
+### Features
+
+* support create api ([018e7c6](https://github.com/varletjs/axle/commit/018e7c6fff34b6c8dda355775076189d62c5eb4c))
+
+
+### BREAKING CHANGES
+
+* createUseAxle immediate option default value changed to true
+
+
+
 # [0.8.0](https://github.com/varletjs/axle/compare/v0.7.1...v0.8.0) (2024-08-07)
 
 

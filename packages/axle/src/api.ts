@@ -1,4 +1,4 @@
-import { isFunction } from '@varlet/shared'
+import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 import { type UseAxle, type UseAxleOptions } from './use'
 

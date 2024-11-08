@@ -1,4 +1,4 @@
-import { isFunction } from '@varlet/shared'
+import { isFunction } from 'rattail'
 import { createMatcher } from '../matcher'
 import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions } from 'axios'

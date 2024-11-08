@@ -7,7 +7,7 @@ import set from 'lodash/set.js'
 import { createMatcher } from '../matcher'
 import { minimatch } from 'minimatch'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
-import { isString } from '@varlet/shared'
+import { isString } from 'rattail'
 
 export type RequestMd5InterceptorMapping = {
   url: string

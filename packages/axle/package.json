@@ -49,7 +49,7 @@
     "build": "tsup src/index.ts src/use.ts src/api.ts --format esm,cjs --out-dir=lib --dts --clean"
   },
   "dependencies": {
-    "@varlet/shared": "2.20.3",
+    "rattail": "1.0.0",
     "axios": "^1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",

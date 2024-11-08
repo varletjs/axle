@@ -1,5 +1,5 @@
 import { ref, type Ref } from 'vue'
-import { isFunction } from '@varlet/shared'
+import { isFunction } from 'rattail'
 import { type RunnerMethod, type AxleInstance, type AxleRequestConfig } from './instance'
 
 export interface RunOptions<V, P> {

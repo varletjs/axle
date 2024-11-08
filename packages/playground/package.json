@@ -11,15 +11,15 @@
   },
   "dependencies": {
     "@varlet/axle": "workspace:*",
-    "@varlet/touch-emulator": "^3.5.2",
-    "@varlet/ui": "^3.5.2",
-    "@varlet/use": "^3.5.2",
-    "@varlet/import-resolver": "^3.5.2",
-    "vue": "3.3.4",
+    "@varlet/import-resolver": "^3.6.4",
+    "@varlet/touch-emulator": "^3.6.4",
+    "@varlet/ui": "^3.6.4",
+    "@varlet/use": "^3.6.4",
     "koa": "^2.14.2",
     "koa-bodyparser": "^4.4.0",
     "koa-router": "^12.0.0",
-    "nodemon": "^2.0.15"
+    "nodemon": "^3.1.7",
+    "vue": "3.5.12"
   },
   "devDependencies": {
     "@types/node": "^17.0.23",

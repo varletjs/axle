@@ -1,4 +1,4 @@
-import { inBrowser } from '@varlet/shared'
+import { inBrowser } from 'rattail'
 import { type AxiosResponse, isAxiosError } from 'axios'
 
 export interface WithResponseReturn<R> {

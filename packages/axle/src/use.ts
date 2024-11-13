@@ -153,7 +153,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           ...config,
         })
 
-        value.value = onTransform(response as R, refs)
+        value.value = await onTransform(response as R, refs)
         error.value = undefined
         onSuccess(response as R, refs)
         loading.value = false

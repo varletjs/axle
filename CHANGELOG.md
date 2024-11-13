@@ -1,3 +1,12 @@
+## [0.9.2](https://github.com/varletjs/axle/compare/v0.9.1...v0.9.2) (2024-11-13)
+
+
+### Features
+
+* support promise onTransform ([fc7c178](https://github.com/varletjs/axle/commit/fc7c178ddc706177331dca38eee55dd14995b3b8))
+
+
+
 ## [0.9.1](https://github.com/varletjs/axle/compare/v0.9.0...v0.9.1) (2024-11-08)
 
 

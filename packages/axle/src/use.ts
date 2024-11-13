@@ -31,7 +31,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   config?: AxleRequestConfig | (() => AxleRequestConfig)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
-  onTransform?(response: R, refs: UseAxleRefs<V>): V
+  onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
   onSuccess?(response: R, refs: UseAxleRefs<V>): void
   onError?(error: Error, refs: UseAxleRefs<V>): void
 }

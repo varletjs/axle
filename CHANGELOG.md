@@ -1,3 +1,13 @@
+## [0.9.4](https://github.com/varletjs/axle/compare/v0.9.3...v0.9.4) (2024-12-02)
+
+
+### Features
+
+* expose AxiosError class ([06ea121](https://github.com/varletjs/axle/commit/06ea121f5ffbd770d9be971ca88e71f58669439c))
+* expose isAxiosError ([dc9330f](https://github.com/varletjs/axle/commit/dc9330fe3f14d0c1e9c53339434751f7e42151ec))
+
+
+
 ## [0.9.3](https://github.com/varletjs/axle/compare/v0.9.2...v0.9.3) (2024-11-13)
 
 

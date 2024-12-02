@@ -24,8 +24,9 @@ export type {
   HeadersDefaults,
   InternalAxiosRequestConfig,
   ResponseType,
-  AxiosError,
 }
+
+export { AxiosError }
 
 export type FetchRunner = <R = AxiosResponse, P = Record<string, any>>(
   url: string,

@@ -9,8 +9,6 @@ import type {
   HeadersDefaults,
   InternalAxiosRequestConfig,
   ResponseType,
-  AxiosError,
-  isAxiosError,
 } from 'axios'
 import { objectToFormData } from './utils'
 
@@ -27,7 +25,7 @@ export type {
   ResponseType,
 }
 
-export { AxiosError, isAxiosError }
+export { AxiosError, isAxiosError } from 'axios'
 
 export type FetchRunner = <R = AxiosResponse, P = Record<string, any>>(
   url: string,

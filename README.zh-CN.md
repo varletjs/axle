@@ -374,13 +374,11 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/role',
 })
@@ -511,13 +509,11 @@ async function handleDelete(id: string) {
 ```html
 <script setup>
 const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-  value: [],
   method: 'get',
   url: '/post',
 })
@@ -536,13 +532,11 @@ const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
 ```html
 <script setup>
 const [users, getUsers] = useAxle({
-  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [posts, getPosts] = useAxle({
-  value: [],
   method: 'get',
   url: '/post',
 })

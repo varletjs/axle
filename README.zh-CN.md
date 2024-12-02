@@ -301,7 +301,14 @@ const useAxle = createUseAxle({
   onTransform: (response) => response,
 })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+const [
+  // 请求数据
+  users, 
+  // 请求触发器
+  getUsers, 
+  // 附加属性
+  { loading, error, uploadProgress, downloadProgress, abort }
+] = useAxle({
   // 请求初始化数据
   value: [],
   // 请求方法
@@ -407,7 +414,7 @@ function sendAllRequest() {
 </template>
 ```
 
-### 增强
+### API 定义增强
 
 从 `0.9.0` 开始支持 `createApi`，以增强 API 定义能力。
 
@@ -493,4 +500,58 @@ async function handleDelete(id: string) {
     getUsers()
   }
 }
+```
+
+### 请求触发器增强
+
+从 `v0.10.0` 开始, 请求触发器将包含附加属性中的全部属性。
+
+增强前:
+
+```html
+<script setup>
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ isUsersLoading ? 'loading...' : users }}</span>
+  <span>{{ isPostsLoading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
+```
+
+增强后:
+
+```html
+<script setup>
+const [users, getUsers] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ getUsers.loading ? 'loading...' : users }}</span>
+  <span>{{ getPosts.loading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
 ```

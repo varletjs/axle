@@ -8,11 +8,11 @@ const model = ref({
   name: '',
 })
 
-const [users, getUsers, { loading: isUsersLoading }] = apiGetUsers.use()
+const [users, getUsers] = apiGetUsers.use()
 
-const [mockUsers, getMockUsers, { loading: isMockUsersLoading }] = apiGetMockUsers.use()
+const [mockUsers, getMockUsers] = apiGetMockUsers.use()
 
-const [user, getUser, { loading: isUserLoading }] = apiGetUser.use<User>({
+const [user, getUser] = apiGetUser.use<User>({
   pathParams: () => ({ id: id.value }),
 })
 
@@ -36,21 +36,21 @@ async function handleDelete() {
   <div style="max-width: 800px">
     <var-space direction="column">
       <var-cell>name: getUsers</var-cell>
-      <var-cell>loading: {{ isUsersLoading }}</var-cell>
+      <var-cell>loading: {{ getUsers.loading }}</var-cell>
       <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-button type="primary" @click="getUsers()">Load</var-button>
       </var-cell>
 
       <var-cell>name: getMockUsers</var-cell>
-      <var-cell>loading: {{ isMockUsersLoading }}</var-cell>
+      <var-cell>loading: {{ getMockUsers.loading }}</var-cell>
       <var-cell>data: {{ mockUsers ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-button type="primary" @click="getMockUsers()">Load</var-button>
       </var-cell>
 
       <var-cell>name: getUser</var-cell>
-      <var-cell>loading: {{ isUserLoading }}</var-cell>
+      <var-cell>loading: {{ getUser.loading }}</var-cell>
       <var-cell>data: {{ user ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-input variant="outlined" size="small" v-model="id" />

@@ -10,8 +10,14 @@ export interface RunOptions<V, P> {
   cloneResetValue?: boolean | ((value: V) => V)
 }
 
-export type Run<V, R, P> = (options?: RunOptions<V, P>) => Promise<R>
-
+export type UseAxleExtra<V> = {
+  uploadProgress: Ref<number>
+  downloadProgress: Ref<number>
+  loading: Ref<boolean>
+  error: Ref<Error | undefined>
+  abort(): void
+  resetValue(options?: ResetValueOptions<V>): void
+}
 export interface UseAxleRefs<V> {
   value: Ref<V>
   loading: Ref<boolean>
@@ -19,6 +25,10 @@ export interface UseAxleRefs<V> {
   uploadProgress: Ref<number>
   downloadProgress: Ref<number>
 }
+
+export type Run<V, R, P> = {
+  (options?: RunOptions<V, P>): Promise<R>
+} & UseAxleExtra<V>
 
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   url: string | (() => string)
@@ -40,18 +50,7 @@ export interface ResetValueOptions<V> {
   cloneResetValue?: boolean | ((value: V) => V)
 }
 
-export type UseAxleInstance<V, R, P> = [
-  value: Ref<V>,
-  run: Run<V, R, P>,
-  extra: {
-    uploadProgress: Ref<number>
-    downloadProgress: Ref<number>
-    loading: Ref<boolean>
-    error: Ref<Error | undefined>
-    abort(): void
-    resetValue(options?: ResetValueOptions<V>): void
-  }
-]
+export type UseAxleInstance<V, R, P> = [value: Ref<V>, run: Run<V, R, P>, extra: UseAxleExtra<V>]
 
 export interface CreateUseAxleOptions {
   axle: AxleInstance
@@ -104,9 +103,89 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       uploadProgress,
     }
 
+    const extra: UseAxleExtra<V> = {
+      uploadProgress,
+      downloadProgress,
+      loading,
+      error,
+      abort,
+      resetValue,
+    }
+
     let controller = new AbortController()
 
-    const resetValue = (options: ResetValueOptions<V> = {}) => {
+    const run: Run<V, R, P> = Object.assign(
+      async (options: RunOptions<V, P> = {}) => {
+        if (controller.signal.aborted) {
+          controller = new AbortController()
+        }
+
+        const resetValueOption = options.resetValue ?? initialResetValue ?? false
+        if (resetValueOption === true) {
+          resetValue(options)
+        }
+
+        uploadProgress.value = 0
+        downloadProgress.value = 0
+
+        const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
+        const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
+        const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
+
+        onBefore(refs)
+
+        loading.value = true
+
+        try {
+          const response = await axle[method](url, params, {
+            signal: controller.signal,
+
+            onUploadProgress(event) {
+              uploadProgress.value = event.progress ?? 0
+            },
+
+            onDownloadProgress(event) {
+              downloadProgress.value = event.progress ?? 0
+            },
+
+            ...config,
+          })
+
+          value.value = await onTransform(response as R, refs)
+          error.value = undefined
+          onSuccess(response as R, refs)
+          loading.value = false
+          onAfter(refs)
+
+          return response as R
+        } catch (responseError: any) {
+          error.value = responseError as Error
+          onError(responseError as Error, refs)
+          loading.value = false
+          onAfter(refs)
+
+          throw responseError
+        }
+      },
+      {
+        uploadProgress,
+        downloadProgress,
+        loading,
+        error,
+        abort,
+        resetValue,
+      }
+    )
+
+    if (immediate) {
+      run({
+        url: normalizeValueGetter(initialUrlOrGetter),
+        params: normalizeValueGetter(initialParamsOrGetter),
+        config: normalizeValueGetter(initialConfigOrGetter),
+      })
+    }
+
+    function resetValue(options: ResetValueOptions<V> = {}) {
       const cloneResetValue = options.cloneResetValue ?? initialCloneResetValue ?? false
       const cloneFn =
         cloneResetValue === true
@@ -117,83 +196,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       value.value = cloneFn(initialValue as V)
     }
 
-    const run: Run<V, R, P> = async (options: RunOptions<V, P> = {}) => {
-      if (controller.signal.aborted) {
-        controller = new AbortController()
-      }
-
-      const resetValueOption = options.resetValue ?? initialResetValue ?? false
-      if (resetValueOption === true) {
-        resetValue(options)
-      }
-
-      uploadProgress.value = 0
-      downloadProgress.value = 0
-
-      const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
-      const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
-      const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
-
-      onBefore(refs)
-
-      loading.value = true
-
-      try {
-        const response = await axle[method](url, params, {
-          signal: controller.signal,
-
-          onUploadProgress(event) {
-            uploadProgress.value = event.progress ?? 0
-          },
-
-          onDownloadProgress(event) {
-            downloadProgress.value = event.progress ?? 0
-          },
-
-          ...config,
-        })
-
-        value.value = await onTransform(response as R, refs)
-        error.value = undefined
-        onSuccess(response as R, refs)
-        loading.value = false
-        onAfter(refs)
-
-        return response as R
-      } catch (responseError: any) {
-        error.value = responseError as Error
-        onError(responseError as Error, refs)
-        loading.value = false
-        onAfter(refs)
-
-        throw responseError
-      }
-    }
-
-    const abort = () => {
+    function abort() {
       controller.abort()
     }
 
-    if (immediate) {
-      run({
-        url: normalizeValueGetter(initialUrlOrGetter),
-        params: normalizeValueGetter(initialParamsOrGetter),
-        config: normalizeValueGetter(initialConfigOrGetter),
-      })
-    }
-
-    return [
-      value,
-      run,
-      {
-        loading,
-        error,
-        uploadProgress,
-        downloadProgress,
-        abort,
-        resetValue,
-      },
-    ]
+    return [value, run, extra]
   }
 
   return useAxle

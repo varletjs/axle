@@ -301,7 +301,14 @@ const useAxle = createUseAxle({
   onTransform: (response) => response,
 })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort, resetValue }] = useAxle({
+const [
+  // response data
+  users, 
+  // request runner/invoker
+  getUsers, 
+  // extra properties
+  { loading, error, uploadProgress, downloadProgress, abort, resetValue }
+] = useAxle({
   // Request initial value
   value: [],
   // Request method
@@ -407,7 +414,7 @@ function sendAllRequest() {
 </template>
 ```
 
-### Enhancement
+### API Definition Enhancement
 
 `createApi` is supported since `v0.9.0`, which is used to define APIs.
 
@@ -493,4 +500,58 @@ async function handleDelete(id: string) {
     getUsers()
   }
 }
+```
+
+### Runner Enhancement
+
+Since `v0.10.0`, the `runner` will include all the extra properties, so we can further simplify the work.
+
+before:
+
+```html
+<script setup>
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ isUsersLoading ? 'loading...' : users }}</span>
+  <span>{{ isPostsLoading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
+```
+
+after:
+
+```html
+<script setup>
+const [users, getUsers] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts] = useAxle({
+  value: [],
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ getUsers.loading ? 'loading...' : users }}</span>
+  <span>{{ getPosts.loading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
 ```

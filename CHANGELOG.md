@@ -1,3 +1,12 @@
+## [0.9.5](https://github.com/varletjs/axle/compare/v0.9.4...v0.9.5) (2024-12-02)
+
+
+### Bug Fixes
+
+* fix expose AxiosError, isAxiosError ([de40e78](https://github.com/varletjs/axle/commit/de40e789f2cb81c818b3ea882acac319bd5400e3))
+
+
+
 ## [0.9.4](https://github.com/varletjs/axle/compare/v0.9.3...v0.9.4) (2024-12-02)
 
 

@@ -43,14 +43,14 @@ async function handleDelete() {
       </var-cell>
 
       <var-cell>name: getMockUsers</var-cell>
-      <var-cell>loading: {{ getMockUsers.loading }}</var-cell>
+      <var-cell>loading: {{ getMockUsers.loading.value }}</var-cell>
       <var-cell>data: {{ mockUsers ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-button type="primary" @click="getMockUsers()">Load</var-button>
       </var-cell>
 
       <var-cell>name: getUser</var-cell>
-      <var-cell>loading: {{ getUser.loading }}</var-cell>
+      <var-cell>loading: {{ getUser.loading.value }}</var-cell>
       <var-cell>data: {{ user ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-input variant="outlined" size="small" v-model="id" />

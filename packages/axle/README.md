@@ -542,8 +542,8 @@ const [posts, getPosts] = useAxle({
 </script>
 
 <template>
-  <span>{{ getUsers.loading ? 'loading...' : users }}</span>
-  <span>{{ getPosts.loading ? 'loading...' : posts }}</span>
+  <span>{{ getUsers.loading.value ? 'loading...' : users }}</span>
+  <span>{{ getPosts.loading.value ? 'loading...' : posts }}</span>
   <button @click="getUsers">Send Request</button>
   <button @click="getPosts">Send Request</button>
 </template>

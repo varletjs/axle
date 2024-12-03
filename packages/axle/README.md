@@ -295,21 +295,27 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
-  // Optional value: Default immediate of the useAxle
-  immediate: true,
+  // Optional value: Default immediate of the useAxle, defaults true
+  immediate: false,
   // Optional value: Default onTransform of the useAxle
   onTransform: (response) => response,
 })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort, resetValue }] = useAxle({
+const [
+  users, 
+  // request runner/invoker
+  getUsers, 
+  // extra properties
+  { loading, error, uploadProgress, downloadProgress, abort, resetValue }
+] = useAxle({
   // Request initial value
   value: [],
   // Request method
   method: 'get',
   // Request url can be a getter function
   url: '/user',
-  // Whether to send the request immediately, defaults false
-  immediate: true,
+  // Whether to send the request immediately, defaults true
+  immediate: false,
   // Whether the value needs to be reset before requesting, defaults false
   resetValue: true,
   // Whether to clone when resetting value, defaults false
@@ -367,13 +373,11 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/role',
 })
@@ -404,5 +408,143 @@ function sendAllRequest() {
   <span>{{ loading }}</span>
   <span>{{ downloadProgress }}</span>
   <button @click="sendAllRequest">Send All Request</button>
+</template>
+```
+
+### API Definition Enhancement
+
+`createApi` is supported since `v0.9.0`, which is used to define APIs.
+
+#### Define APIs
+
+```ts
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
+import { createApi } from '@varlet/axle/api'
+
+const axle = createAxle({
+  baseURL: '/api',
+})
+
+const useAxle = createUseAxle({
+  axle,
+})
+
+const api = createApi(axle, useAxle)
+
+export const apiGetUsers = api<Response<User[]>>('/user', 'get')
+
+export const apiGetUser = api<Response<User>>('/user/:id', 'get')
+
+export const apiCreateUser = api<Response<User>, CreateUser>('/user', 'post')
+
+export const apiUpdateUser = api<Response<User>, UpdateUser>('/user/:id', 'put')
+
+export const apiDeleteUser = api<Response<User>>('/user/:id', 'delete')
+
+export type Response<T> = {
+  data: T
+  code: number
+  message: string
+  success: boolean
+}
+
+export interface User {
+  id: string
+  name: string
+}
+
+export interface CreateUser {
+  name: string
+}
+
+export interface UpdateUser {
+  name: string
+}
+```
+
+#### Invoke APIs
+
+```ts
+const route = useRoute()
+
+const [users, getUsers] = apiGetUsers.use<Response<User[]>>(/** same as useAxle and extends pathParams **/)
+
+const [user, getUser] = apiGetUser.use<Response<User>>({
+  pathParams: () => ({ id: route.params.id }),
+})
+
+async function handleCreate(params: CreateUser) {
+  const { success } = await apiCreateUser.load(params)
+
+  if (success) {
+    getUsers()
+  }
+}
+
+async function handleUpdate(params: UpdateUser, id: string) {
+  const { success } = await apiUpdateUser.load(params, { id })
+
+  if (success) {
+    getUsers()
+  }
+}
+
+async function handleDelete(id: string) {
+  const { success } = await apiDeleteUser.load({}, { id })
+
+  if (success) {
+    getUsers()
+  }
+}
+```
+
+### Runner Enhancement
+
+Since `v0.10.0`, the `runner` will include all the extra properties, so we can further simplify the work.
+
+before:
+
+```html
+<script setup>
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ isUsersLoading ? 'loading...' : users }}</span>
+  <span>{{ isPostsLoading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
+```
+
+after:
+
+```html
+<script setup>
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts] = useAxle({
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ getUsers.loading ? 'loading...' : users }}</span>
+  <span>{{ getPosts.loading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
 </template>
 ```

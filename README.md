@@ -302,7 +302,6 @@ const useAxle = createUseAxle({
 })
 
 const [
-  // response data
   users, 
   // request runner/invoker
   getUsers, 

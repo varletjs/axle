@@ -295,21 +295,27 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 
 const useAxle = createUseAxle({
   axle,
-  // 可选项: useAxle 的默认 immediate
-  immediate: true,
+  // 可选项: useAxle 的默认 immediate, 默认值: true
+  immediate: false,
   // 可选项: useAxle 的默认 onTransform
   onTransform: (response) => response,
 })
 
-const [users, getUsers, { loading, error, uploadProgress, downloadProgress, abort }] = useAxle({
+const [
+  users, 
+  // 请求触发器
+  getUsers, 
+  // 附加属性
+  { loading, error, uploadProgress, downloadProgress, abort }
+] = useAxle({
   // 请求初始化数据
   value: [],
   // 请求方法
   method: 'get',
   // 请求地址, 可以是 getter 函数
   url: '/user',
-  // 是否立即发送请求, 默认值: false
-  immediate: true,
+  // 是否立即发送请求, 默认值: true
+  immediate: false,
   // 请求前是否需要重置 value, 默认值: false
   resetValue: true,
   // 重置 value 是否对 value 进行拷贝
@@ -367,13 +373,11 @@ const axle = createAxle(/** @see https://axios-http.com **/)
 const useAxle = createUseAxle({ axle })
 
 const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/user',
 })
 
 const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  value: [],
   method: 'get',
   url: '/role',
 })
@@ -404,5 +408,143 @@ function sendAllRequest() {
   <span>{{ loading }}</span>
   <span>{{ downloadProgress }}</span>
   <button @click="sendAllRequest">发送全部请求</button>
+</template>
+```
+
+### API 定义增强
+
+从 `0.9.0` 开始支持 `createApi`，以增强 API 定义能力。
+
+#### 定义 API
+
+```ts
+import { createAxle } from '@varlet/axle'
+import { createUseAxle } from '@varlet/axle/use'
+import { createApi } from '@varlet/axle/api'
+
+const axle = createAxle({
+  baseURL: '/api',
+})
+
+const useAxle = createUseAxle({
+  axle,
+})
+
+const api = createApi(axle, useAxle)
+
+export const apiGetUsers = api<Response<User[]>>('/user', 'get')
+
+export const apiGetUser = api<Response<User>>('/user/:id', 'get')
+
+export const apiCreateUser = api<Response<User>, CreateUser>('/user', 'post')
+
+export const apiUpdateUser = api<Response<User>, UpdateUser>('/user/:id', 'put')
+
+export const apiDeleteUser = api<Response<User>>('/user/:id', 'delete')
+
+export type Response<T> = {
+  data: T
+  code: number
+  message: string
+  success: boolean
+}
+
+export interface User {
+  id: string
+  name: string
+}
+
+export interface CreateUser {
+  name: string
+}
+
+export interface UpdateUser {
+  name: string
+}
+```
+
+#### 调用 API
+
+```ts
+const route = useRoute()
+
+const [users, getUsers] = apiGetUsers.use<Response<User[]>>(/** 和 useAxle 一致并且扩展了 pathParams **/)
+
+const [user, getUser] = apiGetUser.use<Response<User>>({
+  pathParams: () => ({ id: route.params.id }),
+})
+
+async function handleCreate(params: CreateUser) {
+  const { success } = await apiCreateUser.load(params)
+
+  if (success) {
+    getUsers()
+  }
+}
+
+async function handleUpdate(params: UpdateUser, id: string) {
+  const { success } = await apiUpdateUser.load(params, { id })
+
+  if (success) {
+    getUsers()
+  }
+}
+
+async function handleDelete(id: string) {
+  const { success } = await apiDeleteUser.load({}, { id })
+
+  if (success) {
+    getUsers()
+  }
+}
+```
+
+### 请求触发器增强
+
+从 `v0.10.0` 开始, 请求触发器将包含附加属性中的全部属性。
+
+增强前:
+
+```html
+<script setup>
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ isUsersLoading ? 'loading...' : users }}</span>
+  <span>{{ isPostsLoading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
+</template>
+```
+
+增强后:
+
+```html
+<script setup>
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+
+const [posts, getPosts] = useAxle({
+  method: 'get',
+  url: '/post',
+})
+</script>
+
+<template>
+  <span>{{ getUsers.loading ? 'loading...' : users }}</span>
+  <span>{{ getPosts.loading ? 'loading...' : posts }}</span>
+  <button @click="getUsers">Send Request</button>
+  <button @click="getPosts">Send Request</button>
 </template>
 ```

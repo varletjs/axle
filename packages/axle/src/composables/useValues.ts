@@ -1,4 +1,4 @@
-import { type Ref, type WritableComputedRef, computed } from 'vue'
+import { computed, type Ref, type WritableComputedRef } from 'vue'
 
 export function useValues<T extends Ref<any>[]>(...valueCollection: T): WritableComputedRef<T[number]['value'][]> {
   return computed({

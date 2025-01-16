@@ -19,8 +19,8 @@ axle.useRequestInterceptor(
               id: 1,
               name: 'Mock Jack Ma',
             },
-          }
-        })
+          },
+        }),
       },
       {
         url: '/user/getUsers',
@@ -49,14 +49,14 @@ axle.useRequestInterceptor(
         handler: () => ({
           // status defaults 200
           status: 500,
-          data: null
+          data: null,
         }),
-      }
+      },
     ],
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
     exclude: ['/other/**'],
-  })
+  }),
 )
 ```

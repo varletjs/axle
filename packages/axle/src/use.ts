@@ -1,6 +1,6 @@
 import { ref, type Ref } from 'vue'
 import { isFunction } from 'rattail'
-import { type RunnerMethod, type AxleInstance, type AxleRequestConfig } from './instance'
+import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
 export interface RunOptions<V, P> {
   url?: string
@@ -59,7 +59,7 @@ export interface CreateUseAxleOptions {
 }
 
 export type UseAxle = <V = any, R = any, P = Record<string, any>>(
-  options: UseAxleOptions<V, R, P>
+  options: UseAxleOptions<V, R, P>,
 ) => UseAxleInstance<V, R, P>
 
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
@@ -70,7 +70,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
   const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = true } = options
 
   const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>>(
-    options: UseAxleOptions<V, R, P>
+    options: UseAxleOptions<V, R, P>,
   ): UseAxleInstance<V, R, P> => {
     const {
       url: initialUrlOrGetter,
@@ -174,7 +174,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         error,
         abort,
         resetValue,
-      }
+      },
     )
 
     if (immediate) {
@@ -191,8 +191,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         cloneResetValue === true
           ? (v: V) => (v == null ? null : JSON.parse(JSON.stringify(v)))
           : isFunction(initialCloneResetValue)
-          ? initialCloneResetValue
-          : (v: V) => v
+            ? initialCloneResetValue
+            : (v: V) => v
       value.value = cloneFn(initialValue as V)
     }
 

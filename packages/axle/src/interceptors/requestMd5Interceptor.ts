@@ -1,13 +1,13 @@
-import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions, AxiosRequestConfig } from 'axios'
-import qs from 'qs'
 import md5 from 'crypto-js/md5.js'
 import get from 'lodash/get.js'
 import set from 'lodash/set.js'
-import { createMatcher } from '../matcher'
 import { minimatch } from 'minimatch'
-import { formDataToObject, isFormData, objectToFormData } from '../utils'
+import qs from 'qs'
 import { isString } from 'rattail'
+import type { RequestInterceptor } from '../instance'
+import { createMatcher } from '../matcher'
+import { formDataToObject, isFormData, objectToFormData } from '../utils'
 
 export type RequestMd5InterceptorMapping = {
   url: string
@@ -24,7 +24,7 @@ export interface RequestMd5InterceptorOptions {
 
 function withCtxMd5(
   ctx: Pick<AxiosRequestConfig, 'data' | 'params' | 'headers'>,
-  mapping: RequestMd5InterceptorMapping
+  mapping: RequestMd5InterceptorMapping,
 ) {
   mapping.path.forEach((path) => {
     const targetValue = get(ctx, path)

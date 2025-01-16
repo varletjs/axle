@@ -11,18 +11,18 @@ axle.useRequestInterceptor(
     mappings: [
       {
         url: '/user/login',
-        path: ['data.password']
+        path: ['data.password'],
       },
       {
         url: '/user/add-user',
         method: 'post',
-        path: ['data.name']
-      }
+        path: ['data.name'],
+      },
     ],
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:post'],
     exclude: ['/other/**'],
-  })
+  }),
 )
 ```

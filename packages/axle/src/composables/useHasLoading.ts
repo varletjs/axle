@@ -1,4 +1,4 @@
-import { type Ref, ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
 export function useHasLoading(...loadings: Ref<boolean>[]) {
   const hasLoading = ref(false)
@@ -8,7 +8,7 @@ export function useHasLoading(...loadings: Ref<boolean>[]) {
     (newLoadings) => {
       hasLoading.value = newLoadings.some(Boolean)
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   return hasLoading

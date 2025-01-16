@@ -4,18 +4,18 @@ import { type UseAxle, type UseAxleOptions } from './use'
 
 export type ApiPathParams = Record<string, any> | (() => Record<string, any>)
 
-export type ApiUseOptions<V, R, P> = Partial<UseAxleOptions<V, R, P>> & { pathParams?: ApiPathParams }
+export type ApiUseOptions<V, R, P, D> = Partial<UseAxleOptions<V, R, P, D>> & { pathParams?: ApiPathParams }
 
 export function createApi(axle: AxleInstance, useAxle: UseAxle) {
-  return function api<R = any, P = Record<string, any>>(url: string, method: RunnerMethod) {
-    function load(params?: P, pathParams?: ApiPathParams, config?: AxleRequestConfig): Promise<R> {
+  return function api<R = any, P = Record<string, any>, D = Record<string, any>>(url: string, method: RunnerMethod) {
+    function load(params?: P, pathParams?: ApiPathParams, config?: AxleRequestConfig<D>): Promise<R> {
       return axle[method](patchUrl(url, pathParams ?? {}), params, config)
     }
 
-    function use<UV = any>(options: ApiUseOptions<UV, R, P> = {}) {
+    function use<V = any>(options: ApiUseOptions<V, R, P, D> = {}) {
       const { pathParams = {}, ...rest } = options
 
-      return useAxle<UV, R, P>({
+      return useAxle<V, R, P, D>({
         url: () => patchUrl(url, pathParams),
         method,
         ...rest,

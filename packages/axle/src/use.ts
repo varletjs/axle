@@ -2,10 +2,10 @@ import { ref, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
-export interface RunOptions<V, P> {
+export interface RunOptions<V, P, D> {
   url?: string
   params?: P
-  config?: AxleRequestConfig
+  config?: AxleRequestConfig<D>
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
 }
@@ -26,11 +26,11 @@ export interface UseAxleRefs<V> {
   downloadProgress: Ref<number>
 }
 
-export type Run<V, R, P> = {
-  (options?: RunOptions<V, P>): Promise<R>
+export type Run<V, R, P, D> = {
+  (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
-export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
+export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
   url: string | (() => string)
   method: RunnerMethod
   value?: V
@@ -38,7 +38,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>> {
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
   immediate?: boolean
-  config?: AxleRequestConfig | (() => AxleRequestConfig)
+  config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -50,7 +50,7 @@ export interface ResetValueOptions<V> {
   cloneResetValue?: boolean | ((value: V) => V)
 }
 
-export type UseAxleInstance<V, R, P> = [value: Ref<V>, run: Run<V, R, P>, extra: UseAxleExtra<V>]
+export type UseAxleInstance<V, R, P, D> = [value: Ref<V>, run: Run<V, R, P, D>, extra: UseAxleExtra<V>]
 
 export interface CreateUseAxleOptions {
   axle: AxleInstance
@@ -58,9 +58,9 @@ export interface CreateUseAxleOptions {
   onTransform?(response: any, refs: any): any
 }
 
-export type UseAxle = <V = any, R = any, P = Record<string, any>>(
-  options: UseAxleOptions<V, R, P>,
-) => UseAxleInstance<V, R, P>
+export type UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+  options: UseAxleOptions<V, R, P, D>,
+) => UseAxleInstance<V, R, P, D>
 
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
@@ -69,9 +69,9 @@ export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
 export function createUseAxle(options: CreateUseAxleOptions) {
   const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = true } = options
 
-  const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>>(
-    options: UseAxleOptions<V, R, P>,
-  ): UseAxleInstance<V, R, P> => {
+  const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptions<V, R, P, D>,
+  ): UseAxleInstance<V, R, P, D> => {
     const {
       url: initialUrlOrGetter,
       method,
@@ -114,8 +114,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
 
-    const run: Run<V, R, P> = Object.assign(
-      async (options: RunOptions<V, P> = {}) => {
+    const run: Run<V, R, P, D> = Object.assign(
+      async (options: RunOptions<V, P, D> = {}) => {
         if (controller.signal.aborted) {
           controller = new AbortController()
         }

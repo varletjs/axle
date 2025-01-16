@@ -12,7 +12,7 @@ import type {
 import qs from 'qs'
 import { objectToFormData } from './utils'
 
-export interface AxleRequestConfig extends AxiosRequestConfig {}
+export interface AxleRequestConfig<D = any> extends AxiosRequestConfig<D> {}
 
 export type {
   AxiosInstance,
@@ -27,16 +27,16 @@ export type {
 
 export { AxiosError, isAxiosError } from 'axios'
 
-export type FetchRunner = <R = AxiosResponse, P = Record<string, any>>(
+export type FetchRunner = <R = AxiosResponse, P = Record<string, any>, D = Record<string, any>>(
   url: string,
   params?: P,
-  config?: AxleRequestConfig,
+  config?: AxleRequestConfig<D>,
 ) => Promise<R>
 
-export type ModifyRunner = <R = AxiosResponse, P = Record<string, any>>(
+export type ModifyRunner = <R = AxiosResponse, P = Record<string, any>, D = Record<string, any>>(
   url: string,
   params?: P,
-  config?: AxleRequestConfig,
+  config?: AxleRequestConfig<D>,
 ) => Promise<R>
 
 export type FetchMethod = 'get' | 'delete' | 'options' | 'head'
@@ -110,10 +110,10 @@ export type AxleInstance = {
 }
 
 export function createFetchRunner(service: AxiosInstance, method: FetchMethod, responseType: ResponseType) {
-  return function <R = AxiosResponse, P = Record<string, any>>(
+  return function <R = AxiosResponse, P = Record<string, any>, D = Record<string, any>>(
     url: string,
     params?: P,
-    config?: AxleRequestConfig,
+    config?: AxleRequestConfig<D>,
   ): Promise<R> {
     return service[method](url, {
       params,
@@ -128,10 +128,10 @@ export function createModifyRunner(
   method: ModifyMethod,
   contentType: 'application/json' | 'multipart/form-data' | 'application/x-www-form-urlencoded',
 ) {
-  return function <R = AxiosResponse, P = Record<string, any>>(
+  return function <R = AxiosResponse, P = Record<string, any>, D = Record<string, any>>(
     url: string,
     params?: P,
-    config?: AxleRequestConfig,
+    config?: AxleRequestConfig<D>,
   ): Promise<R> {
     let normalizedParams: any = params ?? {}
 

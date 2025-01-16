@@ -8,7 +8,6 @@
     "esModuleInterop": true,
     "moduleResolution": "node",
     "target": "ES2017",
-    "allowJs": true,
     "lib": ["esnext", "dom"],
     "allowSyntheticDefaultImports": true,
     "jsx": "preserve"

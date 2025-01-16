@@ -2,18 +2,24 @@
   "name": "@varlet/axle",
   "version": "0.10.1",
   "description": "Progressive request tool based on axios",
-  "type": "module",
-  "main": "lib/index.cjs",
-  "module": "lib/index.js",
-  "types": "index.d.ts",
-  "typesVersions": {
-    "*": {
-      "*": [
-        "./lib/*"
-      ]
-    }
+  "keywords": [
+    "axle",
+    "axios",
+    "helpers",
+    "vue3",
+    "composition api"
+  ],
+  "bugs": {
+    "url": "https://github.com/varletjs/axle/issues"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varletjs/axle.git"
+  },
+  "license": "MIT",
+  "author": "haoziqaq <357229046@qq.com>",
   "sideEffects": false,
+  "type": "module",
   "exports": {
     ".": {
       "import": "./lib/index.js",
@@ -32,32 +38,30 @@
     },
     "./*": "./*"
   },
+  "main": "lib/index.cjs",
+  "module": "lib/index.js",
+  "types": "index.d.ts",
+  "typesVersions": {
+    "*": {
+      "*": [
+        "./lib/*"
+      ]
+    }
+  },
   "files": [
     "lib"
   ],
-  "keywords": [
-    "axle",
-    "axios",
-    "helpers",
-    "vue3",
-    "composition api"
-  ],
-  "author": "haoziqaq <357229046@qq.com>",
-  "license": "MIT",
   "scripts": {
-    "dev": "tsup src/index.ts src/use.ts src/api.ts --format esm --out-dir=lib --watch --dts",
-    "build": "tsup src/index.ts src/use.ts src/api.ts --format esm,cjs --out-dir=lib --dts --clean"
+    "build": "tsup src/index.ts src/use.ts src/api.ts --format esm,cjs --out-dir=lib --dts --clean",
+    "dev": "tsup src/index.ts src/use.ts src/api.ts --format esm --out-dir=lib --watch --dts"
   },
   "dependencies": {
-    "rattail": "1.0.0",
     "axios": "^1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",
     "minimatch": "^9.0.3",
-    "qs": "^6.11.0"
-  },
-  "peerDependencies": {
-    "vue": "^3.2.0"
+    "qs": "^6.11.0",
+    "rattail": "1.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.1",
@@ -68,11 +72,7 @@
     "typescript": "^5.1.5",
     "vue": "3.3.4"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/varletjs/axle.git"
-  },
-  "bugs": {
-    "url": "https://github.com/varletjs/axle/issues"
+  "peerDependencies": {
+    "vue": "^3.2.0"
   }
 }

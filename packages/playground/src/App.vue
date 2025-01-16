@@ -53,7 +53,7 @@ async function handleDelete() {
       <var-cell>loading: {{ getUser.loading.value }}</var-cell>
       <var-cell>data: {{ user ?? 'No Data' }}</var-cell>
       <var-cell>
-        <var-input variant="outlined" size="small" v-model="id" />
+        <var-input v-model="id" variant="outlined" size="small" />
       </var-cell>
       <var-cell>
         <var-button type="primary" @click="getUser()">Load</var-button>
@@ -61,8 +61,8 @@ async function handleDelete() {
 
       <var-cell>name: createUser & updateUser</var-cell>
       <var-cell>
-        <var-input placeholder="id" size="small" variant="outlined" v-model="model.id" />
-        <var-input placeholder="name" style="margin-top: 20px" size="small" variant="outlined" v-model="model.name" />
+        <var-input v-model="model.id" placeholder="id" size="small" variant="outlined" />
+        <var-input v-model="model.name" placeholder="name" style="margin-top: 20px" size="small" variant="outlined" />
       </var-cell>
       <var-cell>
         <var-button style="margin-right: 10px" type="primary" auto-loading @click="handleCreate"> Create </var-button>
@@ -71,7 +71,7 @@ async function handleDelete() {
 
       <var-cell>name: deleteUser</var-cell>
       <var-cell>
-        <var-input placeholder="id" size="small" variant="outlined" v-model="deleteId" />
+        <var-input v-model="deleteId" placeholder="id" size="small" variant="outlined" />
       </var-cell>
       <var-cell>
         <var-button style="margin-right: 20px" type="danger" auto-loading @click="handleDelete"> Delete </var-button>

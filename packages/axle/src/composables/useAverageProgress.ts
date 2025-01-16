@@ -1,4 +1,4 @@
-import { type Ref, ref, watch } from 'vue'
+import { ref, watch, type Ref } from 'vue'
 
 export function useAverageProgress(...progressCollection: Ref<number>[]) {
   const averageProgress = ref(0)
@@ -9,7 +9,7 @@ export function useAverageProgress(...progressCollection: Ref<number>[]) {
       const total = newProgressCollection.reduce((total, progress) => total + progress, 0)
       averageProgress.value = total / progressCollection.length
     },
-    { immediate: true }
+    { immediate: true },
   )
 
   return averageProgress

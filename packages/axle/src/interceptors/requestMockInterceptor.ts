@@ -1,8 +1,8 @@
-import { createMatcher } from '../matcher'
 import { AxiosError } from 'axios'
+import type { AxiosInterceptorOptions, AxiosRequestConfig, AxiosResponse } from 'axios'
 import { minimatch } from 'minimatch'
 import type { RequestInterceptor } from '../instance'
-import type { AxiosInterceptorOptions, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { createMatcher } from '../matcher'
 
 export type RequestMockInterceptorMapping = {
   url: string
@@ -22,7 +22,7 @@ function settle(
   response: AxiosResponse,
   resolve: (response: AxiosResponse) => void,
   reject: (error: AxiosError) => void,
-  delay = 0
+  delay = 0,
 ) {
   if (delay > 0) {
     setTimeout(() => {

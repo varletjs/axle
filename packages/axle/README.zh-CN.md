@@ -57,7 +57,7 @@ axios.interceptors.request.use(
   (error) => {
     // 请求错误处理
     return Promise.reject(error)
-  }
+  },
 )
 
 // 添加请求后返回拦截器
@@ -71,7 +71,7 @@ axios.interceptors.response.use(
     // 任何超出 2xx 范围的状态代码都会导致此函数触发
     // 对响应错误做一些事情
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -218,21 +218,17 @@ const headersInterceptor = requestHeadersInterceptor({
   headers: () => ({
     token: localStorage.getItem('token'),
     'Axle-Custom-Header': 'Axle-Custom-Header',
-  })
+  }),
 })
 
 const retryInterceptor = responseRetryInterceptor({ count: 3 })
 
 axios.interceptors.request.use(
-  headersInterceptor.onFulfilled, 
-  headersInterceptor.onRejected, 
-  headersInterceptor.options
+  headersInterceptor.onFulfilled,
+  headersInterceptor.onRejected,
+  headersInterceptor.options,
 )
-axios.interceptors.response.use(
-  retryInterceptor.onFulfilled,
-  retryInterceptor.onRejected, 
-  retryInterceptor.options
-)
+axios.interceptors.response.use(retryInterceptor.onFulfilled, retryInterceptor.onRejected, retryInterceptor.options)
 ```
 
 ### axle
@@ -262,25 +258,25 @@ axle.useResponseInterceptor(responseRetryInterceptor({ count: 3 }))
 
 ```ts
 axle.useResponseInterceptor(
-  responseRetryInterceptor({ 
+  responseRetryInterceptor({
     count: 3,
     include: ['method:put', 'method:post', 'status:500'],
-    exclude: ['/system/**', '/user/addUser', 'status:400']
+    exclude: ['/system/**', '/user/addUser', 'status:400'],
   }),
 )
 ```
 
 ### 内置拦截器一览
 
-| 名称 | 描述 |
-| --- | --- |
-| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestHeadersInterceptor.md) | 用于自定义请求头 |
-| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMockInterceptor.md) | 用于模拟数据 |
-| [requestMd5Interceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMd5Interceptor.md) | 用于对请求参数进行 md5 处理  |
-| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseRetryInterceptor.md) | 用于实现请求异常重试 |
-| [responseStatusInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseStatusInterceptor.md) | 用于拦截状态码 |
-| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseBlobInterceptor.md) | 用于拦截 blob 类型 |
-| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseTimeoutInterceptor.md) | 用于归一化超时异常 |
+| 名称                                                                                                                                           | 描述                        |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestHeadersInterceptor.md)   | 用于自定义请求头            |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMockInterceptor.md)         | 用于模拟数据                |
+| [requestMd5Interceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMd5Interceptor.md)           | 用于对请求参数进行 md5 处理 |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseRetryInterceptor.md)     | 用于实现请求异常重试        |
+| [responseStatusInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseStatusInterceptor.md)   | 用于拦截状态码              |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseBlobInterceptor.md)       | 用于拦截 blob 类型          |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseTimeoutInterceptor.md) | 用于归一化超时异常          |
 
 ## Vue 组合式 API
 
@@ -288,64 +284,64 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
+  const axle = createAxle(/** @see https://axios-http.com **/)
 
-const useAxle = createUseAxle({
-  axle,
-  // 可选项: useAxle 的默认 immediate, 默认值: true
-  immediate: false,
-  // 可选项: useAxle 的默认 onTransform
-  onTransform: (response) => response,
-})
+  const useAxle = createUseAxle({
+    axle,
+    // 可选项: useAxle 的默认 immediate, 默认值: true
+    immediate: false,
+    // 可选项: useAxle 的默认 onTransform
+    onTransform: (response) => response,
+  })
 
-const [
-  users, 
-  // 请求触发器
-  getUsers, 
-  // 附加属性
-  { loading, error, uploadProgress, downloadProgress, abort }
-] = useAxle({
-  // 请求初始化数据
-  value: [],
-  // 请求方法
-  method: 'get',
-  // 请求地址, 可以是 getter 函数
-  url: '/user',
-  // 是否立即发送请求, 默认值: true
-  immediate: false,
-  // 请求前是否需要重置 value, 默认值: false
-  resetValue: true,
-  // 重置 value 是否对 value 进行拷贝
-  // 设置为 true 时, 使用 JSON.parse(JSON.stringify(value)) 进行拷贝
-  // 设置为一个函数时, 该函数将作为拷贝函数对 value 进行拷贝， 如 v => _.cloneDeep(v)
-  cloneResetValue: true,
-  // 请求参数, 默认值: {}, 可以是 getter 函数
-  params: { current: 1, pageSize: 10 },
-  // Axios 配置, see https://axios-http.com, 可以是 getter 函数
-  config: { headers: {} },
-  // 生命周期
-  onBefore(refs) {
-    const { data, loading, error, uploadProgress, downloadProgress } = refs
-    console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
-    // 处理请求前逻辑
-  },
-  onTransform(response, refs) {
-    // 处理数据转换，转换后的数据将成为 users 的值。
-    return response.data
-  },
-  onSuccess(response, refs) {
-    // 处理请求成功逻辑
-  },
-  onError(error, refs) {
-    // 处理请求错误逻辑
-  },
-  onAfter(refs) {
-    // 处理请求结束逻辑，无论成功失败都会触发。
-  },
-})
+  const [
+    users,
+    // 请求触发器
+    getUsers,
+    // 附加属性
+    { loading, error, uploadProgress, downloadProgress, abort },
+  ] = useAxle({
+    // 请求初始化数据
+    value: [],
+    // 请求方法
+    method: 'get',
+    // 请求地址, 可以是 getter 函数
+    url: '/user',
+    // 是否立即发送请求, 默认值: true
+    immediate: false,
+    // 请求前是否需要重置 value, 默认值: false
+    resetValue: true,
+    // 重置 value 是否对 value 进行拷贝
+    // 设置为 true 时, 使用 JSON.parse(JSON.stringify(value)) 进行拷贝
+    // 设置为一个函数时, 该函数将作为拷贝函数对 value 进行拷贝， 如 v => _.cloneDeep(v)
+    cloneResetValue: true,
+    // 请求参数, 默认值: {}, 可以是 getter 函数
+    params: { current: 1, pageSize: 10 },
+    // Axios 配置, see https://axios-http.com, 可以是 getter 函数
+    config: { headers: {} },
+    // 生命周期
+    onBefore(refs) {
+      const { data, loading, error, uploadProgress, downloadProgress } = refs
+      console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
+      // 处理请求前逻辑
+    },
+    onTransform(response, refs) {
+      // 处理数据转换，转换后的数据将成为 users 的值。
+      return response.data
+    },
+    onSuccess(response, refs) {
+      // 处理请求成功逻辑
+    },
+    onError(error, refs) {
+      // 处理请求错误逻辑
+    },
+    onAfter(refs) {
+      // 处理请求结束逻辑，无论成功失败都会触发。
+    },
+  })
 </script>
 
 <template>
@@ -365,42 +361,42 @@ Axle 提供了一些并行请求处理工具，请参考以下示例。
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle, useAverageProgress, useHasLoading, useValues } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
+  const axle = createAxle(/** @see https://axios-http.com **/)
 
-const useAxle = createUseAxle({ axle })
+  const useAxle = createUseAxle({ axle })
 
-const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  method: 'get',
-  url: '/role',
-})
+  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+    method: 'get',
+    url: '/role',
+  })
 
-// 所有请求结束时，loading 为 false
-const loading = useHasLoading(isUsersLoading, isRolesLoading)
-// 所有请求结束时，downloadProgress 为 1
-const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-// Ref<[
-//   [{ name: 'foo' }, { name: 'bar' }],
-//   [{ role: 'admin' }, { role: 'user' }]
-// ]> <-
-// [
-//   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
-//   Ref<[{ role: 'admin' }, { role: 'user' }]>
-// ]
-const usersRoles = useValues(users, roles)
+  // 所有请求结束时，loading 为 false
+  const loading = useHasLoading(isUsersLoading, isRolesLoading)
+  // 所有请求结束时，downloadProgress 为 1
+  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+  // Ref<[
+  //   [{ name: 'foo' }, { name: 'bar' }],
+  //   [{ role: 'admin' }, { role: 'user' }]
+  // ]> <-
+  // [
+  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
+  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
+  // ]
+  const usersRoles = useValues(users, roles)
 
-function sendAllRequest() {
-  // parallel
-  getUsers()
-  getRoles()
-}
+  function sendAllRequest() {
+    // parallel
+    getUsers()
+    getRoles()
+  }
 </script>
 
 <template>
@@ -419,8 +415,8 @@ function sendAllRequest() {
 
 ```ts
 import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
 import { createApi } from '@varlet/axle/api'
+import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle({
   baseURL: '/api',
@@ -507,15 +503,15 @@ async function handleDelete(id: string) {
 
 ```html
 <script setup>
-const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>
@@ -530,15 +526,15 @@ const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
 
 ```html
 <script setup>
-const [users, getUsers] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [posts, getPosts] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [posts, getPosts] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>

@@ -14,12 +14,12 @@ axle.useResponseInterceptor(
         code: 200,
         data: response.data,
         message: 'success',
-      }
+      },
     }),
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
     exclude: ['/user/**'],
-  })
+  }),
 )
 ```

@@ -1,5 +1,5 @@
+import { isAxiosError, type AxiosResponse } from 'axios'
 import { inBrowser } from 'rattail'
-import { type AxiosResponse, isAxiosError } from 'axios'
 
 export interface WithResponseReturn<R> {
   response: R | undefined

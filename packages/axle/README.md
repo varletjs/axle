@@ -57,7 +57,7 @@ axios.interceptors.request.use(
   (error) => {
     // Do something with request error
     return Promise.reject(error)
-  }
+  },
 )
 
 // Add a response interceptor
@@ -71,7 +71,7 @@ axios.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error)
-  }
+  },
 )
 ```
 
@@ -218,21 +218,17 @@ const headersInterceptor = requestHeadersInterceptor({
   headers: () => ({
     token: localStorage.getItem('token'),
     'Axle-Custom-Header': 'Axle-Custom-Header',
-  })
+  }),
 })
 
 const retryInterceptor = responseRetryInterceptor({ count: 3 })
 
 axios.interceptors.request.use(
-  headersInterceptor.onFulfilled, 
-  headersInterceptor.onRejected, 
-  headersInterceptor.options
+  headersInterceptor.onFulfilled,
+  headersInterceptor.onRejected,
+  headersInterceptor.options,
 )
-axios.interceptors.response.use(
-  retryInterceptor.onFulfilled,
-  retryInterceptor.onRejected, 
-  retryInterceptor.options
-)
+axios.interceptors.response.use(retryInterceptor.onFulfilled, retryInterceptor.onRejected, retryInterceptor.options)
 ```
 
 ### axle
@@ -262,25 +258,25 @@ It is used to request filtering to determine what request should apply the inter
 
 ```ts
 axle.useResponseInterceptor(
-  responseRetryInterceptor({ 
+  responseRetryInterceptor({
     count: 3,
     include: ['method:put', 'method:post', 'status:500'],
-    exclude: ['/system/**', '/user/addUser', 'status:400']
+    exclude: ['/system/**', '/user/addUser', 'status:400'],
   }),
 )
 ```
 
 ### List of built-in interceptor
 
-| Name | Description |
-| --- | --- |
-| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestHeadersInterceptor.md) | Used to customize the request header |
-| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMockInterceptor.md) | Used to mock data |
-| [requestMd5Interceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMd5Interceptor.md) | Used for md encryption of parameters and headers |
-| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseRetryInterceptor.md) | Used to realize the request abnormal retry |
-| [responseStatusInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseStatusInterceptor.md) | Used to intercept status code |
-| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseBlobInterceptor.md) | Used to intercept blob type |
-| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout |
+| Name                                                                                                                                           | Description                                      |
+| ---------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| [requestHeadersInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestHeadersInterceptor.md)   | Used to customize the request header             |
+| [requestMockInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMockInterceptor.md)         | Used to mock data                                |
+| [requestMd5Interceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/requestMd5Interceptor.md)           | Used for md encryption of parameters and headers |
+| [responseRetryInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseRetryInterceptor.md)     | Used to realize the request abnormal retry       |
+| [responseStatusInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseStatusInterceptor.md)   | Used to intercept status code                    |
+| [responseBlobInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseBlobInterceptor.md)       | Used to intercept blob type                      |
+| [responseTimeoutInterceptor](https://github.com/varletjs/axle/blob/main/packages/axle/src/interceptors/examples/responseTimeoutInterceptor.md) | Used to abnormal timeout                         |
 
 ## Vue Composition API
 
@@ -288,64 +284,64 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
+  const axle = createAxle(/** @see https://axios-http.com **/)
 
-const useAxle = createUseAxle({
-  axle,
-  // Optional value: Default immediate of the useAxle, defaults true
-  immediate: false,
-  // Optional value: Default onTransform of the useAxle
-  onTransform: (response) => response,
-})
+  const useAxle = createUseAxle({
+    axle,
+    // Optional value: Default immediate of the useAxle, defaults true
+    immediate: false,
+    // Optional value: Default onTransform of the useAxle
+    onTransform: (response) => response,
+  })
 
-const [
-  users, 
-  // request runner/invoker
-  getUsers, 
-  // extra properties
-  { loading, error, uploadProgress, downloadProgress, abort, resetValue }
-] = useAxle({
-  // Request initial value
-  value: [],
-  // Request method
-  method: 'get',
-  // Request url can be a getter function
-  url: '/user',
-  // Whether to send the request immediately, defaults true
-  immediate: false,
-  // Whether the value needs to be reset before requesting, defaults false
-  resetValue: true,
-  // Whether to clone when resetting value, defaults false
-  // When set to true, use JSON.parse(JSON.stringify(value)) cloned
-  // When set to a function, the set function will be used as the clone function, such as v => _.cloneDeep(v)
-  cloneResetValue: true,
-  // Request params, defaults {}, can be a getter function
-  params: { current: 1, pageSize: 10 },
-  // Axios config, see https://axios-http.com can be a getter function
-  config: { headers: {} },
-  // lifecycle
-  onBefore(refs) {
-    const { data, loading, error, uploadProgress, downloadProgress } = refs
-    console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
-    // Do request before
-  },
-  onTransform(response, refs) {
-    // Handle data transform, The transformed data will be the value of users.
-    return response.data
-  },
-  onSuccess(response, refs) {
-    // Do request success
-  },
-  onError(error, refs) {
-    // Do request error
-  },
-  onAfter(refs) {
-    // Do request after
-  },
-})
+  const [
+    users,
+    // request runner/invoker
+    getUsers,
+    // extra properties
+    { loading, error, uploadProgress, downloadProgress, abort, resetValue },
+  ] = useAxle({
+    // Request initial value
+    value: [],
+    // Request method
+    method: 'get',
+    // Request url can be a getter function
+    url: '/user',
+    // Whether to send the request immediately, defaults true
+    immediate: false,
+    // Whether the value needs to be reset before requesting, defaults false
+    resetValue: true,
+    // Whether to clone when resetting value, defaults false
+    // When set to true, use JSON.parse(JSON.stringify(value)) cloned
+    // When set to a function, the set function will be used as the clone function, such as v => _.cloneDeep(v)
+    cloneResetValue: true,
+    // Request params, defaults {}, can be a getter function
+    params: { current: 1, pageSize: 10 },
+    // Axios config, see https://axios-http.com can be a getter function
+    config: { headers: {} },
+    // lifecycle
+    onBefore(refs) {
+      const { data, loading, error, uploadProgress, downloadProgress } = refs
+      console.log(data.value, loading.value, error.value, uploadProgress.value, downloadProgress.value)
+      // Do request before
+    },
+    onTransform(response, refs) {
+      // Handle data transform, The transformed data will be the value of users.
+      return response.data
+    },
+    onSuccess(response, refs) {
+      // Do request success
+    },
+    onError(error, refs) {
+      // Do request error
+    },
+    onAfter(refs) {
+      // Do request after
+    },
+  })
 </script>
 
 <template>
@@ -365,42 +361,42 @@ Axle provides some parallel request processing tools, please refer to the follow
 
 ```html
 <script setup>
-import { createAxle } from '@varlet/axle'
-import { createUseAxle, useValues, useAverageProgress, useHasLoading } from '@varlet/axle/use'
+  import { createAxle } from '@varlet/axle'
+  import { createUseAxle, useAverageProgress, useHasLoading, useValues } from '@varlet/axle/use'
 
-const axle = createAxle(/** @see https://axios-http.com **/)
+  const axle = createAxle(/** @see https://axios-http.com **/)
 
-const useAxle = createUseAxle({ axle })
+  const useAxle = createUseAxle({ axle })
 
-const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-  method: 'get',
-  url: '/role',
-})
+  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
+    method: 'get',
+    url: '/role',
+  })
 
-// At the end of all requests, loading is false
-const loading = useHasLoading(isUsersLoading, isRolesLoading)
-// At the end of all requests, downloadProgress is 1
-const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-// Ref<[
-//   [{ name: 'foo' }, { name: 'bar' }],
-//   [{ role: 'admin' }, { role: 'user' }]
-// ]> <-
-// [
-//   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
-//   Ref<[{ role: 'admin' }, { role: 'user' }]>
-// ]
-const usersRoles = useValues(users, roles)
+  // At the end of all requests, loading is false
+  const loading = useHasLoading(isUsersLoading, isRolesLoading)
+  // At the end of all requests, downloadProgress is 1
+  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
+  // Ref<[
+  //   [{ name: 'foo' }, { name: 'bar' }],
+  //   [{ role: 'admin' }, { role: 'user' }]
+  // ]> <-
+  // [
+  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
+  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
+  // ]
+  const usersRoles = useValues(users, roles)
 
-function sendAllRequest() {
-  // parallel
-  getUsers()
-  getRoles()
-}
+  function sendAllRequest() {
+    // parallel
+    getUsers()
+    getRoles()
+  }
 </script>
 
 <template>
@@ -419,8 +415,8 @@ function sendAllRequest() {
 
 ```ts
 import { createAxle } from '@varlet/axle'
-import { createUseAxle } from '@varlet/axle/use'
 import { createApi } from '@varlet/axle/api'
+import { createUseAxle } from '@varlet/axle/use'
 
 const axle = createAxle({
   baseURL: '/api',
@@ -507,15 +503,15 @@ before:
 
 ```html
 <script setup>
-const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>
@@ -530,15 +526,15 @@ after:
 
 ```html
 <script setup>
-const [users, getUsers] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [posts, getPosts] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [posts, getPosts] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>

@@ -9,13 +9,13 @@ axle.useRequestInterceptor(
   requestHeadersInterceptor({
     // additional headers carried by the request
     headers: {
-      'Custom-Field': 'custom-field'
+      'Custom-Field': 'custom-field',
     },
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
     exclude: ['/user/**'],
-  })
+  }),
 )
 ```
 
@@ -28,13 +28,13 @@ axle.useRequestInterceptor(
   requestHeadersInterceptor({
     // headers can also be a getter
     headers: () => ({
-      'Authorization': localStorage.getItem('token'),
+      Authorization: localStorage.getItem('token'),
       'Custom-Field': 'custom-field',
     }),
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
     exclude: ['/user/**'],
-  })
+  }),
 )
 ```

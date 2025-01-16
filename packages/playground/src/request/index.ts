@@ -60,7 +60,7 @@ axle.useRequestInterceptor(
         path: ['data.name'],
       },
     ],
-  })
+  }),
 )
 
 axle.useResponseInterceptor(
@@ -107,7 +107,7 @@ axle.useResponseInterceptor(
       Snackbar.error(error.message)
       return Promise.reject(error)
     },
-  }
+  },
 )
 
 export { axle, useAxle, api }

@@ -22,6 +22,6 @@ axle.useResponseInterceptor(
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
     exclude: ['/user/**'],
-  })
+  }),
 )
 ```

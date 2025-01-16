@@ -1,6 +1,3 @@
-package.json
-*.md
-.github/**
 .history/**
 lib/**
 es/**

@@ -1,7 +1,7 @@
-import { isFunction } from 'rattail'
-import { createMatcher } from '../matcher'
-import type { RequestInterceptor } from '../instance'
 import type { AxiosInterceptorOptions } from 'axios'
+import { isFunction } from 'rattail'
+import type { RequestInterceptor } from '../instance'
+import { createMatcher } from '../matcher'
 
 export interface RequestHeadersInterceptorOptions {
   headers?: Record<string, string> | (() => Record<string, string>)

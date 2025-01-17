@@ -1,6 +1,6 @@
 {
   "name": "@varlet/axle",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "description": "Progressive request tool based on axios",
   "keywords": [
     "axle",

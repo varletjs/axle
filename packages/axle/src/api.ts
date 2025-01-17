@@ -12,7 +12,7 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
       return axle[method](patchUrl(url, pathParams ?? {}), params, config)
     }
 
-    function use<V = any>(options: ApiUseOptions<V, R, P, D> = {}) {
+    function use<V = R>(options: ApiUseOptions<V, R, P, D> = {}) {
       const { pathParams = {}, ...rest } = options
 
       return useAxle<V, R, P, D>({

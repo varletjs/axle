@@ -355,58 +355,6 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
 </template>
 ```
 
-### 并行请求实用工具
-
-Axle 提供了一些并行请求处理工具，请参考以下示例。
-
-```html
-<script setup>
-  import { createAxle } from '@varlet/axle'
-  import { createUseAxle, useAverageProgress, useHasLoading, useValues } from '@varlet/axle/use'
-
-  const axle = createAxle(/** @see https://axios-http.com **/)
-
-  const useAxle = createUseAxle({ axle })
-
-  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
-
-  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-    method: 'get',
-    url: '/role',
-  })
-
-  // 所有请求结束时，loading 为 false
-  const loading = useHasLoading(isUsersLoading, isRolesLoading)
-  // 所有请求结束时，downloadProgress 为 1
-  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-  // Ref<[
-  //   [{ name: 'foo' }, { name: 'bar' }],
-  //   [{ role: 'admin' }, { role: 'user' }]
-  // ]> <-
-  // [
-  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
-  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
-  // ]
-  const usersRoles = useValues(users, roles)
-
-  function sendAllRequest() {
-    // parallel
-    getUsers()
-    getRoles()
-  }
-</script>
-
-<template>
-  <span>{{ usersRoles }}</span>
-  <span>{{ loading }}</span>
-  <span>{{ downloadProgress }}</span>
-  <button @click="sendAllRequest">发送全部请求</button>
-</template>
-```
-
 ### API 定义增强
 
 从 `0.9.0` 开始支持 `createApi`，以增强 API 定义能力。
@@ -503,15 +451,15 @@ async function handleDelete(id: string) {
 
 ```html
 <script setup>
-  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
-
-  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-    method: 'get',
-    url: '/post',
-  })
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+  
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  method: 'get',
+  url: '/post',
+})
 </script>
 
 <template>
@@ -526,15 +474,15 @@ async function handleDelete(id: string) {
 
 ```html
 <script setup>
-  const [users, getUsers] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+})
 
-  const [posts, getPosts] = useAxle({
-    method: 'get',
-    url: '/post',
-  })
+const [posts, getPosts] = useAxle({
+  method: 'get',
+  url: '/post',
+})
 </script>
 
 <template>
@@ -544,3 +492,8 @@ async function handleDelete(id: string) {
   <button @click="getPosts">Send Request</button>
 </template>
 ```
+
+### API 生成工具
+
+`API` 生成工具可以通过 `Openapi3/Swagger2` 的 `Schema` 生成所有的 `API 调用器` 和 `类型声明`。
+我们推荐使用 [api-farmer](https://github.com/varletjs/api-farmer)，它对 `axle` 第一方支持，并且具有高可定制性。

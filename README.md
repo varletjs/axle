@@ -355,58 +355,6 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
 </template>
 ```
 
-### Parallel Utils
-
-Axle provides some parallel request processing tools, please refer to the following examples.
-
-```html
-<script setup>
-  import { createAxle } from '@varlet/axle'
-  import { createUseAxle, useAverageProgress, useHasLoading, useValues } from '@varlet/axle/use'
-
-  const axle = createAxle(/** @see https://axios-http.com **/)
-
-  const useAxle = createUseAxle({ axle })
-
-  const [users, getUsers, { loading: isUsersLoading, downloadProgress: usersDownloadProgress }] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
-
-  const [roles, getRoles, { loading: isRolesLoading, downloadProgress: rolesDownloadProgress }] = useAxle({
-    method: 'get',
-    url: '/role',
-  })
-
-  // At the end of all requests, loading is false
-  const loading = useHasLoading(isUsersLoading, isRolesLoading)
-  // At the end of all requests, downloadProgress is 1
-  const downloadProgress = useAverageProgress(usersDownloadProgress, rolesDownloadProgress)
-  // Ref<[
-  //   [{ name: 'foo' }, { name: 'bar' }],
-  //   [{ role: 'admin' }, { role: 'user' }]
-  // ]> <-
-  // [
-  //   Ref<[{ name: 'foo' }, { name: 'bar' }]>,
-  //   Ref<[{ role: 'admin' }, { role: 'user' }]>
-  // ]
-  const usersRoles = useValues(users, roles)
-
-  function sendAllRequest() {
-    // parallel
-    getUsers()
-    getRoles()
-  }
-</script>
-
-<template>
-  <span>{{ usersRoles }}</span>
-  <span>{{ loading }}</span>
-  <span>{{ downloadProgress }}</span>
-  <button @click="sendAllRequest">Send All Request</button>
-</template>
-```
-
 ### API Definition Enhancement
 
 `createApi` is supported since `v0.9.0`, which is used to define APIs.
@@ -503,15 +451,15 @@ before:
 
 ```html
 <script setup>
-  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
-
-  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-    method: 'get',
-    url: '/post',
-  })
+const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+  
+const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+  method: 'get',
+  url: '/post',
+})
 </script>
 
 <template>
@@ -526,15 +474,15 @@ after:
 
 ```html
 <script setup>
-  const [users, getUsers] = useAxle({
-    method: 'get',
-    url: '/user',
-  })
-
-  const [posts, getPosts] = useAxle({
-    method: 'get',
-    url: '/post',
-  })
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+})
+  
+const [posts, getPosts] = useAxle({
+  method: 'get',
+  url: '/post',
+})
 </script>
 
 <template>
@@ -544,3 +492,8 @@ after:
   <button @click="getPosts">Send Request</button>
 </template>
 ```
+
+### API Generation Tool
+
+The `API` generation tool can generate all `API dispatcher` and `type declarations` through `Schema` of `Openapi3/Swagger2`.
+We recommend using [api-farmer](https://github.com/varletjs/api-farmer), which has first-party support for `axle` and is highly customizable.

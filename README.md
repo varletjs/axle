@@ -293,6 +293,8 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     axle,
     // Optional value: Default immediate of the useAxle, defaults true
     immediate: false,
+    // Optional value: Default abortOnUnmount of the useAxle, defaults true
+    abortOnUnmount: false,
     // Optional value: Default onTransform of the useAxle
     onTransform: (response) => response,
   })
@@ -312,6 +314,8 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     url: '/user',
     // Whether to send the request immediately, defaults true
     immediate: false,
+    // Whether to abort the request on component unmounted, defaults true
+    abortOnUnmount: false,
     // Whether the value needs to be reset before requesting, defaults false
     resetValue: true,
     // Whether to clone when resetting value, defaults false
@@ -451,15 +455,15 @@ before:
 
 ```html
 <script setup>
-const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
-  
-const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
+
+  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>
@@ -474,15 +478,15 @@ after:
 
 ```html
 <script setup>
-const [users, getUsers] = useAxle({
-  method: 'get',
-  url: '/user',
-})
-  
-const [posts, getPosts] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [users, getUsers] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
+
+  const [posts, getPosts] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>

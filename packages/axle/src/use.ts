@@ -1,4 +1,4 @@
-import { ref, type Ref } from 'vue'
+import { onUnmounted, ref, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -34,11 +34,12 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   url: string | (() => string)
   method: RunnerMethod
   value?: V
-  params?: P | (() => P)
+  immediate?: boolean
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
-  immediate?: boolean
+  abortOnUnmount?: boolean
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
+  params?: P | (() => P)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -55,6 +56,7 @@ export type UseAxleInstance<V, R, P, D> = [value: Ref<V>, run: Run<V, R, P, D>, 
 export interface CreateUseAxleOptions {
   axle: AxleInstance
   immediate?: boolean
+  abortOnUnmount?: boolean
   onTransform?(response: any, refs: any): any
 }
 
@@ -67,7 +69,12 @@ export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
 }
 
 export function createUseAxle(options: CreateUseAxleOptions) {
-  const { axle, onTransform: defaultOnTransform, immediate: defaultImmediate = true } = options
+  const {
+    axle,
+    onTransform: defaultOnTransform,
+    immediate: defaultImmediate = true,
+    abortOnUnmount: defaultAbortOnUnmount = true,
+  } = options
 
   const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
     options: UseAxleOptions<V, R, P, D>,
@@ -76,6 +83,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       url: initialUrlOrGetter,
       method,
       immediate = defaultImmediate,
+      abortOnUnmount = defaultAbortOnUnmount,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
@@ -182,6 +190,12 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         url: normalizeValueGetter(initialUrlOrGetter),
         params: normalizeValueGetter(initialParamsOrGetter),
         config: normalizeValueGetter(initialConfigOrGetter),
+      })
+    }
+
+    if (abortOnUnmount) {
+      onUnmounted(() => {
+        abort()
       })
     }
 

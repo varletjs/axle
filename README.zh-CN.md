@@ -293,6 +293,8 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     axle,
     // 可选项: useAxle 的默认 immediate, 默认值: true
     immediate: false,
+    // 可选项: useAxle 的默认 abortOnUnmount, 默认值: true
+    abortOnUnmount: false,
     // 可选项: useAxle 的默认 onTransform
     onTransform: (response) => response,
   })
@@ -312,6 +314,8 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     url: '/user',
     // 是否立即发送请求, 默认值: true
     immediate: false,
+    // 是否在组件卸载之后中断请求，默认值: true
+    abortOnUnmount: false,
     // 请求前是否需要重置 value, 默认值: false
     resetValue: true,
     // 重置 value 是否对 value 进行拷贝
@@ -451,15 +455,15 @@ async function handleDelete(id: string) {
 
 ```html
 <script setup>
-const [users, getUsers, { loading: isUsersLoading }] = useAxle({
-  method: 'get',
-  url: '/user',
-})
-  
-const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [users, getUsers, { loading: isUsersLoading }] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
+
+  const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>
@@ -474,15 +478,15 @@ const [posts, getPosts, { loading: isPostsLoading }] = useAxle({
 
 ```html
 <script setup>
-const [users, getUsers] = useAxle({
-  method: 'get',
-  url: '/user',
-})
+  const [users, getUsers] = useAxle({
+    method: 'get',
+    url: '/user',
+  })
 
-const [posts, getPosts] = useAxle({
-  method: 'get',
-  url: '/post',
-})
+  const [posts, getPosts] = useAxle({
+    method: 'get',
+    url: '/post',
+  })
 </script>
 
 <template>

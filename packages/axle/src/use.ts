@@ -1,4 +1,4 @@
-import { onUnmounted, ref, type Ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -193,7 +193,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       })
     }
 
-    if (abortOnUnmount) {
+    if (abortOnUnmount && getCurrentInstance()) {
       onUnmounted(() => {
         abort()
       })

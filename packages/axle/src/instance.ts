@@ -13,7 +13,7 @@ import qs from 'qs'
 import { objectToFormData } from './utils'
 
 export interface AxleRequestConfig<D = any, E = Record<string, any>> extends AxiosRequestConfig<D> {
-  extra: E
+  extra?: E
 }
 
 export type {

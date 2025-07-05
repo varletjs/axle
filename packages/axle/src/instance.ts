@@ -12,7 +12,9 @@ import type {
 import qs from 'qs'
 import { objectToFormData } from './utils'
 
-export interface AxleRequestConfig<D = any> extends AxiosRequestConfig<D> {}
+export interface AxleRequestConfig<D = any, E = Record<string, any>> extends AxiosRequestConfig<D> {
+  extra: E
+}
 
 export type {
   AxiosInstance,

@@ -76,7 +76,7 @@ const cacheBuffer: Map<string, { response?: any; expiredTime?: number; promise: 
 
 export function cleanupCacheBuffer() {
   cacheBuffer.forEach((value, key) => {
-    if (value.expiredTime && value.expiredTime < Date.now()) {
+    if (value.expiredTime && Date.now() >= value.expiredTime) {
       cacheBuffer.delete(key)
     }
   })
@@ -229,11 +229,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           }
 
           const buffer = cacheBuffer.get(key)!
-          if (buffer.expiredTime == null || buffer.response == null) {
-            return false
-          }
 
-          return true
+          return buffer.response != null
         }
 
         function shouldAwaitPromise(key: string | undefined) {

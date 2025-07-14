@@ -167,7 +167,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           cleanupCacheBuffer()
           const response = (await getResponse()) as R
 
-          if (shouldSetResponse(normalizedCacheKey)) {
+          if (shouldSetCacheResponse(normalizedCacheKey)) {
             const cache = cacheBuffer.get(normalizedCacheKey!)!
             cache.response = response
             cache.expiredTime = Date.now() + cacheTime
@@ -194,13 +194,13 @@ export function createUseAxle(options: CreateUseAxleOptions) {
             return JSON.parse(JSON.stringify(cacheBuffer.get(normalizedCacheKey!)!.response))
           }
 
-          if (shouldAwaitPromise(normalizedCacheKey)) {
+          if (shouldAwaitCachePromise(normalizedCacheKey)) {
             return cacheBuffer.get(normalizedCacheKey!)!.promise
           }
 
           const promise = fetchResponse()
 
-          if (shouldSetPromise(normalizedCacheKey)) {
+          if (shouldSetCachePromise(normalizedCacheKey)) {
             cacheBuffer.set(normalizedCacheKey!, { promise })
           }
 
@@ -233,7 +233,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           return buffer.response != null
         }
 
-        function shouldAwaitPromise(key: string | undefined) {
+        function shouldAwaitCachePromise(key: string | undefined) {
           if (!key || !cacheBuffer.has(key)) {
             return false
           }
@@ -243,7 +243,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           return buffer.promise
         }
 
-        function shouldSetPromise(key: string | undefined) {
+        function shouldSetCachePromise(key: string | undefined) {
           if (!key || cacheBuffer.has(key)) {
             return false
           }
@@ -251,7 +251,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           return true
         }
 
-        function shouldSetResponse(key: string | undefined) {
+        function shouldSetCacheResponse(key: string | undefined) {
           if (!key || !cacheBuffer.has(key)) {
             return false
           }

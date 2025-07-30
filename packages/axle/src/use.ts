@@ -17,6 +17,7 @@ export type UseAxleExtra<V> = {
   error: Ref<Error | undefined>
   abort(): void
   resetValue(options?: ResetValueOptions<V>): void
+  invalidateCache(): void
 }
 export interface UseAxleRefs<V> {
   value: Ref<V>
@@ -38,6 +39,8 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
   abortOnUnmount?: boolean
+  cacheKey?: string | (() => string)
+  cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   params?: P | (() => P)
   onBefore?(refs: UseAxleRefs<V>): void
@@ -57,6 +60,7 @@ export interface CreateUseAxleOptions {
   axle: AxleInstance
   immediate?: boolean
   abortOnUnmount?: boolean
+  cacheTime?: number
   onTransform?(response: any, refs: any): any
 }
 
@@ -68,12 +72,23 @@ export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
 }
 
+const cacheBuffer: Map<string, { response?: any; expiredTime?: number; promise: Promise<any> }> = new Map()
+
+export function cleanupCacheBuffer() {
+  cacheBuffer.forEach((value, key) => {
+    if (value.expiredTime && Date.now() >= value.expiredTime) {
+      cacheBuffer.delete(key)
+    }
+  })
+}
+
 export function createUseAxle(options: CreateUseAxleOptions) {
   const {
     axle,
     onTransform: defaultOnTransform,
     immediate: defaultImmediate = true,
     abortOnUnmount: defaultAbortOnUnmount = true,
+    cacheTime: defaultCacheTime = Infinity,
   } = options
 
   const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
@@ -84,6 +99,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       method,
       immediate = defaultImmediate,
       abortOnUnmount = defaultAbortOnUnmount,
+      cacheTime = defaultCacheTime,
+      cacheKey,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
@@ -118,6 +135,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       error,
       abort,
       resetValue,
+      invalidateCache,
     }
 
     let controller = new AbortController()
@@ -139,13 +157,58 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
         const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
         const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
+        const normalizedCacheKey = cacheKey ? normalizeValueGetter(cacheKey) : undefined
 
         onBefore(refs)
 
         loading.value = true
 
         try {
-          const response = await axle[method](url, params, {
+          cleanupCacheBuffer()
+          const response = (await getResponse()) as R
+
+          if (shouldSetCacheResponse(normalizedCacheKey)) {
+            const cache = cacheBuffer.get(normalizedCacheKey!)!
+            cache.response = response
+            cache.expiredTime = Date.now() + cacheTime
+          }
+
+          value.value = await onTransform(response, refs)
+          error.value = undefined
+          onSuccess(response, refs)
+          loading.value = false
+          onAfter(refs)
+
+          return response
+        } catch (responseError: any) {
+          error.value = responseError as Error
+          onError(responseError as Error, refs)
+          loading.value = false
+          onAfter(refs)
+
+          throw responseError
+        }
+
+        function getResponse() {
+          if (shouldUseCache(normalizedCacheKey)) {
+            return JSON.parse(JSON.stringify(cacheBuffer.get(normalizedCacheKey!)!.response))
+          }
+
+          if (shouldAwaitCachePromise(normalizedCacheKey)) {
+            return cacheBuffer.get(normalizedCacheKey!)!.promise
+          }
+
+          const promise = fetchResponse()
+
+          if (shouldSetCachePromise(normalizedCacheKey)) {
+            cacheBuffer.set(normalizedCacheKey!, { promise })
+          }
+
+          return promise
+        }
+
+        function fetchResponse() {
+          return axle[method](url, params, {
             signal: controller.signal,
 
             onUploadProgress(event) {
@@ -158,21 +221,44 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
             ...config,
           })
+        }
 
-          value.value = await onTransform(response as R, refs)
-          error.value = undefined
-          onSuccess(response as R, refs)
-          loading.value = false
-          onAfter(refs)
+        function shouldUseCache(key: string | undefined) {
+          if (!key || !cacheBuffer.has(key)) {
+            return false
+          }
 
-          return response as R
-        } catch (responseError: any) {
-          error.value = responseError as Error
-          onError(responseError as Error, refs)
-          loading.value = false
-          onAfter(refs)
+          const buffer = cacheBuffer.get(key)!
 
-          throw responseError
+          return buffer.response != null
+        }
+
+        function shouldAwaitCachePromise(key: string | undefined) {
+          if (!key || !cacheBuffer.has(key)) {
+            return false
+          }
+
+          const buffer = cacheBuffer.get(key)!
+
+          return buffer.promise
+        }
+
+        function shouldSetCachePromise(key: string | undefined) {
+          if (!key || cacheBuffer.has(key)) {
+            return false
+          }
+
+          return true
+        }
+
+        function shouldSetCacheResponse(key: string | undefined) {
+          if (!key || !cacheBuffer.has(key)) {
+            return false
+          }
+
+          const buffer = cacheBuffer.get(key)!
+
+          return buffer.response == null
         }
       },
       {
@@ -182,6 +268,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         error,
         abort,
         resetValue,
+        invalidateCache,
       },
     )
 
@@ -212,6 +299,15 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     function abort() {
       controller.abort()
+    }
+
+    function invalidateCache() {
+      const normalizedCacheKey = cacheKey ? normalizeValueGetter(cacheKey) : undefined
+      if (!normalizedCacheKey || !cacheBuffer.has(normalizedCacheKey)) {
+        return
+      }
+
+      cacheBuffer.delete(normalizedCacheKey)
     }
 
     return [value, run, extra]

@@ -1,4 +1,4 @@
-import { getCurrentInstance, onUnmounted, ref, type Ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref, watch, type Ref, type WatchSource } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -43,6 +43,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   params?: P | (() => P)
+  reloadWatch?: WatchSource | WatchSource[]
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -106,6 +107,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
+      reloadWatch,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -286,6 +288,26 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       })
     }
 
+    if (reloadWatch) {
+      const currentInstance = getCurrentInstance()
+
+      if (!currentInstance) {
+        console.warn('[Axle] reloadWatch can only be used within Vue component context')
+      } else {
+        watch(
+          reloadWatch,
+          () => {
+            run({
+              url: normalizeValueGetter(initialUrlOrGetter),
+              params: normalizeValueGetter(initialParamsOrGetter),
+              config: normalizeValueGetter(initialConfigOrGetter),
+            })
+          },
+          { deep: true },
+        )
+      }
+    }
+
     function resetValue(options: ResetValueOptions<V> = {}) {
       const cloneResetValue = options.cloneResetValue ?? initialCloneResetValue ?? false
       const cloneFn =
@@ -316,6 +338,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
   return useAxle
 }
 
-export * from './composables/useValues.js'
-export * from './composables/useHasLoading.js'
 export * from './composables/useAverageProgress.js'
+export * from './composables/useHasLoading.js'
+export * from './composables/useValues.js'

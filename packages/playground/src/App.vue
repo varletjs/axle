@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { apiGetUsers, apiGetMockUsers, apiGetUser, apiCreateUser, apiDeleteUser, apiUpdateUser, User } from './apis'
+import { apiCreateUser, apiDeleteUser, apiGetMockUsers, apiGetUser, apiGetUsers, apiUpdateUser, User } from './apis'
 
 const id = ref('1')
 const deleteId = ref('1')
@@ -9,6 +9,12 @@ const model = ref({
 })
 
 const [users, getUsers] = apiGetUsers.use()
+
+const [userForWatch, getUserForWatch] = apiGetUser.use({
+  immediate: false,
+  pathParams: () => ({ id: id.value }),
+  reloadWatch: () => id,
+})
 
 const [mockUsers, getMockUsers] = apiGetMockUsers.use()
 
@@ -57,6 +63,13 @@ async function handleDelete() {
       </var-cell>
       <var-cell>
         <var-button type="primary" @click="getUser()">Load</var-button>
+      </var-cell>
+
+      <var-cell>name: getUserForWatch</var-cell>
+      <var-cell>loading: {{ getUserForWatch.loading.value }}</var-cell>
+      <var-cell>data: {{ userForWatch ?? 'No Data' }}</var-cell>
+      <var-cell>
+        <var-input v-model="id" variant="outlined" size="small" />
       </var-cell>
 
       <var-cell>name: createUser & updateUser</var-cell>

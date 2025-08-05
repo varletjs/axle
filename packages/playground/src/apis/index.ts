@@ -19,7 +19,11 @@ export interface UpdateUser {
   name: string
 }
 
-export const apiGetUsers = api<Response<User[]>>('/user', 'get')
+export interface UsersParams {
+  id?: string
+}
+
+export const apiGetUsers = api<Response<User[]>, UsersParams>('/user', 'get')
 
 export const apiGetUser = api<Response<User>>('/user/:id', 'get')
 

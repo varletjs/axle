@@ -1,4 +1,4 @@
-import { getCurrentInstance, onUnmounted, ref, watch, type Ref, type WatchSource } from 'vue'
+import { getCurrentInstance, onUnmounted, ref, watch, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -31,6 +31,12 @@ export type Run<V, R, P, D> = {
   (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
+export interface WatchOptions {
+  params?: boolean
+  pathParams?: boolean
+  config?: boolean
+}
+
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
   url: string | (() => string)
   method: RunnerMethod
@@ -43,7 +49,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   params?: P | (() => P)
-  reloadWatch?: WatchSource | WatchSource[]
+  watch?: boolean | WatchOptions
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -107,7 +113,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
-      reloadWatch,
+      watch: watchOptions,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -282,29 +288,41 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       })
     }
 
-    if (abortOnUnmount && getCurrentInstance()) {
-      onUnmounted(() => {
-        abort()
-      })
-    }
+    if (getCurrentInstance()) {
+      if (abortOnUnmount) {
+        onUnmounted(() => {
+          abort()
+        })
+      }
 
-    if (reloadWatch) {
-      const currentInstance = getCurrentInstance()
+      if (watchOptions) {
+        const watchSources: any[] = []
 
-      if (!currentInstance) {
-        console.warn('[Axle] reloadWatch can only be used within Vue component context')
-      } else {
-        watch(
-          reloadWatch,
-          () => {
-            run({
-              url: normalizeValueGetter(initialUrlOrGetter),
-              params: normalizeValueGetter(initialParamsOrGetter),
-              config: normalizeValueGetter(initialConfigOrGetter),
-            })
-          },
-          { deep: true },
-        )
+        const watchMap: { key: keyof WatchOptions; getter: any | (() => any) | undefined }[] = [
+          { key: 'params', getter: initialParamsOrGetter },
+          { key: 'config', getter: initialConfigOrGetter },
+          { key: 'pathParams', getter: initialUrlOrGetter },
+        ]
+
+        for (const { key, getter } of watchMap) {
+          if (isFunction(getter) && (watchOptions === true || watchOptions?.[key])) {
+            watchSources.push(() => normalizeValueGetter(getter))
+          }
+        }
+
+        if (watchSources.length > 0) {
+          watch(
+            watchSources,
+            () => {
+              run({
+                url: normalizeValueGetter(initialUrlOrGetter),
+                params: normalizeValueGetter(initialParamsOrGetter),
+                config: normalizeValueGetter(initialConfigOrGetter),
+              })
+            },
+            { deep: true, immediate },
+          )
+        }
       }
     }
 

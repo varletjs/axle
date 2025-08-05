@@ -1,6 +1,6 @@
 import Koa from 'koa'
-import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
+import Router from 'koa-router'
 
 const app = new Koa()
 const router = new Router()
@@ -38,6 +38,16 @@ const users = [
 
 router.get('/user', async (ctx) => {
   await delay(100)
+  const id = ctx.request.query.id
+  if (id) {
+    const user = users.find((user) => user.id === Number(id))
+    if (!user) {
+      response(ctx, 404, null, 'not found this user')
+      return
+    }
+    response(ctx, 200, [user])
+    return
+  }
   response(ctx, 200, users)
 })
 

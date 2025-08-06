@@ -59,14 +59,12 @@
     "axios": "^1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",
-    "minimatch": "^9.0.3",
     "qs": "^6.11.0",
     "rattail": "1.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.1",
     "@types/lodash": "4.14.202",
-    "@types/minimatch": "^5.1.2",
     "@types/qs": "^6.9.7",
     "tsup": "7.2.0",
     "typescript": "^5.1.5",

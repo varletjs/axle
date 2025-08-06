@@ -1,12 +1,12 @@
 import type { AxiosInterceptorOptions } from 'axios'
 import { isFunction } from 'rattail'
 import type { RequestInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export interface RequestHeadersInterceptorOptions {
   headers?: Record<string, string> | (() => Record<string, string>)
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 

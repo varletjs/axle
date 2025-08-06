@@ -1,12 +1,12 @@
 import type { AxiosInterceptorOptions } from 'axios'
 import axios, { isCancel } from 'axios'
 import type { ResponseInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export interface ResponseRetryInterceptorOptions {
   count?: number
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 

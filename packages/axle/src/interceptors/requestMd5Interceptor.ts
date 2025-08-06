@@ -2,23 +2,22 @@ import type { AxiosInterceptorOptions, AxiosRequestConfig } from 'axios'
 import md5 from 'crypto-js/md5.js'
 import get from 'lodash/get.js'
 import set from 'lodash/set.js'
-import { minimatch } from 'minimatch'
 import qs from 'qs'
-import { isString } from 'rattail'
+import { isFunction, isString } from 'rattail'
 import type { RequestInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 import { formDataToObject, isFormData, objectToFormData } from '../utils'
 
 export type RequestMd5InterceptorMapping = {
-  url: string
+  url: string | ((url: string) => boolean)
   path: string[]
   method?: string
 }
 
 export interface RequestMd5InterceptorOptions {
   mappings?: RequestMd5InterceptorMapping[]
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
@@ -76,7 +75,9 @@ export function requestMd5Interceptor(options: RequestMd5InterceptorOptions = {}
 
       const findMapping = () =>
         (options.mappings ?? []).find((mapping) => {
-          const isMatchUrl = minimatch(config.url ?? '', mapping.url)
+          const isMatchUrl = isFunction(mapping.url)
+            ? mapping.url(config.url ?? '')
+            : mapping.url === (config.url ?? '')
           const isMatchMethod = mapping.method != null ? config.method === mapping.method : true
           return isMatchUrl && isMatchMethod
         })

@@ -254,14 +254,14 @@ Each built-in interceptor supports `include` `exclude` `axiosInterceptorOptions 
 
 #### include & exclude
 
-It is used to request filtering to determine what request should apply the interceptor and support specifying the `method`、 `glob` syntax or `status` code. The usage method is as follows.
+It is used to request filtering to determine what request should apply the interceptor and support specifying the `method`, `status` code, `pattern` function. The usage method is as follows.
 
 ```ts
 axle.useResponseInterceptor(
   responseRetryInterceptor({
     count: 3,
     include: ['method:put', 'method:post', 'status:500'],
-    exclude: ['/system/**', '/user/addUser', 'status:400'],
+    exclude: [({ url, method, status }) => url.startsWith('/system'), '/user/addUser', 'status:400'],
   }),
 )
 ```

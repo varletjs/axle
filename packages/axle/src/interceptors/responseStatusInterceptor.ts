@@ -1,12 +1,12 @@
 import type { AxiosInterceptorOptions, AxiosResponse } from 'axios'
 import type { ResponseInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export interface ResponseStatusInterceptorOptions {
   validStatusHandler?: Record<number | string, (response: AxiosResponse<any, any>) => any>
   invalidStatusHandler?: Record<number | string, (error: any) => any>
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 

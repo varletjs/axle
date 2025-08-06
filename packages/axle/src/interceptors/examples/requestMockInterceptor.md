@@ -44,7 +44,7 @@ axle.useRequestInterceptor(
         }),
       },
       {
-        url: '/error/**',
+        url: (url) => url.startsWith('/error/'),
         delay: 1000,
         handler: () => ({
           // status defaults 200
@@ -56,7 +56,7 @@ axle.useRequestInterceptor(
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:get', 'method:post'],
-    exclude: ['/other/**'],
+    exclude: [({ url }) => url.startsWith('/other/')],
   }),
 )
 ```

@@ -296,33 +296,30 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       }
 
       if (watchOptions) {
-        const watchSources: any[] = []
+        const normalizedWatchOptions =
+          watchOptions === true
+            ? { params: true, pathParams: true, config: true }
+            : { params: false, pathParams: false, config: false, ...watchOptions }
 
-        const watchMap: { key: keyof WatchOptions; getter: any | (() => any) | undefined }[] = [
-          { key: 'params', getter: initialParamsOrGetter },
-          { key: 'config', getter: initialConfigOrGetter },
-          { key: 'pathParams', getter: initialUrlOrGetter },
-        ]
+        const enableWatchParams = isFunction(initialParamsOrGetter) && normalizedWatchOptions.params
+        const enableWatchConfig = isFunction(initialConfigOrGetter) && normalizedWatchOptions.config
+        const enableWatchPathParams = isFunction(initialUrlOrGetter) && normalizedWatchOptions.pathParams
 
-        for (const { key, getter } of watchMap) {
-          if (isFunction(getter) && (watchOptions === true || watchOptions?.[key])) {
-            watchSources.push(() => normalizeValueGetter(getter))
-          }
-        }
-
-        if (watchSources.length > 0) {
-          watch(
-            watchSources,
-            () => {
-              run({
-                url: normalizeValueGetter(initialUrlOrGetter),
-                params: normalizeValueGetter(initialParamsOrGetter),
-                config: normalizeValueGetter(initialConfigOrGetter),
-              })
-            },
-            { deep: true, immediate },
-          )
-        }
+        watch(
+          () => [
+            enableWatchParams ? normalizeValueGetter(initialParamsOrGetter) : undefined,
+            enableWatchConfig ? normalizeValueGetter(initialConfigOrGetter) : undefined,
+            enableWatchPathParams ? normalizeValueGetter(initialUrlOrGetter) : undefined,
+          ],
+          () => {
+            run({
+              url: normalizeValueGetter(initialUrlOrGetter),
+              params: normalizeValueGetter(initialParamsOrGetter),
+              config: normalizeValueGetter(initialConfigOrGetter),
+            })
+          },
+          { deep: true, immediate },
+        )
       }
     }
 

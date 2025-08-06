@@ -321,8 +321,6 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     // - pathParams: true - 监听 pathParams 变化（用于 API 定义）
     // - config: true - 监听 config 配置变化
     watch: true,
-    // 监听数据变化时自动重新加载
-    reloadWatch: () => id,
     // 请求前是否需要重置 value, 默认值: false
     resetValue: true,
     // 重置 value 是否对 value 进行拷贝

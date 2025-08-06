@@ -32,7 +32,7 @@ axle.useRequestInterceptor(
   requestMockInterceptor({
     mappings: [
       {
-        url: '/mock/**',
+        url: (url) => url.startsWith('/mock/'),
         handler: () => ({
           data: {
             code: 200,
@@ -56,7 +56,8 @@ axle.useRequestInterceptor(
   requestMd5Interceptor({
     mappings: [
       {
-        url: '/user/add-user',
+        url: '/user',
+        method: 'post',
         path: ['data.name'],
       },
     ],

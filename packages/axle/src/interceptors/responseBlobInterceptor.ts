@@ -1,11 +1,11 @@
 import type { AxiosInterceptorOptions, AxiosResponse } from 'axios'
 import type { ResponseInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export interface ResponseBlobInterceptorOptions {
   onResponse?: (response: AxiosResponse<any, any>) => any
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 

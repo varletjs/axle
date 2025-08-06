@@ -14,7 +14,7 @@ axle.useRequestInterceptor(
         path: ['data.password'],
       },
       {
-        url: '/user/add-user',
+        url: (url) => url === '/user/add-user',
         method: 'post',
         path: ['data.name'],
       },
@@ -22,7 +22,7 @@ axle.useRequestInterceptor(
 
     // optional filtering options that determine whether the interceptor intercepts
     include: ['method:post'],
-    exclude: ['/other/**'],
+    exclude: [({ url }) => url.startsWith('/other/')],
   }),
 )
 ```

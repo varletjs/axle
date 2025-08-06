@@ -254,14 +254,14 @@ axle.useResponseInterceptor(responseRetryInterceptor({ count: 3 }))
 
 #### include & exclude
 
-用于请求过滤，以确定什么请求应该应用该拦截器，支持指定 `method`、 `glob` 或者 `status`，使用方式如下。
+用于请求过滤，以确定什么请求应该应用该拦截器，支持指定 `method`、 `status`、`匹配函数` 使用方式如下。
 
 ```ts
 axle.useResponseInterceptor(
   responseRetryInterceptor({
     count: 3,
     include: ['method:put', 'method:post', 'status:500'],
-    exclude: ['/system/**', '/user/addUser', 'status:400'],
+    exclude: [({ url, method, status }) => url.startsWith('/system/'), '/user/addUser', 'status:400'],
   }),
 )
 ```

@@ -1,11 +1,11 @@
 import { AxiosError } from 'axios'
 import type { AxiosInterceptorOptions, AxiosRequestConfig, AxiosResponse } from 'axios'
-import { minimatch } from 'minimatch'
+import { isFunction } from 'rattail'
 import type { RequestInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export type RequestMockInterceptorMapping = {
-  url: string
+  url: string | ((url: string) => boolean)
   handler: (config: AxiosRequestConfig) => { data: any; status?: number; statusText?: string }
   method?: string
   delay?: number
@@ -13,8 +13,8 @@ export type RequestMockInterceptorMapping = {
 
 export interface RequestMockInterceptorOptions {
   mappings?: RequestMockInterceptorMapping[]
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 
@@ -48,7 +48,9 @@ export function requestMockInterceptor(options: RequestMockInterceptorOptions = 
 
       const findMapping = () =>
         (options.mappings ?? []).find((mapping) => {
-          const isMatchUrl = minimatch(config.url ?? '', mapping.url)
+          const isMatchUrl = isFunction(mapping.url)
+            ? mapping.url(config.url ?? '')
+            : mapping.url === (config.url ?? '')
           const isMatchMethod = mapping.method != null ? config.method === mapping.method : true
           return isMatchUrl && isMatchMethod
         })

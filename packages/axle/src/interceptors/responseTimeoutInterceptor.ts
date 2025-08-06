@@ -1,11 +1,11 @@
 import type { AxiosInterceptorOptions } from 'axios'
 import type { ResponseInterceptor } from '../instance'
-import { createMatcher } from '../matcher'
+import { createMatcher, MatchPattern } from '../matcher'
 
 export interface ResponseTimeoutInterceptorOptions {
   normalizeErrorCode?: string
-  include?: string[]
-  exclude?: string[]
+  include?: MatchPattern[]
+  exclude?: MatchPattern[]
   axiosInterceptorOptions?: AxiosInterceptorOptions
 }
 

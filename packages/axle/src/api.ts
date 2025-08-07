@@ -14,11 +14,13 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
       return axle[method](patchUrl(url, pathParams ?? {}), params, config)
     }
 
-    function use<V = R>(options?: ApiUseOptions<V, R, P, D> & { runnable: Runnable }): UseAxleInstance<V, R, P, D, true>
-    function use<V = R>(options?: ApiUseOptions<V, R, P, D>): UseAxleInstance<V, R, P, D, false>
+    function use<V = R>(
+      options?: ApiUseOptions<V, R, P, D> & { runnable: Runnable },
+    ): UseAxleInstance<V, R | undefined, P, D>
+    function use<V = R>(options: ApiUseOptions<V, R, P, D>): UseAxleInstance<V, R, P, D>
     function use<V = R>(
       options: ApiUseOptions<V, R, P, D> & { runnable?: Runnable } = {},
-    ): UseAxleInstance<V, R, P, D, any> {
+    ): UseAxleInstance<V, R, P, D> {
       const { pathParams = {}, ...rest } = options
 
       return useAxle<V, R, P, D>({

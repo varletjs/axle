@@ -1,8 +1,8 @@
 import { getCurrentInstance, onUnmounted, ref, type Ref } from 'vue'
-import { isBoolean, isFunction } from 'rattail'
+import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
-export type Runnable = boolean | (() => boolean | Promise<boolean>)
+export type Runnable = boolean | (() => boolean)
 
 export interface RunOptions<V, P, D> {
   url?: string
@@ -30,8 +30,8 @@ export interface UseAxleRefs<V> {
   downloadProgress: Ref<number>
 }
 
-export type Run<V, R, P, D, HasRunnable extends boolean> = {
-  (options?: RunOptions<V, P, D>): Promise<HasRunnable extends true ? R | undefined : R>
+export type Run<V, R, P, D> = {
+  (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
@@ -58,11 +58,7 @@ export interface ResetValueOptions<V> {
   cloneResetValue?: boolean | ((value: V) => V)
 }
 
-export type UseAxleInstance<V, R, P, D, HasRunnable extends boolean = false> = [
-  value: Ref<V>,
-  run: Run<V, R, P, D, HasRunnable>,
-  extra: UseAxleExtra<V>,
-]
+export type UseAxleInstance<V, R, P, D> = [value: Ref<V>, run: Run<V, R, P, D>, extra: UseAxleExtra<V>]
 
 export interface CreateUseAxleOptions {
   axle: AxleInstance
@@ -72,25 +68,25 @@ export interface CreateUseAxleOptions {
   onTransform?(response: any, refs: any): any
 }
 
-export type UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
-  options: UseAxleOptions<V, R, P, D>,
-) => UseAxleInstance<V, R, P, D>
+export interface UseAxle {
+  <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptions<V, R, P, D> & { runnable: Runnable },
+  ): UseAxleInstance<V, R | undefined, P, D>
+  <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptions<V, R, P, D>,
+  ): UseAxleInstance<V, R, P, D>
+}
 
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
 }
 
-export async function normalizeRunnable(runnable?: Runnable): Promise<boolean> {
-  if (isBoolean(runnable)) {
-    return runnable
-  }
-
+export function normalizeRunnable(runnable: Runnable): boolean {
   if (isFunction(runnable)) {
-    const result = runnable()
-    return await Promise.resolve(result)
+    return runnable()
   }
 
-  return true
+  return runnable
 }
 
 const cacheBuffer: Map<string, { response?: any; expiredTime?: number; promise: Promise<any> }> = new Map()
@@ -112,15 +108,9 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     cacheTime: defaultCacheTime = Infinity,
   } = options
 
-  const useAxle: UseAxle = <
-    V = any,
-    R = any,
-    P = Record<string, any>,
-    D = Record<string, any>,
-    HasRunnable extends boolean = false,
-  >(
-    options: UseAxleOptions<V, R, P, D>,
-  ): UseAxleInstance<V, R, P, D, HasRunnable> => {
+  const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptions<V, R, P, D> & { runnable?: Runnable },
+  ) => {
     const {
       url: initialUrlOrGetter,
       method,
@@ -133,7 +123,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
-      runnable: initialRunnable,
+      runnable: initialRunnable = true,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -168,11 +158,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
 
-    const run: Run<V, R, P, D, HasRunnable> = Object.assign(
+    const run: Run<V, R, P, D> = Object.assign(
       async (options: RunOptions<V, P, D> = {}) => {
-        const canRun = await normalizeRunnable(initialRunnable)
-        if (!canRun) {
-          return undefined as HasRunnable extends true ? R | undefined : R
+        const runnable = await normalizeRunnable(initialRunnable)
+        if (!runnable) {
+          return undefined as R
         }
 
         if (controller.signal.aborted) {

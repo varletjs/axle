@@ -326,6 +326,8 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     params: { current: 1, pageSize: 10 },
     // Axios config, see https://axios-http.com can be a getter function
     config: { headers: {} },
+    // Used to control whether the request can be triggered, returns false will not trigger the request
+    runnable: () => true,
     // lifecycle
     onBefore(refs) {
       const { data, loading, error, uploadProgress, downloadProgress } = refs

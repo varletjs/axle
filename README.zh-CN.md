@@ -326,6 +326,8 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     params: { current: 1, pageSize: 10 },
     // Axios 配置, see https://axios-http.com, 可以是 getter 函数
     config: { headers: {} },
+    // 用于控制请求是否可以被触发，返回 false 时不会触发请求
+    runnable: () => true,
     // 生命周期
     onBefore(refs) {
       const { data, loading, error, uploadProgress, downloadProgress } = refs

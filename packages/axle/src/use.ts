@@ -84,6 +84,13 @@ export interface UseAxle {
   ): UseAxleInstance<V, R, P, D>
 }
 
+type GenericUseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> = UseAxleOptions<
+  V,
+  R,
+  P,
+  D
+> & { runnable?: Runnable }
+
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
 }
@@ -108,7 +115,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
   } = options
 
   const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
-    options: UseAxleOptions<V, R, P, D> & { runnable?: Runnable },
+    options: GenericUseAxleOptions<V, R, P, D>,
   ) => {
     const {
       url: initialUrlOrGetter,
@@ -157,10 +164,10 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
 
-    const run: Run<V, R, P, D> = Object.assign(
+    const run = Object.assign(
       async (options: RunOptions<V, P, D> = {}) => {
         if (!initialRunnable()) {
-          return undefined as R
+          return undefined
         }
 
         if (controller.signal.aborted) {

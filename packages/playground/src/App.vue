@@ -34,7 +34,7 @@ async function handleDelete() {
   await getUsers()
 }
 
-function changeRunnable() {
+function toggleRunnable() {
   runnable.value = !runnable.value
 }
 </script>
@@ -49,7 +49,7 @@ function changeRunnable() {
       <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-button type="primary" @click="getUsers()">Load</var-button>
-        <var-button type="danger" @click="changeRunnable()">Change Runnable</var-button>
+        <var-button type="danger" @click="toggleRunnable()">Change Runnable</var-button>
       </var-cell>
 
       <var-cell>name: getMockUsers</var-cell>

@@ -124,12 +124,12 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       abortOnUnmount = defaultAbortOnUnmount,
       cacheTime = defaultCacheTime,
       cacheKey,
+      runnable = () => true,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
-      runnable: initialRunnable = () => true,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -166,8 +166,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     const run = Object.assign(
       async (options: RunOptions<V, P, D> = {}) => {
-        if (!initialRunnable()) {
-          return undefined
+        if (!runnable()) {
+          return
         }
 
         if (controller.signal.aborted) {

@@ -1,10 +1,17 @@
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
-import { type UseAxle, type UseAxleOptions } from './use'
+import { UseAxleInstance, UseAxleOptionsWithRunnable, type UseAxle, type UseAxleOptions } from './use'
 
 export type ApiPathParams = Record<string, any> | (() => Record<string, any>)
 
-export type ApiUseOptions<V, R, P, D> = Partial<UseAxleOptions<V, R, P, D>> & { pathParams?: ApiPathParams }
+export type ApiUseOptions<V, R, P, D> = Partial<UseAxleOptions<V, R, P, D>> & {
+  pathParams?: ApiPathParams
+}
+
+export type ApiUseOptionsWithRunnable<V, R, P, D> = Partial<Omit<UseAxleOptionsWithRunnable<V, R, P, D>, 'runnable'>> &
+  Pick<UseAxleOptionsWithRunnable<V, R, P, D>, 'runnable'> & {
+    pathParams?: ApiPathParams
+  }
 
 export function createApi(axle: AxleInstance, useAxle: UseAxle) {
   return function api<R = any, P = Record<string, any>, D = Record<string, any>>(url: string, method: RunnerMethod) {
@@ -12,7 +19,9 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
       return axle[method](patchUrl(url, pathParams ?? {}), params, config)
     }
 
-    function use<V = R>(options: ApiUseOptions<V, R, P, D> = {}) {
+    function use<V = R>(options?: ApiUseOptionsWithRunnable<V, R, P, D>): UseAxleInstance<V, R | undefined, P, D>
+    function use<V = R>(options?: ApiUseOptions<V, R, P, D>): UseAxleInstance<V, R, P, D>
+    function use<V = R>(options: any = {}): any {
       const { pathParams = {}, ...rest } = options
 
       return useAxle<V, R, P, D>({

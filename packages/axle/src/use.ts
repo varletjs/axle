@@ -1,4 +1,4 @@
-import { getCurrentInstance, onUnmounted, ref, type Ref } from 'vue'
+import { getCurrentInstance, onUnmounted, ref, watch, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -34,6 +34,12 @@ export type Run<V, R, P, D> = {
   (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
+export interface WatchOptions {
+  params?: boolean
+  pathParams?: boolean
+  config?: boolean
+}
+
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
   url: string | (() => string)
   method: RunnerMethod
@@ -46,6 +52,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   params?: P | (() => P)
+  watch?: boolean | WatchOptions
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -130,6 +137,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
+      watch: watchOptions,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -308,10 +316,39 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       })
     }
 
-    if (abortOnUnmount && getCurrentInstance()) {
-      onUnmounted(() => {
-        abort()
-      })
+    if (getCurrentInstance()) {
+      if (abortOnUnmount) {
+        onUnmounted(() => {
+          abort()
+        })
+      }
+
+      if (watchOptions) {
+        const normalizedWatchOptions =
+          watchOptions === true
+            ? { params: true, pathParams: true, config: true }
+            : { params: false, pathParams: false, config: false, ...watchOptions }
+
+        const enableWatchParams = isFunction(initialParamsOrGetter) && normalizedWatchOptions.params
+        const enableWatchConfig = isFunction(initialConfigOrGetter) && normalizedWatchOptions.config
+        const enableWatchPathParams = isFunction(initialUrlOrGetter) && normalizedWatchOptions.pathParams
+
+        watch(
+          () => [
+            enableWatchParams ? normalizeValueGetter(initialParamsOrGetter) : undefined,
+            enableWatchConfig ? normalizeValueGetter(initialConfigOrGetter) : undefined,
+            enableWatchPathParams ? normalizeValueGetter(initialUrlOrGetter) : undefined,
+          ],
+          () => {
+            run({
+              url: normalizeValueGetter(initialUrlOrGetter),
+              params: normalizeValueGetter(initialParamsOrGetter),
+              config: normalizeValueGetter(initialConfigOrGetter),
+            })
+          },
+          { deep: true, immediate },
+        )
+      }
     }
 
     function resetValue(options: ResetValueOptions<V> = {}) {

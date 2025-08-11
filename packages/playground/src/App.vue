@@ -19,23 +19,10 @@ const [userForWatchAll, getUserForWatchAll] = apiGetUser.use({
   watch: true,
 })
 
-const [userForWatchPathParams, getUserForWatchPathParams] = apiGetUser.use({
-  immediate: false,
-  pathParams: () => ({ id: id.value }),
-  watch: { pathParams: true },
-})
-
-const [usersForWatchParams, getUsersForWatchParams] = apiGetUsers.use({
-  immediate: false,
-  params: () => ({ id: id.value }),
-  watch: { params: true },
-})
-
 const timeoutInput = ref('5000')
 const requestConfig = computed(() => ({ timeout: parseInt(timeoutInput.value) || 5000 }))
-const [userForWatchConfig, getUserForWatchConfig] = apiGetUser.use({
+const [userForWatchConfig, getUserForWatchConfig] = apiGetUsers.use({
   immediate: false,
-  pathParams: () => ({ id: id.value }),
   config: () => requestConfig.value,
   watch: { config: true },
 })
@@ -101,14 +88,6 @@ function toggleRunnable() {
       <var-cell>name: getUserForWatchAll (watch: true)</var-cell>
       <var-cell>loading: {{ getUserForWatchAll.loading.value }}</var-cell>
       <var-cell>data: {{ userForWatchAll ?? 'No Data' }}</var-cell>
-
-      <var-cell>name: getUserForWatchPathParams (watch: { pathParams: true })</var-cell>
-      <var-cell>loading: {{ getUserForWatchPathParams.loading.value }}</var-cell>
-      <var-cell>data: {{ userForWatchPathParams ?? 'No Data' }}</var-cell>
-
-      <var-cell>name: getUsersForWatchParams (watch: { params: true })</var-cell>
-      <var-cell>loading: {{ getUsersForWatchParams.loading.value }}</var-cell>
-      <var-cell>data: {{ usersForWatchParams ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-input v-model="id" placeholder="update id auto load" variant="outlined" size="small" />
       </var-cell>

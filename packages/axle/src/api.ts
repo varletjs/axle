@@ -1,10 +1,17 @@
+import { watch } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
-import { type UseAxle, type UseAxleOptions } from './use'
+import { normalizeValueGetter, UseAxleInstance, type UseAxle, type UseAxleOptions, type WatchOptions } from './use'
 
 export type ApiPathParams = Record<string, any> | (() => Record<string, any>)
+export type ApiWatchOptions = WatchOptions & {
+  pathParams?: boolean
+}
 
-export type ApiUseOptions<V, R, P, D> = Partial<UseAxleOptions<V, R, P, D>> & { pathParams?: ApiPathParams }
+export type ApiUseOptions<V, R, P, D> = Partial<UseAxleOptions<V, R, P, D>> & {
+  pathParams?: ApiPathParams
+  watch?: ApiWatchOptions
+}
 
 export function createApi(axle: AxleInstance, useAxle: UseAxle) {
   return function api<R = any, P = Record<string, any>, D = Record<string, any>>(url: string, method: RunnerMethod) {
@@ -12,14 +19,25 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
       return axle[method](patchUrl(url, pathParams ?? {}), params, config)
     }
 
-    function use<V = R>(options: ApiUseOptions<V, R, P, D> = {}) {
-      const { pathParams = {}, ...rest } = options
+    function use<V = R>(options: ApiUseOptions<V, R, P, D> = {}): UseAxleInstance<V, R, P, D> {
+      const { pathParams = {}, watch: apiWatch, ...rest } = options
 
-      return useAxle<V, R, P, D>({
+      const enableWatchPathParams = isFunction(pathParams) && (apiWatch?.pathParams || apiWatch === true)
+
+      const [data, run, extra] = useAxle<V, R, P, D>({
         url: () => patchUrl(url, pathParams),
         method,
         ...rest,
       })
+
+      watch(
+        () => [enableWatchPathParams ? normalizeValueGetter(pathParams) : undefined],
+        () => {
+          run()
+        },
+      )
+
+      return [data, run, extra]
     }
 
     function patchUrl(url: string, pathParams: ApiPathParams) {

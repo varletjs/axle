@@ -31,11 +31,12 @@ export type Run<V, R, P, D> = {
   (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
-export interface WatchOptions {
+export interface WatchDeps {
   params?: boolean
-  pathParams?: boolean
   config?: boolean
 }
+
+export type WatchOptions = boolean | WatchDeps
 
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
   url: string | (() => string)
@@ -49,7 +50,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   params?: P | (() => P)
-  watch?: boolean | WatchOptions
+  watch?: WatchOptions
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -297,19 +298,15 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
       if (watchOptions) {
         const normalizedWatchOptions =
-          watchOptions === true
-            ? { params: true, pathParams: true, config: true }
-            : { params: false, pathParams: false, config: false, ...watchOptions }
+          watchOptions === true ? { params: true, config: true } : { params: false, config: false, ...watchOptions }
 
         const enableWatchParams = isFunction(initialParamsOrGetter) && normalizedWatchOptions.params
         const enableWatchConfig = isFunction(initialConfigOrGetter) && normalizedWatchOptions.config
-        const enableWatchPathParams = isFunction(initialUrlOrGetter) && normalizedWatchOptions.pathParams
 
         watch(
           () => [
             enableWatchParams ? normalizeValueGetter(initialParamsOrGetter) : undefined,
             enableWatchConfig ? normalizeValueGetter(initialConfigOrGetter) : undefined,
-            enableWatchPathParams ? normalizeValueGetter(initialUrlOrGetter) : undefined,
           ],
           () => {
             run({
@@ -318,7 +315,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
               config: normalizeValueGetter(initialConfigOrGetter),
             })
           },
-          { deep: true, immediate },
+          { deep: true },
         )
       }
     }

@@ -42,6 +42,7 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
       const [data, run, extra] = useAxle<V, R, P, D>({
         url: () => patchUrl(url, pathParams),
         method,
+        watch: apiWatch,
         ...rest,
       })
 

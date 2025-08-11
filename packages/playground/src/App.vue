@@ -3,12 +3,15 @@ import { apiCreateUser, apiDeleteUser, apiGetMockUsers, apiGetUser, apiGetUsers,
 
 const id = ref('1')
 const deleteId = ref('1')
+const runnable = ref(true)
 const model = ref({
   id: '',
   name: '',
 })
 
-const [users, getUsers] = apiGetUsers.use()
+const [users, getUsers] = apiGetUsers.use({
+  runnable: () => runnable.value,
+})
 
 const [userForWatchAll, getUserForWatchAll] = apiGetUser.use({
   immediate: false,
@@ -57,6 +60,10 @@ async function handleDelete() {
   await apiDeleteUser.load({}, { id: deleteId.value })
   await getUsers()
 }
+
+function toggleRunnable() {
+  runnable.value = !runnable.value
+}
 </script>
 
 <template>
@@ -64,9 +71,12 @@ async function handleDelete() {
     <var-space direction="column">
       <var-cell>name: getUsers</var-cell>
       <var-cell>loading: {{ getUsers.loading }}</var-cell>
+      <var-cell>runnable: {{ runnable }}</var-cell>
+
       <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
       <var-cell>
         <var-button type="primary" @click="getUsers()">Load</var-button>
+        <var-button type="danger" @click="toggleRunnable()">Change Runnable</var-button>
       </var-cell>
 
       <var-cell>name: getMockUsers</var-cell>

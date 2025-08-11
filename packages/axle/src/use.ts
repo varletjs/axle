@@ -2,6 +2,8 @@ import { getCurrentInstance, onUnmounted, ref, watch, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
+export type Runnable = () => boolean
+
 export interface RunOptions<V, P, D> {
   url?: string
   params?: P
@@ -19,6 +21,7 @@ export type UseAxleExtra<V> = {
   resetValue(options?: ResetValueOptions<V>): void
   invalidateCache(): void
 }
+
 export interface UseAxleRefs<V> {
   value: Ref<V>
   loading: Ref<boolean>
@@ -72,9 +75,29 @@ export interface CreateUseAxleOptions {
   onTransform?(response: any, refs: any): any
 }
 
-export type UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
-  options: UseAxleOptions<V, R, P, D>,
-) => UseAxleInstance<V, R, P, D>
+export type UseAxleOptionsWithRunnable<
+  V = any,
+  R = any,
+  P = Record<string, any>,
+  D = Record<string, any>,
+> = UseAxleOptions<V, R, P, D> & { runnable: Runnable }
+
+export interface UseAxle {
+  <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptionsWithRunnable<V, R, P, D>,
+  ): UseAxleInstance<V, R | undefined, P, D>
+
+  <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
+    options: UseAxleOptions<V, R, P, D>,
+  ): UseAxleInstance<V, R, P, D>
+}
+
+type GenericUseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> = UseAxleOptions<
+  V,
+  R,
+  P,
+  D
+> & { runnable?: Runnable }
 
 export function normalizeValueGetter<T>(valueGetter: T | (() => T)) {
   return isFunction(valueGetter) ? valueGetter() : valueGetter
@@ -100,8 +123,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
   } = options
 
   const useAxle: UseAxle = <V = any, R = any, P = Record<string, any>, D = Record<string, any>>(
-    options: UseAxleOptions<V, R, P, D>,
-  ): UseAxleInstance<V, R, P, D> => {
+    options: GenericUseAxleOptions<V, R, P, D>,
+  ) => {
     const {
       url: initialUrlOrGetter,
       method,
@@ -109,6 +132,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       abortOnUnmount = defaultAbortOnUnmount,
       cacheTime = defaultCacheTime,
       cacheKey,
+      runnable = () => true,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
@@ -149,8 +173,12 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
 
-    const run: Run<V, R, P, D> = Object.assign(
+    const run = Object.assign(
       async (options: RunOptions<V, P, D> = {}) => {
+        if (!runnable()) {
+          return
+        }
+
         if (controller.signal.aborted) {
           controller = new AbortController()
         }

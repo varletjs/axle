@@ -297,6 +297,8 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     onTransform: (response) => response,
   })
 
+  const id = ref('1')
+
   const [
     users,
     // 请求触发器
@@ -312,6 +314,13 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     url: '/user',
     // 是否立即发送请求, 默认值: true
     immediate: false,
+    // 监听响应式参数变化时自动重新加载
+    // 设置为 true 时，监听所有参数变化 (params, config, pathParams)
+    // 设置为对象时，监听指定参数变化：
+    // - params: true - 监听 params 参数变化
+    // - pathParams: true - 监听 pathParams 变化（用于 API 定义）
+    // - config: true - 监听 config 配置变化
+    watch: true,
     // 请求前是否需要重置 value, 默认值: false
     resetValue: true,
     // 重置 value 是否对 value 进行拷贝

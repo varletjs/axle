@@ -297,6 +297,8 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     onTransform: (response) => response,
   })
 
+  const id = ref('1')
+
   const [
     users,
     // request runner/invoker
@@ -312,6 +314,13 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     url: '/user',
     // Whether to send the request immediately, defaults true
     immediate: false,
+    // Automatically reload when reactive parameters change
+    // When set to true, watch all parameters (params, config, pathParams)
+    // When set to an object, watch specific parameters:
+    // - params: true - watch params changes
+    // - pathParams: true - watch pathParams changes (for API definitions)
+    // - config: true - watch config changes
+    watch: true,
     // Whether the value needs to be reset before requesting, defaults false
     resetValue: true,
     // Whether to clone when resetting value, defaults false

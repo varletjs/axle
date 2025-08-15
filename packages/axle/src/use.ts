@@ -34,12 +34,13 @@ export type Run<V, R, P, D> = {
   (options?: RunOptions<V, P, D>): Promise<R>
 } & UseAxleExtra<V>
 
-export interface WatchDeps {
-  params?: boolean
-  config?: boolean
-}
-
-export type WatchOptions = boolean | WatchDeps
+export type WatchOptions =
+  | boolean
+  | {
+      params?: boolean
+      config?: boolean
+      _custom?: () => any
+    }
 
 export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = Record<string, any>> {
   url: string | (() => string)
@@ -327,7 +328,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       if (watchOptions) {
         const normalizedWatchOptions =
           watchOptions === true ? { params: true, config: true } : { params: false, config: false, ...watchOptions }
-
         const enableWatchParams = isFunction(initialParamsOrGetter) && normalizedWatchOptions.params
         const enableWatchConfig = isFunction(initialConfigOrGetter) && normalizedWatchOptions.config
 
@@ -335,6 +335,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           () => [
             enableWatchParams ? normalizeValueGetter(initialParamsOrGetter) : undefined,
             enableWatchConfig ? normalizeValueGetter(initialConfigOrGetter) : undefined,
+            normalizedWatchOptions._custom ? normalizedWatchOptions._custom() : undefined,
           ],
           () => {
             run({

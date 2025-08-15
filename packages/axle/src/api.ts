@@ -1,8 +1,6 @@
-import { watch } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 import {
-  normalizeValueGetter,
   UseAxleInstance,
   UseAxleOptionsWithRunnable,
   type UseAxle,
@@ -11,6 +9,7 @@ import {
 } from './use'
 
 export type ApiPathParams = Record<string, any> | (() => Record<string, any>)
+
 export type ApiWatchOptions = WatchOptions & {
   pathParams?: boolean
 }
@@ -35,25 +34,21 @@ export function createApi(axle: AxleInstance, useAxle: UseAxle) {
     function use<V = R>(options?: ApiUseOptionsWithRunnable<V, R, P, D>): UseAxleInstance<V, R | undefined, P, D>
     function use<V = R>(options?: ApiUseOptions<V, R, P, D>): UseAxleInstance<V, R, P, D>
     function use<V = R>(options: any = {}): any {
-      const { pathParams = {}, watch: apiWatch, ...rest } = options
+      const { pathParams = {}, watch: watchOptions, ...rest } = options
+      const enableWatchPathParams = isFunction(pathParams) && (watchOptions?.pathParams || watchOptions === true)
+      const normalizedWatchOptions =
+        watchOptions === true
+          ? { params: true, config: true, _custom: enableWatchPathParams ? pathParams : undefined }
+          : watchOptions === false
+            ? { params: false, config: false }
+            : { params: false, config: false, ...watchOptions, _custom: enableWatchPathParams ? pathParams : undefined }
 
-      const enableWatchPathParams = isFunction(pathParams) && (apiWatch?.pathParams || apiWatch === true)
-
-      const [data, run, extra] = useAxle<V, R, P, D>({
+      return useAxle<V, R, P, D>({
         url: () => patchUrl(url, pathParams),
         method,
-        watch: apiWatch,
+        watch: normalizedWatchOptions,
         ...rest,
       })
-
-      watch(
-        () => [enableWatchPathParams ? normalizeValueGetter(pathParams) : undefined],
-        () => {
-          run()
-        },
-      )
-
-      return [data, run, extra]
     }
 
     function patchUrl(url: string, pathParams: ApiPathParams) {

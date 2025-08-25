@@ -304,7 +304,7 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     // 请求触发器
     getUsers,
     // 附加属性
-    { loading, error, uploadProgress, downloadProgress, abort },
+    { loading, error, uploadProgress, downloadProgress, abort, resetValue, invalidateCache, cancelPolling },
   ] = useAxle({
     // 请求初始化数据
     value: [],
@@ -322,6 +322,12 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     // 设置为 true 时, 使用 JSON.parse(JSON.stringify(value)) 进行拷贝
     // 设置为一个函数时, 该函数将作为拷贝函数对 value 进行拷贝， 如 v => _.cloneDeep(v)
     cloneResetValue: true,
+    // 轮询间隔，单位毫秒。传入此配置即可启用请求轮询，轮询器将在请求首次发送完成时启动。
+    pollingInterval: 1000,
+    // 页面隐藏时是否轮询，默认值: true
+    pollingOnHidden: true,
+    // 组件失活（keep-alive）时是否轮询，默认 false
+    pollingOnDeactivated: false,
     // 请求参数, 默认值: {}, 可以是 getter 函数
     params: { current: 1, pageSize: 10 },
     // Axios 配置, see https://axios-http.com, 可以是 getter 函数

@@ -1,4 +1,4 @@
-import { getCurrentInstance, onUnmounted, ref, watch, type Ref } from 'vue'
+import { getCurrentInstance, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import { isFunction } from 'rattail'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
@@ -13,13 +13,15 @@ export interface RunOptions<V, P, D> {
 }
 
 export type UseAxleExtra<V> = {
-  uploadProgress: Ref<number>
-  downloadProgress: Ref<number>
   loading: Ref<boolean>
   error: Ref<Error | undefined>
+  uploadProgress: Ref<number>
+  downloadProgress: Ref<number>
+  pollingCanceled: Ref<boolean>
   abort(): void
   resetValue(options?: ResetValueOptions<V>): void
   invalidateCache(): void
+  cancelPolling(): void
 }
 
 export interface UseAxleRefs<V> {
@@ -28,6 +30,7 @@ export interface UseAxleRefs<V> {
   error: Ref<Error | undefined>
   uploadProgress: Ref<number>
   downloadProgress: Ref<number>
+  pollingCanceled: Ref<boolean>
 }
 
 export type Run<V, R, P, D> = {
@@ -53,8 +56,11 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheKey?: string | (() => string)
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
-  params?: P | (() => P)
   watch?: WatchOptions
+  pollingInterval?: number
+  pollingOnHidden?: boolean
+  pollingOnDeactivated?: boolean
+  params?: P | (() => P)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
   onTransform?(response: R, refs: UseAxleRefs<V>): V | Promise<V>
@@ -133,13 +139,16 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       abortOnUnmount = defaultAbortOnUnmount,
       cacheTime = defaultCacheTime,
       cacheKey,
-      runnable = () => true,
+      pollingInterval,
+      pollingOnHidden = true,
+      pollingOnDeactivated = false,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
       params: initialParamsOrGetter,
       config: initialConfigOrGetter,
       watch: watchOptions,
+      runnable = () => true,
       onBefore = () => {},
       onAfter = () => {},
       onTransform = (defaultOnTransform as UseAxleOptions<V, R, P>['onTransform']) ??
@@ -153,6 +162,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     const error = ref<Error>()
     const downloadProgress = ref(0)
     const uploadProgress = ref(0)
+    const pollingCanceled = ref(false)
 
     const refs: UseAxleRefs<V> = {
       value,
@@ -160,6 +170,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       error,
       downloadProgress,
       uploadProgress,
+      pollingCanceled,
     }
 
     const extra: UseAxleExtra<V> = {
@@ -167,158 +178,174 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       downloadProgress,
       loading,
       error,
+      pollingCanceled,
       abort,
       resetValue,
       invalidateCache,
+      cancelPolling,
     }
 
     let controller = new AbortController()
+    let pollingTimer: any = null
+    let deactivated = false
+    let hidden = false
 
-    const run = Object.assign(
-      async (options: RunOptions<V, P, D> = {}) => {
-        if (!runnable()) {
-          return
+    const run = Object.assign(async (options: RunOptions<V, P, D> = {}) => {
+      if (!runnable()) {
+        return
+      }
+
+      pollingCanceled.value = false
+
+      if (controller.signal.aborted) {
+        controller = new AbortController()
+      }
+
+      const resetValueOption = options.resetValue ?? initialResetValue ?? false
+      if (resetValueOption === true) {
+        resetValue(options)
+      }
+
+      uploadProgress.value = 0
+      downloadProgress.value = 0
+
+      const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
+      const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
+      const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
+      const normalizedCacheKey = cacheKey ? normalizeValueGetter(cacheKey) : undefined
+
+      onBefore(refs)
+
+      loading.value = true
+
+      try {
+        cleanupCacheBuffer()
+        const response = (await getResponse()) as R
+
+        if (shouldSetCacheResponse(normalizedCacheKey)) {
+          const cache = cacheBuffer.get(normalizedCacheKey!)!
+          cache.response = response
+          cache.expiredTime = Date.now() + cacheTime
         }
 
-        if (controller.signal.aborted) {
-          controller = new AbortController()
+        value.value = await onTransform(response, refs)
+        error.value = undefined
+        onSuccess(response, refs)
+        loading.value = false
+        onAfter(refs)
+
+        return response
+      } catch (responseError: any) {
+        error.value = responseError as Error
+        onError(responseError as Error, refs)
+        loading.value = false
+        onAfter(refs)
+
+        throw responseError
+      } finally {
+        clearPolling()
+        startPolling()
+      }
+
+      function getResponse() {
+        if (shouldUseCache(normalizedCacheKey)) {
+          return JSON.parse(JSON.stringify(cacheBuffer.get(normalizedCacheKey!)!.response))
         }
 
-        const resetValueOption = options.resetValue ?? initialResetValue ?? false
-        if (resetValueOption === true) {
-          resetValue(options)
+        if (shouldAwaitCachePromise(normalizedCacheKey)) {
+          return cacheBuffer.get(normalizedCacheKey!)!.promise
         }
 
-        uploadProgress.value = 0
-        downloadProgress.value = 0
+        const promise = fetchResponse()
 
-        const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
-        const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
-        const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
-        const normalizedCacheKey = cacheKey ? normalizeValueGetter(cacheKey) : undefined
-
-        onBefore(refs)
-
-        loading.value = true
-
-        try {
-          cleanupCacheBuffer()
-          const response = (await getResponse()) as R
-
-          if (shouldSetCacheResponse(normalizedCacheKey)) {
-            const cache = cacheBuffer.get(normalizedCacheKey!)!
-            cache.response = response
-            cache.expiredTime = Date.now() + cacheTime
-          }
-
-          value.value = await onTransform(response, refs)
-          error.value = undefined
-          onSuccess(response, refs)
-          loading.value = false
-          onAfter(refs)
-
-          return response
-        } catch (responseError: any) {
-          error.value = responseError as Error
-          onError(responseError as Error, refs)
-          loading.value = false
-          onAfter(refs)
-
-          throw responseError
+        if (shouldSetCachePromise(normalizedCacheKey)) {
+          cacheBuffer.set(normalizedCacheKey!, { promise })
         }
 
-        function getResponse() {
-          if (shouldUseCache(normalizedCacheKey)) {
-            return JSON.parse(JSON.stringify(cacheBuffer.get(normalizedCacheKey!)!.response))
-          }
+        return promise
+      }
 
-          if (shouldAwaitCachePromise(normalizedCacheKey)) {
-            return cacheBuffer.get(normalizedCacheKey!)!.promise
-          }
+      function fetchResponse() {
+        return axle[method](url, params, {
+          signal: controller.signal,
 
-          const promise = fetchResponse()
+          onUploadProgress(event) {
+            uploadProgress.value = event.progress ?? 0
+          },
 
-          if (shouldSetCachePromise(normalizedCacheKey)) {
-            cacheBuffer.set(normalizedCacheKey!, { promise })
-          }
+          onDownloadProgress(event) {
+            downloadProgress.value = event.progress ?? 0
+          },
 
-          return promise
+          ...config,
+        })
+      }
+
+      function shouldUseCache(key: string | undefined) {
+        if (!key || !cacheBuffer.has(key)) {
+          return false
         }
 
-        function fetchResponse() {
-          return axle[method](url, params, {
-            signal: controller.signal,
+        const buffer = cacheBuffer.get(key)!
 
-            onUploadProgress(event) {
-              uploadProgress.value = event.progress ?? 0
-            },
+        return buffer.response != null
+      }
 
-            onDownloadProgress(event) {
-              downloadProgress.value = event.progress ?? 0
-            },
-
-            ...config,
-          })
+      function shouldAwaitCachePromise(key: string | undefined) {
+        if (!key || !cacheBuffer.has(key)) {
+          return false
         }
 
-        function shouldUseCache(key: string | undefined) {
-          if (!key || !cacheBuffer.has(key)) {
-            return false
-          }
+        const buffer = cacheBuffer.get(key)!
 
-          const buffer = cacheBuffer.get(key)!
+        return buffer.promise
+      }
 
-          return buffer.response != null
+      function shouldSetCachePromise(key: string | undefined) {
+        if (!key || cacheBuffer.has(key)) {
+          return false
         }
 
-        function shouldAwaitCachePromise(key: string | undefined) {
-          if (!key || !cacheBuffer.has(key)) {
-            return false
-          }
+        return true
+      }
 
-          const buffer = cacheBuffer.get(key)!
-
-          return buffer.promise
+      function shouldSetCacheResponse(key: string | undefined) {
+        if (!key || !cacheBuffer.has(key)) {
+          return false
         }
 
-        function shouldSetCachePromise(key: string | undefined) {
-          if (!key || cacheBuffer.has(key)) {
-            return false
-          }
+        const buffer = cacheBuffer.get(key)!
 
-          return true
-        }
-
-        function shouldSetCacheResponse(key: string | undefined) {
-          if (!key || !cacheBuffer.has(key)) {
-            return false
-          }
-
-          const buffer = cacheBuffer.get(key)!
-
-          return buffer.response == null
-        }
-      },
-      {
-        uploadProgress,
-        downloadProgress,
-        loading,
-        error,
-        abort,
-        resetValue,
-        invalidateCache,
-      },
-    )
+        return buffer.response == null
+      }
+    }, extra)
 
     if (immediate) {
-      run({
-        url: normalizeValueGetter(initialUrlOrGetter),
-        params: normalizeValueGetter(initialParamsOrGetter),
-        config: normalizeValueGetter(initialConfigOrGetter),
-      })
+      runWithInitialConfig()
     }
 
     if (getCurrentInstance()) {
+      onActivated(() => {
+        deactivated = false
+        addVisibilityChangeListener()
+        startPolling()
+      })
+
+      onMounted(() => {
+        addVisibilityChangeListener()
+      })
+
+      onDeactivated(() => {
+        deactivated = true
+        removeVisibilityChangeListener()
+        clearPolling()
+      })
+
+      onUnmounted(() => {
+        removeVisibilityChangeListener()
+        cancelPolling()
+      })
+
       if (abortOnUnmount) {
         onUnmounted(() => {
           abort()
@@ -338,15 +365,19 @@ export function createUseAxle(options: CreateUseAxleOptions) {
             normalizedWatchOptions._custom ? normalizedWatchOptions._custom() : undefined,
           ],
           () => {
-            run({
-              url: normalizeValueGetter(initialUrlOrGetter),
-              params: normalizeValueGetter(initialParamsOrGetter),
-              config: normalizeValueGetter(initialConfigOrGetter),
-            })
+            runWithInitialConfig()
           },
           { deep: true },
         )
       }
+    }
+
+    function runWithInitialConfig() {
+      return run({
+        url: normalizeValueGetter(initialUrlOrGetter),
+        params: normalizeValueGetter(initialParamsOrGetter),
+        config: normalizeValueGetter(initialConfigOrGetter),
+      })
     }
 
     function resetValue(options: ResetValueOptions<V> = {}) {
@@ -362,6 +393,58 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     function abort() {
       controller.abort()
+    }
+
+    function addVisibilityChangeListener() {
+      if (typeof document !== 'undefined') {
+        document.addEventListener('visibilitychange', handleVisibilityChange)
+      }
+    }
+
+    function removeVisibilityChangeListener() {
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', handleVisibilityChange)
+      }
+    }
+
+    function handleVisibilityChange() {
+      hidden = document.visibilityState === 'hidden'
+
+      if (pollingOnHidden) {
+        return
+      }
+
+      hidden ? clearPolling() : startPolling()
+    }
+
+    function startPolling() {
+      if (
+        pollingInterval == null ||
+        pollingCanceled.value ||
+        pollingTimer != null ||
+        (deactivated && !pollingOnDeactivated) ||
+        (hidden && !pollingOnHidden)
+      ) {
+        return
+      }
+
+      pollingTimer = setTimeout(() => {
+        runWithInitialConfig()
+      }, pollingInterval)
+    }
+
+    function clearPolling() {
+      if (pollingTimer == null) {
+        return
+      }
+
+      clearTimeout(pollingTimer)
+      pollingTimer = null
+    }
+
+    function cancelPolling() {
+      clearPolling()
+      pollingCanceled.value = true
     }
 
     function invalidateCache() {

@@ -304,7 +304,7 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     // request runner/invoker
     getUsers,
     // extra properties
-    { loading, error, uploadProgress, downloadProgress, abort, resetValue },
+    { loading, error, uploadProgress, downloadProgress, abort, resetValue, invalidateCache, cancelPolling },
   ] = useAxle({
     // Request initial value
     value: [],
@@ -322,6 +322,12 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     // When set to true, use JSON.parse(JSON.stringify(value)) cloned
     // When set to a function, the set function will be used as the clone function, such as v => _.cloneDeep(v)
     cloneResetValue: true,
+    // Polling interval, in milliseconds. Passing this configuration enables request polling. The poller will start when the first request is sent.
+    pollingInterval: 1000,
+    // Whether to poll when the page is hidden, defaults true
+    pollingOnHidden: true,
+    // Whether to poll when the component is deactivated (keep-alive), defaults false
+    pollingOnDeactivated: false,
     // Request params, defaults {}, can be a getter function
     params: { current: 1, pageSize: 10 },
     // Axios config, see https://axios-http.com can be a getter function

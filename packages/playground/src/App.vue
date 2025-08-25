@@ -27,6 +27,13 @@ const [userForWatchConfig, getUserForWatchConfig] = apiGetUsers.use({
   watch: { config: true },
 })
 
+const [, getPollingUsers] = apiGetUsers.use({
+  pollingInterval: 1000,
+  onSuccess(response) {
+    console.log('polling users', response)
+  },
+})
+
 const [mockUsers, getMockUsers] = apiGetMockUsers.use()
 
 const [user, getUser] = apiGetUser.use<User>({
@@ -51,6 +58,10 @@ async function handleDelete() {
 function toggleRunnable() {
   runnable.value = !runnable.value
 }
+
+function togglePolling() {
+  getPollingUsers.pollingCanceled.value ? getPollingUsers() : getPollingUsers.cancelPolling()
+}
 </script>
 
 <template>
@@ -62,8 +73,13 @@ function toggleRunnable() {
 
       <var-cell>data: {{ users ?? 'No Data' }}</var-cell>
       <var-cell>
-        <var-button type="primary" @click="getUsers()">Load</var-button>
-        <var-button type="danger" @click="toggleRunnable()">Change Runnable</var-button>
+        <div style="display: flex; gap: 10px">
+          <var-button type="primary" @click="getUsers()">Load</var-button>
+          <var-button type="danger" @click="toggleRunnable()">Change Runnable</var-button>
+          <var-button type="danger" @click="togglePolling">
+            Polling Canceled: {{ getPollingUsers.pollingCanceled.value }}
+          </var-button>
+        </div>
       </var-cell>
 
       <var-cell>name: getMockUsers</var-cell>

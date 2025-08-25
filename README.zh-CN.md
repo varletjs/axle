@@ -304,7 +304,17 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     // 请求触发器
     getUsers,
     // 附加属性
-    { loading, error, uploadProgress, downloadProgress, abort, resetValue, invalidateCache, cancelPolling },
+    {
+      loading,
+      error,
+      uploadProgress,
+      downloadProgress,
+      cancelPolling,
+      abort,
+      resetValue,
+      invalidateCache,
+      cancelPolling,
+    },
   ] = useAxle({
     // 请求初始化数据
     value: [],

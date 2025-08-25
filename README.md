@@ -304,7 +304,17 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     // request runner/invoker
     getUsers,
     // extra properties
-    { loading, error, uploadProgress, downloadProgress, abort, resetValue, invalidateCache, cancelPolling },
+    {
+      loading,
+      error,
+      uploadProgress,
+      downloadProgress,
+      cancelPolling,
+      abort,
+      resetValue,
+      invalidateCache,
+      cancelPolling,
+    },
   ] = useAxle({
     // Request initial value
     value: [],

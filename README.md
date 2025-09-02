@@ -328,6 +328,13 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     abortOnUnmount: false,
     // Whether the value needs to be reset before requesting, defaults false
     resetValue: true,
+    // Automatically reload when reactive inputs change
+    // When set to true, watch all inputs (params, config, pathParams)
+    // When set to an object, watch specific inputs:
+    // - params: true - watch params changes
+    // - pathParams: true - watch pathParams changes (for API definitions)
+    // - config: true - watch config changes
+    watch: true,
     // Whether to clone when resetting value, defaults false
     // When set to true, use JSON.parse(JSON.stringify(value)) cloned
     // When set to a function, the set function will be used as the clone function, such as v => _.cloneDeep(v)

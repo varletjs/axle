@@ -367,7 +367,6 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           () => {
             runWithInitialConfig()
           },
-          { deep: true },
         )
       }
     }

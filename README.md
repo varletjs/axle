@@ -345,6 +345,8 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     pollingOnHidden: true,
     // Whether to poll when the component is deactivated (keep-alive), defaults false
     pollingOnDeactivated: false,
+    // Refresh the request when the window is focused, defaults false
+    refreshOnWindowFocus: false,
     // Request params, defaults {}, can be a getter function
     params: { current: 1, pageSize: 10 },
     // Axios config, see https://axios-http.com can be a getter function

@@ -345,6 +345,8 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     pollingOnHidden: true,
     // 组件失活（keep-alive）时是否轮询，默认 false
     pollingOnDeactivated: false,
+    // 窗口聚焦时是否刷新请求，默认值: false
+    refreshOnWindowFocus: false,
     // 请求参数, 默认值: {}, 可以是 getter 函数
     params: { current: 1, pageSize: 10 },
     // Axios 配置, see https://axios-http.com, 可以是 getter 函数

@@ -7,11 +7,11 @@
     "build": "pnpm --dir ./packages/axle build",
     "clean": "rimraf ./node_modules ./packages/*/node_modules",
     "dev": "pnpm --dir ./packages/axle dev",
-    "dev:play": "pnpm --dir ./packages/playground dev",
     "format": "prettier --write .",
     "preinstall": "npx only-allow pnpm",
     "postinstall": "simple-git-hooks",
     "lint": "eslint . --fix",
+    "play": "pnpm --dir ./packages/playground dev",
     "release": "pnpm build && vr release"
   },
   "simple-git-hooks": {

@@ -1,3 +1,17 @@
+# [0.13.0](https://github.com/varletjs/axle/compare/v0.12.0...v0.13.0) (2025-09-25)
+
+
+### Bug Fixes
+
+* remove deep watcher option ([#22](https://github.com/varletjs/axle/issues/22)) ([72c62ef](https://github.com/varletjs/axle/commit/72c62eff92679c8d90c47f2727486d39f4b592b5))
+
+
+### Features
+
+* refresh on window foucs ([#23](https://github.com/varletjs/axle/issues/23)) ([f92bb58](https://github.com/varletjs/axle/commit/f92bb58bddf01ef6998abaa6619139a5c0f3a82d))
+
+
+
 # [0.12.0](https://github.com/varletjs/axle/compare/v0.11.2...v0.12.0) (2025-08-27)
 
 

@@ -37,6 +37,7 @@ const [, getPollingUsers] = apiGetUsers.use({
 const [mockUsers, getMockUsers] = apiGetMockUsers.use()
 
 const [user, getUser] = apiGetUser.use<User>({
+  refreshOnWindowFocus: true,
   pathParams: () => ({ id: id.value }),
 })
 

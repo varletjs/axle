@@ -60,6 +60,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   pollingInterval?: number
   pollingOnHidden?: boolean
   pollingOnDeactivated?: boolean
+  refreshOnWindowFocus?: boolean
   params?: P | (() => P)
   onBefore?(refs: UseAxleRefs<V>): void
   onAfter?(refs: UseAxleRefs<V>): void
@@ -142,6 +143,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       pollingInterval,
       pollingOnHidden = true,
       pollingOnDeactivated = false,
+      refreshOnWindowFocus = false,
       value: initialValue,
       resetValue: initialResetValue,
       cloneResetValue: initialCloneResetValue,
@@ -328,21 +330,25 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       onActivated(() => {
         deactivated = false
         addVisibilityChangeListener()
+        addWindowFocusListener()
         startPolling()
       })
 
       onMounted(() => {
         addVisibilityChangeListener()
+        addWindowFocusListener()
       })
 
       onDeactivated(() => {
         deactivated = true
         removeVisibilityChangeListener()
+        removeWindowFocusListener()
         clearPolling()
       })
 
       onUnmounted(() => {
         removeVisibilityChangeListener()
+        removeWindowFocusListener()
         cancelPolling()
       })
 
@@ -392,6 +398,24 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     function abort() {
       controller.abort()
+    }
+
+    function addWindowFocusListener() {
+      if (typeof window !== 'undefined') {
+        window.addEventListener('focus', handleWindowFocus)
+      }
+    }
+
+    function removeWindowFocusListener() {
+      if (typeof window !== 'undefined') {
+        window.removeEventListener('focus', handleWindowFocus)
+      }
+    }
+
+    function handleWindowFocus() {
+      if (refreshOnWindowFocus) {
+        runWithInitialConfig()
+      }
     }
 
     function addVisibilityChangeListener() {

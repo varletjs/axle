@@ -191,9 +191,10 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     let pollingTimer: any = null
     let deactivated = false
     let hidden = false
+    let unmounted = false
 
     const run = Object.assign(async (options: RunOptions<V, P, D> = {}) => {
-      if (!runnable()) {
+      if (!runnable() || unmounted) {
         return
       }
 
@@ -352,11 +353,13 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         cancelPolling()
       })
 
-      if (abortOnUnmount) {
-        onUnmounted(() => {
+      onUnmounted(() => {
+        unmounted = true
+
+        if (abortOnUnmount) {
           abort()
-        })
-      }
+        }
+      })
 
       if (watchOptions) {
         const normalizedWatchOptions =

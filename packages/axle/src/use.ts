@@ -194,7 +194,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     let unmounted = false
 
     const run = Object.assign(async (options: RunOptions<V, P, D> = {}) => {
-      if (!runnable() || unmounted) {
+      if (!runnable() || (abortOnUnmount && unmounted)) {
         return
       }
 

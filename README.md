@@ -1,11 +1,11 @@
 <div align="center">
-  <a href="https://github.com/varletjs/axle">
+  <a href="https://axle.varletjs.org">
     <img src="https://raw.githubusercontent.com/varletjs/axle/main/packages/docs/public/logo.svg" width="150">
   </a>
   <h1>AXLE</h1>
   <p>Progressive request tool based on axios.</p>
   <p>
-    <a href="https://github.com/varletjs/axle">Documentation</a> |
+    <a href="https://axle.varletjs.org">Documentation</a> |
     <a href="https://github.com/varletjs/axle/blob/main/README.zh-CN.md">中文介绍</a>
   </p>
   <p>
@@ -56,4 +56,4 @@ axle.post('/url', { name: 'Axle' }, { headers: {} })
 
 ### Documentation
 
-For full documentation, please visit the [documentation site](https://github.com/varletjs/axle).
+For full documentation, please visit the [documentation site](https://axle.varletjs.org).

@@ -1,11 +1,11 @@
 <div align="center">
-  <a href="https://github.com/varletjs/axle">
+  <a href="https://axle.varletjs.org">
     <img src="https://raw.githubusercontent.com/varletjs/axle/main/packages/docs/public/logo.svg" width="150">
   </a>
   <h1>AXLE</h1>
   <p>基于 axios 的渐进式请求工具。</p>
   <p>
-    <a href="https://github.com/varletjs/axle">文档</a> |
+    <a href="https://axle.varletjs.org">文档</a> |
     <a href="https://github.com/varletjs/axle/blob/main/README.md">ENGLISH README</a>
   </p>
   <p>
@@ -56,4 +56,4 @@ axle.post('/url', { name: 'Axle' }, { headers: {} })
 
 ### 文档
 
-完整文档请访问[文档站](https://github.com/varletjs/axle)。
+完整文档请访问[文档站](https://axle.varletjs.org)。

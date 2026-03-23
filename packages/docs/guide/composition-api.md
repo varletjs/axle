@@ -87,7 +87,7 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
 
 ## Runner Enhancement
 
-Since `v0.10.0`, the `runner` will include all the extra properties, so we can further simplify the work.
+The `runner` includes all the extra properties, so we can further simplify the work.
 
 Before:
 

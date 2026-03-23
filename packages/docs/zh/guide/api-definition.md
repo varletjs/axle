@@ -1,6 +1,6 @@
 # API 定义增强
 
-从 `0.9.0` 开始支持 `createApi`，以增强 API 定义能力。
+使用 `createApi` 增强 API 定义能力。
 
 ## 定义 API
 

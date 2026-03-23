@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitepress'
-import { guideItems, guideItemsZh, interceptorItems } from './items'
+import { guideItems, guideItemsZh, interceptorItems, interceptorItemsZh } from './items'
 
 function withI18n(items: { link: string; text: string }[], locale: 'zh') {
   return items.map((item) => ({
@@ -35,7 +35,7 @@ export default defineConfig({
           },
           {
             text: '内置拦截器',
-            items: withI18n(interceptorItems, 'zh'),
+            items: withI18n(interceptorItemsZh, 'zh'),
           },
         ],
 
@@ -50,8 +50,8 @@ export default defineConfig({
   },
   markdown: {
     theme: {
-      light: 'vitesse-light',
-      dark: 'vitesse-dark',
+      light: 'catppuccin-latte',
+      dark: 'material-theme-palenight',
     },
   },
   themeConfig: {

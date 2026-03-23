@@ -24,3 +24,12 @@ export const interceptorItems = [
   { text: 'responseStatusInterceptor', link: '/interceptors/response-status-interceptor' },
   { text: 'responseBlobInterceptor', link: '/interceptors/response-blob-interceptor' },
 ]
+
+export const interceptorItemsZh = [
+  { text: '请求头拦截器', link: '/interceptors/request-headers-interceptor' },
+  { text: '数据模拟拦截器', link: '/interceptors/request-mock-interceptor' },
+  { text: 'MD5 拦截器', link: '/interceptors/request-md5-interceptor' },
+  { text: '请求重试拦截器', link: '/interceptors/response-retry-interceptor' },
+  { text: '状态码拦截器', link: '/interceptors/response-status-interceptor' },
+  { text: 'Blob 类型拦截器', link: '/interceptors/response-blob-interceptor' },
+]

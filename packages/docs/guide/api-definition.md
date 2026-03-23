@@ -1,6 +1,6 @@
 # API Definition
 
-`createApi` is supported since `v0.9.0`, which is used to define APIs.
+Use `createApi` to define APIs.
 
 ## Define APIs
 

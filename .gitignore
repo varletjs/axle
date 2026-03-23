@@ -15,3 +15,5 @@ cjs
 site
 auto-imports.d.ts
 components.d.ts
+packages/docs/.vitepress/cache
+packages/docs/.vitepress/dist

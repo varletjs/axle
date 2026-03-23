@@ -1,0 +1,29 @@
+# requestMd5Interceptor
+
+用于对请求参数进行 md5 处理。
+
+## 使用
+
+```js
+import { createAxle, requestMd5Interceptor } from '@varlet/axle'
+
+const axle = createAxle()
+
+axle.useRequestInterceptor(
+  requestMd5Interceptor({
+    mappings: [
+      {
+        url: '/user/login',
+        path: ['data.password'],
+      },
+      {
+        url: (url) => url === '/user/add-user',
+        method: 'post',
+        path: ['data.name'],
+      },
+    ],
+    include: ['method:post'],
+    exclude: [({ url }) => url.startsWith('/other/')],
+  }),
+)
+```

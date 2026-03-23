@@ -1,0 +1,14 @@
+{
+  "name": "@varlet/axle-docs",
+  "version": "0.13.2",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "vitepress build",
+    "dev": "vitepress dev",
+    "preview": "vitepress preview"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.4"
+  }
+}

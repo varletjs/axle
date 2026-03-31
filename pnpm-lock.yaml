@@ -50,7 +50,7 @@ importers:
   packages/axle:
     dependencies:
       axios:
-        specifier: ^1.7.3
+        specifier: 1.7.3
         version: 1.7.3
       crypto-js:
         specifier: ^4.2.0

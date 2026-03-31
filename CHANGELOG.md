@@ -1,3 +1,12 @@
+## [1.0.1](https://github.com/varletjs/axle/compare/v1.0.0...v1.0.1) (2026-03-31)
+
+
+### Bug Fixes
+
+* update axios dependency version to remove caret ([d2a2843](https://github.com/varletjs/axle/commit/d2a2843e5f82e8ab322d1639ca513b9db021ca5d))
+
+
+
 # [1.0.0](https://github.com/varletjs/axle/compare/v0.13.2...v1.0.0) (2026-03-23)
 
 

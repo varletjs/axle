@@ -3,71 +3,71 @@
   "version": "1.0.1",
   "description": "Progressive request tool based on axios",
   "keywords": [
-    "axle",
     "axios",
+    "axle",
+    "composition api",
     "helpers",
-    "vue3",
-    "composition api"
+    "vue3"
   ],
   "bugs": {
     "url": "https://github.com/varletjs/axle/issues"
   },
+  "license": "MIT",
+  "author": "haoziqaq <357229046@qq.com>",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/varletjs/axle.git"
   },
-  "license": "MIT",
-  "author": "haoziqaq <357229046@qq.com>",
-  "sideEffects": false,
+  "files": [
+    "dist"
+  ],
   "type": "module",
-  "exports": {
-    ".": {
-      "import": "./lib/index.js",
-      "require": "./lib/index.cjs",
-      "types": "./lib/index.d.ts"
-    },
-    "./use": {
-      "import": "./lib/use.js",
-      "require": "./lib/use.cjs",
-      "types": "./lib/use.d.ts"
-    },
-    "./api": {
-      "import": "./lib/api.js",
-      "require": "./lib/api.cjs",
-      "types": "./lib/api.d.ts"
-    },
-    "./*": "./*"
-  },
-  "main": "lib/index.cjs",
-  "module": "lib/index.js",
-  "types": "index.d.ts",
+  "sideEffects": false,
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
   "typesVersions": {
     "*": {
-      "*": [
-        "./lib/*"
+      "use": [
+        "dist/use.d.mts"
+      ],
+      "api": [
+        "dist/api.d.mts"
       ]
     }
   },
-  "files": [
-    "lib"
-  ],
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./use": {
+      "types": "./dist/use.d.mts",
+      "import": "./dist/use.mjs"
+    },
+    "./api": {
+      "types": "./dist/api.d.mts",
+      "import": "./dist/api.mjs"
+    },
+    "./*": "./*"
+  },
   "scripts": {
-    "build": "tsup src/index.ts src/use.ts src/api.ts --format esm,cjs --out-dir=lib --dts --clean",
-    "dev": "tsup src/index.ts src/use.ts src/api.ts --format esm --out-dir=lib --watch --dts"
+    "build": "vp pack",
+    "dev": "vp pack --watch"
   },
   "dependencies": {
     "axios": "1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",
     "qs": "^6.11.0",
-    "rattail": "1.0.0"
+    "rattail": "^1.8.1"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.1",
     "@types/lodash": "4.14.202",
     "@types/qs": "^6.9.7",
-    "tsup": "7.2.0",
     "typescript": "^5.1.5",
+    "vite-plus": "^0.1.16",
     "vue": "3.3.4"
   },
   "peerDependencies": {

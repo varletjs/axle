@@ -1,0 +1,1 @@
+pnpm exec vr commit-lint -p $1

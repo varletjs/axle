@@ -10,45 +10,21 @@
     "docs:build": "pnpm --dir ./packages/docs build",
     "docs:dev": "pnpm --dir ./packages/docs dev",
     "docs:preview": "pnpm --dir ./packages/docs preview",
-    "format": "prettier --write .",
+    "lint": "vp lint --fix",
+    "format": "vp fmt",
     "preinstall": "npx only-allow pnpm",
-    "postinstall": "simple-git-hooks",
-    "lint": "eslint . --fix",
-    "play": "pnpm --dir ./packages/playground dev",
+    "prepare": "vp config --hooks-dir .vite-hooks",
     "release": "pnpm build && vr release"
   },
-  "simple-git-hooks": {
-    "pre-commit": "pnpm exec nano-staged --allow-empty --concurrent false",
-    "commit-msg": "pnpm exec vr commit-lint -p $1"
-  },
-  "nano-staged": {
-    "*.{vue,ts,tsx,js,jsx,less,css}": "pnpm format",
-    "*.{vue,ts,tsx,js,jsx}": "pnpm lint"
-  },
   "devDependencies": {
-    "@configurajs/eslint": "^0.1.0",
-    "@configurajs/prettier": "^0.1.2",
-    "@varlet/eslint-config": "^2.19.2",
-    "@varlet/release": "^0.3.1",
-    "eslint": "^9.18.0",
-    "nano-staged": "0.8.0",
-    "prettier": "^3.4.2",
+    "@varlet/release": "^1.1.0",
+    "rattail": "^1.8.1",
     "rimraf": "^5.0.1",
-    "simple-git-hooks": "^2.8.1",
-    "typescript": "^5.1.5"
+    "typescript": "5.3.3",
+    "vite-plus": "^0.1.16"
   },
-  "packageManager": "pnpm@9.1.1",
   "engines": {
-    "pnpm": ">=9.0"
+    "pnpm": ">=10.0.0"
   },
-  "pnpm": {
-    "overrides": {
-      "array-includes": "npm:@nolyfill/array-includes@latest",
-      "array.prototype.flat": "npm:@nolyfill/array.prototype.flat@latest",
-      "array.prototype.flatmap": "npm:@nolyfill/array.prototype.flatmap@latest",
-      "object.assign": "npm:@nolyfill/object.assign@latest",
-      "object.entries": "npm:@nolyfill/object.entries@latest",
-      "object.values": "npm:@nolyfill/object.values@latest"
-    }
-  }
+  "packageManager": "pnpm@10.0.0"
 }

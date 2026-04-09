@@ -1,5 +1,5 @@
-import { getCurrentInstance, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import { isFunction } from 'rattail'
+import { getCurrentInstance, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
 
 export type Runnable = () => boolean

@@ -9,9 +9,8 @@ node_modules
 *.vsix
 package-lock.json
 
-lib
+dist
 es
-cjs
 site
 auto-imports.d.ts
 components.d.ts

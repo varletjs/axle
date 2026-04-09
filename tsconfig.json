@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
+    "target": "es2020",
     "strict": true,
-    "baseUrl": ".",
-    "downlevelIteration": true,
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
-    "moduleResolution": "node",
-    "target": "ES2017",
+    "resolveJsonModule": true,
+    "jsx": "preserve",
     "lib": ["esnext", "dom"],
-    "allowSyntheticDefaultImports": true,
-    "jsx": "preserve"
+    "module": "esnext",
+    "moduleResolution": "bundler"
   }
 }

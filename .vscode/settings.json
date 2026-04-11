@@ -1,0 +1,5 @@
+{
+  "prettier.enable": false,
+  "eslint.enable": false,
+  "editor.defaultFormatter": "oxc.oxc-vscode"
+}

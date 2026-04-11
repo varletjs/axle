@@ -1,27 +1,88 @@
 {
+  "name": "@varlet/axle",
   "version": "1.0.2",
-  "private": true,
+  "description": "Progressive request tool based on axios",
+  "keywords": [
+    "axios",
+    "axle",
+    "composition api",
+    "helpers",
+    "vue3"
+  ],
+  "bugs": {
+    "url": "https://github.com/varletjs/axle/issues"
+  },
+  "license": "MIT",
+  "author": "haoziqaq <357229046@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varletjs/axle.git"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
+  "sideEffects": false,
+  "main": "dist/index.mjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.mts",
+  "typesVersions": {
+    "*": {
+      "use": [
+        "dist/use.d.mts"
+      ],
+      "api": [
+        "dist/api.d.mts"
+      ]
+    }
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./use": {
+      "types": "./dist/use.d.mts",
+      "import": "./dist/use.mjs"
+    },
+    "./api": {
+      "types": "./dist/api.d.mts",
+      "import": "./dist/api.mjs"
+    },
+    "./*": "./*"
+  },
   "scripts": {
-    "bootstrap": "pnpm i && pnpm build",
-    "build": "pnpm --dir ./packages/axle build",
-    "clean": "rimraf ./node_modules ./packages/*/node_modules",
-    "dev": "pnpm --dir ./packages/axle dev",
-    "docs:build": "pnpm --dir ./packages/docs build",
-    "docs:dev": "pnpm --dir ./packages/docs dev",
-    "docs:preview": "pnpm --dir ./packages/docs preview",
+    "build": "vp pack",
+    "clean": "rimraf node_modules dist",
+    "dev": "vp pack --watch",
+    "docs:build": "vitepress build docs",
+    "docs:dev": "vitepress dev docs",
+    "docs:preview": "vitepress preview docs",
     "lint": "vp lint --fix",
     "format": "vp fmt",
-    "preinstall": "npx only-allow pnpm",
     "prepare": "vp config --hooks-dir .vite-hooks",
     "release": "pnpm build && vr release"
   },
+  "dependencies": {
+    "axios": "1.7.3",
+    "crypto-js": "^4.2.0",
+    "lodash": "4.17.21",
+    "qs": "^6.11.0",
+    "rattail": "^1.8.3"
+  },
   "devDependencies": {
+    "@types/crypto-js": "^4.2.1",
+    "@types/lodash": "4.14.202",
+    "@types/qs": "^6.9.7",
     "@varlet/release": "^1.1.0",
-    "rattail": "^1.8.1",
     "rimraf": "^5.0.1",
     "typescript": "5.3.3",
-    "vite-plus": "^0.1.16"
+    "vite-plus": "0.1.16",
+    "vitepress": "2.0.0-alpha.17",
+    "vue": "3.5.32"
+  },
+  "peerDependencies": {
+    "vue": "^3.2.0"
   },
   "engines": {
     "pnpm": ">=10.0.0"

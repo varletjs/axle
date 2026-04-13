@@ -75,6 +75,7 @@
     "@types/lodash": "4.14.202",
     "@types/qs": "^6.9.7",
     "@varlet/release": "^1.1.0",
+    "oxc-minify": "^0.125.0",
     "rimraf": "^5.0.1",
     "typescript": "5.3.3",
     "vite-plus": "0.1.16",
@@ -87,5 +88,11 @@
   "engines": {
     "pnpm": ">=10.0.0"
   },
-  "packageManager": "pnpm@10.0.0"
+  "packageManager": "pnpm@10.0.0",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.16",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.16"
+    }
+  }
 }

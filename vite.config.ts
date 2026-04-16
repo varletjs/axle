@@ -1,5 +1,4 @@
-import { lint, fmt, staged } from 'rattail/vite-plus'
-import { defineConfig } from 'vite-plus'
+import { defineConfig, lint, fmt, staged, clean, hook } from 'rattail/vite-plus'
 
 export default defineConfig({
   pack: {
@@ -12,4 +11,10 @@ export default defineConfig({
   fmt: fmt(),
 
   staged: staged(),
+
+  rattail: {
+    clean: clean(),
+
+    hook: hook(),
+  },
 })

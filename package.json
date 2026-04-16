@@ -53,32 +53,30 @@
   },
   "scripts": {
     "build": "vp pack",
-    "clean": "rimraf node_modules dist",
+    "clean": "rt clean",
     "dev": "vp pack --watch",
     "docs:build": "vitepress build docs",
     "docs:dev": "vitepress dev docs",
     "docs:preview": "vitepress preview docs",
     "lint": "vp lint --fix",
     "format": "vp fmt",
-    "prepare": "vp config --hooks-dir .vite-hooks",
-    "release": "pnpm build && vr release"
+    "prepare": "vp config --hooks-dir .vite-hooks && rt hook",
+    "release": "pnpm build && rt release"
   },
   "dependencies": {
     "axios": "1.7.3",
     "crypto-js": "^4.2.0",
     "lodash": "4.17.21",
     "qs": "^6.11.0",
-    "rattail": "^1.8.3"
+    "rattail": "^2.0.3"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.1",
     "@types/lodash": "4.14.202",
     "@types/qs": "^6.9.7",
-    "@varlet/release": "^1.1.0",
     "oxc-minify": "^0.125.0",
-    "rimraf": "^5.0.1",
     "typescript": "5.3.3",
-    "vite-plus": "0.1.16",
+    "vite-plus": "0.1.18",
     "vitepress": "2.0.0-alpha.17",
     "vue": "3.5.32"
   },
@@ -91,8 +89,8 @@
   "packageManager": "pnpm@10.0.0",
   "pnpm": {
     "overrides": {
-      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.16",
-      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.16"
+      "vite": "npm:@voidzero-dev/vite-plus-core@0.1.18",
+      "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.18"
     }
   }
 }

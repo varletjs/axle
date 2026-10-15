@@ -1,3 +1,23 @@
+# [1.1.0](https://github.com/varletjs/axle/compare/v1.0.2...v1.1.0) (2026-10-15)
+
+
+### Bug Fixes
+
+* add TypeScript error suppression for custom CSS import ([abe9026](https://github.com/varletjs/axle/commit/abe90264a218039510eba95f5f5399cbeeb77684))
+
+
+### Features
+
+* add abortPrevious and pollingSilent options to useAxle ([f2f0c44](https://github.com/varletjs/axle/commit/f2f0c4412486d1bc182dcad45910276c77ac4c37))
+* add response interceptors for retry and status handling ([5f6ce03](https://github.com/varletjs/axle/commit/5f6ce038210be3ae320fccd8dc8c952a19036001))
+* add silent run and polling features to useAxle ([414a56b](https://github.com/varletjs/axle/commit/414a56bad0f8301adc35ea2cee235aed7407c113))
+* enhance Vite configuration with Rattail features ([c2cc5a3](https://github.com/varletjs/axle/commit/c2cc5a37fd518595d3c91cc9deabc98e38a6630d))
+
+
+### Refactoring
+
+* refactor code structure for improved readability and maintainability ([0ce008d](https://github.com/varletjs/axle/commit/0ce008dde25ed9614b8a673cd1f45f2816f6c827))
+
 ## [1.0.2](https://github.com/varletjs/axle/compare/v1.0.1...v1.0.2) (2026-04-09)
 
 ## [1.0.1](https://github.com/varletjs/axle/compare/v1.0.0...v1.0.1) (2026-03-31)
@@ -48,12 +68,6 @@
 # [0.12.0](https://github.com/varletjs/axle/compare/v0.11.2...v0.12.0) (2025-08-27)
 
 
-### Code Refactoring
-
-* cleanup code ([6a1dd49](https://github.com/varletjs/axle/commit/6a1dd4916682e4366efafafc2f0c40c6552ba27e))
-* remove minimatch for reduce package size and refactor match api (include and exclude) ([8468cdf](https://github.com/varletjs/axle/commit/8468cdf1f0bcee39010310b18ba9fec39667d489))
-
-
 ### Features
 
 * add watch api ([#20](https://github.com/varletjs/axle/issues/20)) ([4229f10](https://github.com/varletjs/axle/commit/4229f10a5438dee8354e48f74d1d79dce4143985))
@@ -61,6 +75,12 @@
 * support cache ([#19](https://github.com/varletjs/axle/issues/19)) ([24a5330](https://github.com/varletjs/axle/commit/24a5330b7dea033ee6e0a6178471702a68427262))
 * support polling ([2ccf2ef](https://github.com/varletjs/axle/commit/2ccf2ef7e6b8394ffb26cd0f42e89b0d5f52f846))
 * support runnable option to control request execution ([#21](https://github.com/varletjs/axle/issues/21)) ([f71e37d](https://github.com/varletjs/axle/commit/f71e37d18a3826e84dbf8cdd985c30aabf0c3121))
+
+
+### Refactoring
+
+* cleanup code ([6a1dd49](https://github.com/varletjs/axle/commit/6a1dd4916682e4366efafafc2f0c40c6552ba27e))
+* remove minimatch for reduce package size and refactor match api (include and exclude) ([8468cdf](https://github.com/varletjs/axle/commit/8468cdf1f0bcee39010310b18ba9fec39667d489))
 
 ## [0.11.2](https://github.com/varletjs/axle/compare/v0.11.1...v0.11.2) (2025-07-05)
 
@@ -128,7 +148,7 @@
 ## [0.9.1](https://github.com/varletjs/axle/compare/v0.9.0...v0.9.1) (2024-11-08)
 
 
-### Code Refactoring
+### Refactoring
 
 * replace shared with rattail ([9fff7f7](https://github.com/varletjs/axle/commit/9fff7f79bd014af542bb4f1516cb5b430175a2b2))
 
@@ -140,14 +160,14 @@
 * createUseAxle immediate option default value changed to true
 
 
-### Code Refactoring
-
-* adjust import path ([3f8d0b1](https://github.com/varletjs/axle/commit/3f8d0b1adaa6d9d0cbe5cb8d503da9be6a80b98a))
-
-
 ### Features
 
 * support create api ([018e7c6](https://github.com/varletjs/axle/commit/018e7c6fff34b6c8dda355775076189d62c5eb4c))
+
+
+### Refactoring
+
+* adjust import path ([3f8d0b1](https://github.com/varletjs/axle/commit/3f8d0b1adaa6d9d0cbe5cb8d503da9be6a80b98a))
 
 # [0.8.0](https://github.com/varletjs/axle/compare/v0.7.1...v0.8.0) (2024-08-07)
 
@@ -161,14 +181,14 @@
 # [0.7.0](https://github.com/varletjs/axle/compare/v0.6.0...v0.7.0) (2024-04-23)
 
 
-### Code Refactoring
-
-* refactor withResponse api ([177bd5d](https://github.com/varletjs/axle/commit/177bd5d585aa77b10edcedd18cc6e22f425f3f4d))
-
-
 ### Features
 
 * add function withResponse ([#16](https://github.com/varletjs/axle/issues/16)) ([7bd290b](https://github.com/varletjs/axle/commit/7bd290ba7244feebad4f5ee42a5574e66f49589c))
+
+
+### Refactoring
+
+* refactor withResponse api ([177bd5d](https://github.com/varletjs/axle/commit/177bd5d585aa77b10edcedd18cc6e22f425f3f4d))
 
 # [0.6.0](https://github.com/varletjs/axle/compare/v0.5.2...v0.6.0) (2024-01-06)
 
@@ -234,7 +254,7 @@
 ## [0.3.2](https://github.com/varletjs/axle/compare/v0.3.1...v0.3.2) (2023-12-19)
 
 
-### Code Refactoring
+### Refactoring
 
 * lightweight md5 ([ce40d60](https://github.com/varletjs/axle/commit/ce40d607d20f7efc918bdadd8908d46b7c112b38))
 
@@ -254,15 +274,15 @@
 requestMd5Interceptor, requestMockInterceptor
 
 
-### Code Refactoring
-
-* refactor mapping option to mappings ([ccaf7f5](https://github.com/varletjs/axle/commit/ccaf7f53f843e5a7b5fe68cd3ee0221f0e767140))
-
-
 ### Features
 
 * **requestMd5Interceptor:** support path overload ([19acb60](https://github.com/varletjs/axle/commit/19acb604dc4c43398a8fed9c88a80dd92a2d4776))
 * **requestMockInterceptor:** support handler overload ([9b2ccaa](https://github.com/varletjs/axle/commit/9b2ccaaf4a9a3531d886d8a6fd9690f5376c4cb5))
+
+
+### Refactoring
+
+* refactor mapping option to mappings ([ccaf7f5](https://github.com/varletjs/axle/commit/ccaf7f53f843e5a7b5fe68cd3ee0221f0e767140))
 
 ## [0.2.18](https://github.com/varletjs/axle/compare/v0.2.17...v0.2.18) (2023-12-15)
 
@@ -279,7 +299,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.2.17](https://github.com/varletjs/axle/compare/v0.2.16...v0.2.17) (2023-12-09)
 
 
-### Code Refactoring
+### Refactoring
 
 * refactor to monorepo ([a923af0](https://github.com/varletjs/axle/commit/a923af0a4d2a1d40eaefbeb3257de2174ac121d6))
 
@@ -314,14 +334,14 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.2.12](https://github.com/varletjs/axle/compare/v0.2.11...v0.2.12) (2023-12-07)
 
 
-### Code Refactoring
-
-* refactor responseStatusInterceptor ([be3e9cd](https://github.com/varletjs/axle/commit/be3e9cdc4a5ea42b24cbb6f772bb55e021c5a29f))
-
-
 ### Features
 
 * support responseStatusInterceptor ([#8](https://github.com/varletjs/axle/issues/8)) ([04f3778](https://github.com/varletjs/axle/commit/04f37781ca8fbbc088cec9ea2f22982757077f1f))
+
+
+### Refactoring
+
+* refactor responseStatusInterceptor ([be3e9cd](https://github.com/varletjs/axle/commit/be3e9cdc4a5ea42b24cbb6f772bb55e021c5a29f))
 
 ## [0.2.11](https://github.com/varletjs/axle/compare/v0.2.10...v0.2.11) (2023-12-06)
 
@@ -333,7 +353,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.2.10](https://github.com/varletjs/axle/compare/v0.2.9...v0.2.10) (2023-12-03)
 
 
-### Code Refactoring
+### Refactoring
 
 * optimize code ([affeac6](https://github.com/varletjs/axle/commit/affeac659912a1d7ec22e2b2a33afb4360ad8040))
 
@@ -414,7 +434,7 @@ requestMd5Interceptor, requestMockInterceptor
 # [0.2.0](https://github.com/varletjs/axle/compare/v0.1.2...v0.2.0) (2023-09-12)
 
 
-### Code Refactoring
+### Refactoring
 
 * break some api and types ([c11d0c1](https://github.com/varletjs/axle/commit/c11d0c104baf00b57bae4da5679e6a85ba5b7eb0))
 
@@ -470,7 +490,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.22](https://github.com/varletjs/axle/compare/v0.0.21...v0.0.22) (2023-07-05)
 
 
-### Code Refactoring
+### Refactoring
 
 * refactor options ([07274c7](https://github.com/varletjs/axle/commit/07274c7dbc49bf59455dac5835d8b39de0ce20ee))
 
@@ -485,21 +505,21 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.17](https://github.com/varletjs/axle/compare/v0.0.16...v0.0.17) (2023-07-04)
 
 
-### Code Refactoring
+### Refactoring
 
 * add generic default ([043020b](https://github.com/varletjs/axle/commit/043020ba585f7776382020212b1337a6ee82f58d))
 
 ## [0.0.16](https://github.com/varletjs/axle/compare/v0.0.15...v0.0.16) (2023-07-04)
 
 
-### Code Refactoring
+### Refactoring
 
 * wip ([93bb843](https://github.com/varletjs/axle/commit/93bb8439b7fbab9bcb9c2692b6905f77149e0ed0))
 
 ## [0.0.15](https://github.com/varletjs/axle/compare/v0.0.14...v0.0.15) (2023-07-03)
 
 
-### Code Refactoring
+### Refactoring
 
 * immediate default value to false ([3380723](https://github.com/varletjs/axle/commit/3380723267f07637ca8ed724734d1b6f28da03d3))
 
@@ -513,7 +533,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.13](https://github.com/varletjs/axle/compare/v0.0.12...v0.0.13) (2023-07-03)
 
 
-### Code Refactoring
+### Refactoring
 
 * refactor run return value ([1a50d94](https://github.com/varletjs/axle/commit/1a50d942f4b408e37e054ded92a1d23e0e4d8af0))
 
@@ -527,7 +547,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.11](https://github.com/varletjs/axle/compare/v0.0.10...v0.0.11) (2023-07-03)
 
 
-### Code Refactoring
+### Refactoring
 
 * fix playground ([f1fd433](https://github.com/varletjs/axle/commit/f1fd433291754c5d9bf9bd35e4d444bfe3dbda98))
 
@@ -541,7 +561,7 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.9](https://github.com/varletjs/axle/compare/v0.0.8...v0.0.9) (2023-06-29)
 
 
-### Code Refactoring
+### Refactoring
 
 * clean structure ([24ad6e2](https://github.com/varletjs/axle/commit/24ad6e2bbc6809385f59fb68ca15395004fbc64a))
 
@@ -550,21 +570,21 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.7](https://github.com/varletjs/axle/compare/v0.0.6...v0.0.7) (2023-06-19)
 
 
-### Code Refactoring
+### Refactoring
 
 * standard import path ([e6291f6](https://github.com/varletjs/axle/commit/e6291f62bfd6ce4b9a9014776345343f251ac5ee))
 
 ## [0.0.6](https://github.com/varletjs/axle/compare/v0.0.5...v0.0.6) (2023-06-19)
 
 
-### Code Refactoring
+### Refactoring
 
 * patch ext ([7e2e197](https://github.com/varletjs/axle/commit/7e2e197c43e269df78fb7c4a2fc518b5c5346a12))
 
 ## [0.0.5](https://github.com/varletjs/axle/compare/v0.0.4...v0.0.5) (2023-06-02)
 
 
-### Code Refactoring
+### Refactoring
 
 * remove _t ([bd1075e](https://github.com/varletjs/axle/commit/bd1075e7a5dde4a8807dcea638d614b82f7485e5))
 
@@ -576,15 +596,15 @@ requestMd5Interceptor, requestMockInterceptor
 * fix config ([04f3a48](https://github.com/varletjs/axle/commit/04f3a4832ae6ce3950bf34898ce712119d342db4))
 
 
-### Code Refactoring
-
-* optimize api gen ([c4b8779](https://github.com/varletjs/axle/commit/c4b8779b2e7a5fa0dc18830e08760f7951a66b56))
-* optimize code and fix docs ([fee83ca](https://github.com/varletjs/axle/commit/fee83cade409f0b68c1129e9416c67d5e2de1202))
-
-
 ### Features
 
 * support useAxleHelper ([477d9fc](https://github.com/varletjs/axle/commit/477d9fcce5de8837072bfa31c4b9f906ce0327f6))
+
+
+### Refactoring
+
+* optimize api gen ([c4b8779](https://github.com/varletjs/axle/commit/c4b8779b2e7a5fa0dc18830e08760f7951a66b56))
+* optimize code and fix docs ([fee83ca](https://github.com/varletjs/axle/commit/fee83cade409f0b68c1129e9416c67d5e2de1202))
 
 ## [0.0.3](https://github.com/varletjs/axle/compare/v0.0.2...v0.0.3) (2022-06-30)
 
@@ -598,12 +618,11 @@ requestMd5Interceptor, requestMockInterceptor
 ## [0.0.1](https://github.com/varletjs/axle/compare/cb1ecbda73212fd99a269f4f8dee2de5c354fc3f...v0.0.1) (2022-03-27)
 
 
-### Code Refactoring
-
-* change workflows & README.md ([0cf95cd](https://github.com/varletjs/axle/commit/0cf95cd70ede024d1c955021ac5304e165c8a228))
-
-
 ### Features
 
 * finish axle develop ([cb1ecbd](https://github.com/varletjs/axle/commit/cb1ecbda73212fd99a269f4f8dee2de5c354fc3f))
 
+
+### Refactoring
+
+* change workflows & README.md ([0cf95cd](https://github.com/varletjs/axle/commit/0cf95cd70ede024d1c955021ac5304e165c8a228))

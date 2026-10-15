@@ -134,3 +134,25 @@ After:
   <button @click="getPosts">Send Request</button>
 </template>
 ```
+
+## Silent Run
+
+Pass `silent: true` to refresh data without setting `loading`, e.g. for background refreshes.
+
+```js
+getUsers({ silent: true })
+```
+
+## Polling
+
+With `pollingInterval`, every finished run schedules another run after the interval. Runs triggered by polling don't set `loading`.
+
+`pollingInterval` can also be a getter that returns the interval. Returning `null` or `undefined` stops polling. When the reactive data read by the getter changes, the next poll is rescheduled.
+
+```js
+const [task, getTask] = useAxle({
+  method: 'get',
+  url: '/task',
+  pollingInterval: () => (task.value?.status === 'pending' ? 2000 : null),
+})
+```

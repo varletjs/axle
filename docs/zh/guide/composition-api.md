@@ -133,3 +133,25 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
   <button @click="getPosts">Send Request</button>
 </template>
 ```
+
+## 静默请求
+
+传入 `silent: true` 时不设置 `loading`，适用于后台刷新等场景。
+
+```js
+getUsers({ silent: true })
+```
+
+## 轮询
+
+设置 `pollingInterval` 后，每次请求结束都会在间隔后再次请求。轮询发起的请求不设置 `loading`。
+
+`pollingInterval` 也可以是返回间隔的 getter 函数，返回 `null` 或 `undefined` 时停止轮询。getter 依赖的响应式数据变化时会重新安排下一次轮询。
+
+```js
+const [task, getTask] = useAxle({
+  method: 'get',
+  url: '/task',
+  pollingInterval: () => (task.value?.status === 'pending' ? 2000 : null),
+})
+```

@@ -61,7 +61,8 @@
     "lint": "vp lint --fix",
     "format": "vp fmt",
     "prepare": "vp config --hooks-dir .vite-hooks && rt hook",
-    "release": "pnpm build && rt release"
+    "release": "pnpm build && rt release",
+    "test": "vp test run"
   },
   "dependencies": {
     "axios": "1.7.3",

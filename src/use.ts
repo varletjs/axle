@@ -1,3 +1,4 @@
+import { isCancel } from 'axios'
 import { isFunction } from 'rattail'
 import { getCurrentInstance, onActivated, onDeactivated, onMounted, onUnmounted, ref, watch, type Ref } from 'vue'
 import { type AxleInstance, type AxleRequestConfig, type RunnerMethod } from './instance'
@@ -10,6 +11,7 @@ export interface RunOptions<V, P, D> {
   config?: AxleRequestConfig<D>
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
+  silent?: boolean
 }
 
 export type UseAxleExtra<V> = {
@@ -57,7 +59,7 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   watch?: WatchOptions
-  pollingInterval?: number
+  pollingInterval?: number | (() => number | null | undefined)
   pollingOnHidden?: boolean
   pollingOnDeactivated?: boolean
   refreshOnWindowFocus?: boolean
@@ -188,7 +190,10 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     }
 
     let controller = new AbortController()
+    let latestRunId = 0
+    let cachedRequest: { key: string; promise: Promise<any> } | undefined
     let pollingTimer: any = null
+    let running = false
     let deactivated = false
     let hidden = false
     let unmounted = false
@@ -198,11 +203,17 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         return
       }
 
-      pollingCanceled.value = false
-
-      if (controller.signal.aborted) {
-        controller = new AbortController()
+      if (!isCachedRequestPending()) {
+        controller.abort()
       }
+
+      cachedRequest = undefined
+
+      const runId = ++latestRunId
+      const runController = new AbortController()
+      controller = runController
+      running = true
+      pollingCanceled.value = false
 
       const resetValueOption = options.resetValue ?? initialResetValue ?? false
       if (resetValueOption === true) {
@@ -219,7 +230,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
       onBefore(refs)
 
-      loading.value = true
+      loading.value = !options.silent
 
       try {
         cleanupCacheBuffer()
@@ -231,7 +242,17 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           cache.expiredTime = Date.now() + cacheTime
         }
 
-        value.value = await onTransform(response, refs)
+        if (!isLatestRun()) {
+          return response
+        }
+
+        const transformedValue = await onTransform(response, refs)
+
+        if (!isLatestRun()) {
+          return response
+        }
+
+        value.value = transformedValue
         error.value = undefined
         onSuccess(response, refs)
         loading.value = false
@@ -239,6 +260,10 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
         return response
       } catch (responseError: any) {
+        if (!isLatestRun()) {
+          throw responseError
+        }
+
         error.value = responseError as Error
         onError(responseError as Error, refs)
         loading.value = false
@@ -246,8 +271,15 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
         throw responseError
       } finally {
-        clearPolling()
-        startPolling()
+        if (isLatestRun()) {
+          running = false
+          clearPolling()
+          startPolling()
+        }
+      }
+
+      function isLatestRun() {
+        return runId === latestRunId
       }
 
       function getResponse() {
@@ -263,6 +295,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
         if (shouldSetCachePromise(normalizedCacheKey)) {
           cacheBuffer.set(normalizedCacheKey!, { promise })
+          cachedRequest = { key: normalizedCacheKey!, promise }
         }
 
         return promise
@@ -270,14 +303,18 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
       function fetchResponse() {
         return axle[method](url, params, {
-          signal: controller.signal,
+          signal: runController.signal,
 
           onUploadProgress(event) {
-            uploadProgress.value = event.progress ?? 0
+            if (isLatestRun()) {
+              uploadProgress.value = event.progress ?? 0
+            }
           },
 
           onDownloadProgress(event) {
-            downloadProgress.value = event.progress ?? 0
+            if (isLatestRun()) {
+              downloadProgress.value = event.progress ?? 0
+            }
           },
 
           ...config,
@@ -378,13 +415,27 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           },
         )
       }
+
+      if (isFunction(pollingInterval)) {
+        watch(pollingInterval, () => {
+          clearPolling()
+          startPolling()
+        })
+      }
     }
 
-    function runWithInitialConfig() {
+    function runWithInitialConfig({ silent = false }: { silent?: boolean } = {}) {
       return run({
         url: normalizeValueGetter(initialUrlOrGetter),
         params: normalizeValueGetter(initialParamsOrGetter),
         config: normalizeValueGetter(initialConfigOrGetter),
+        silent,
+      }).catch((runError) => {
+        if (isCancel(runError)) {
+          return
+        }
+
+        throw runError
       })
     }
 
@@ -401,6 +452,22 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     function abort() {
       controller.abort()
+
+      if (isCachedRequestPending()) {
+        cacheBuffer.delete(cachedRequest!.key)
+      }
+
+      cachedRequest = undefined
+    }
+
+    function isCachedRequestPending() {
+      if (!cachedRequest) {
+        return false
+      }
+
+      const buffer = cacheBuffer.get(cachedRequest.key)
+
+      return buffer?.promise === cachedRequest.promise && buffer.response == null
     }
 
     function addWindowFocusListener() {
@@ -444,8 +511,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     }
 
     function startPolling() {
+      const interval = normalizeValueGetter(pollingInterval)
+
       if (
-        pollingInterval == null ||
+        interval == null ||
+        running ||
         pollingCanceled.value ||
         pollingTimer != null ||
         (deactivated && !pollingOnDeactivated) ||
@@ -455,8 +525,9 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       }
 
       pollingTimer = setTimeout(() => {
-        runWithInitialConfig()
-      }, pollingInterval)
+        pollingTimer = null
+        runWithInitialConfig({ silent: true })
+      }, interval)
     }
 
     function clearPolling() {

@@ -1,4 +1,4 @@
-# [1.1.0](https://github.com/varletjs/axle/compare/v1.0.2...v1.1.0) (2026-10-15)
+## [1.1.1](https://github.com/varletjs/axle/compare/v1.1.0...v1.1.1) (2026-10-15)
 
 
 ### Bug Fixes
@@ -11,6 +11,7 @@
 * add abortPrevious and pollingSilent options to useAxle ([f2f0c44](https://github.com/varletjs/axle/commit/f2f0c4412486d1bc182dcad45910276c77ac4c37))
 * add response interceptors for retry and status handling ([5f6ce03](https://github.com/varletjs/axle/commit/5f6ce038210be3ae320fccd8dc8c952a19036001))
 * add silent run and polling features to useAxle ([414a56b](https://github.com/varletjs/axle/commit/414a56bad0f8301adc35ea2cee235aed7407c113))
+* enhance createUseAxle to manage pending requests and improve loading state handling ([367a757](https://github.com/varletjs/axle/commit/367a7577b2650d1cf96ec03a46514f2360f6e866))
 * enhance Vite configuration with Rattail features ([c2cc5a3](https://github.com/varletjs/axle/commit/c2cc5a37fd518595d3c91cc9deabc98e38a6630d))
 
 

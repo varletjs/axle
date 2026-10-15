@@ -199,7 +199,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     let controller = new AbortController()
     let latestRunId = 0
-    let cachedRequest: { key: string; promise: Promise<any> } | undefined
+    let pendingCaches: { key: string; promise: Promise<any> }[] = []
     let pollingTimer: any = null
     let running = false
     let deactivated = false
@@ -211,15 +211,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         return
       }
 
-      if (abortPrevious && !isCachedRequestPending()) {
+      if (abortPrevious && getPendingCaches().length === 0) {
         controller.abort()
       }
 
-      if (abortPrevious) {
-        cachedRequest = undefined
-      }
-
-      if (abortPrevious || controller.signal.aborted) {
+      if (controller.signal.aborted) {
         controller = new AbortController()
       }
 
@@ -227,30 +223,30 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       const runController = controller
       running = true
       pollingCanceled.value = false
-
-      const resetValueOption = options.resetValue ?? initialResetValue ?? false
-      if (resetValueOption === true) {
-        resetValue(options)
-      }
-
-      uploadProgress.value = 0
-      downloadProgress.value = 0
-
-      const url = options.url ?? normalizeValueGetter(initialUrlOrGetter)
-      const params = options.params ?? normalizeValueGetter(initialParamsOrGetter)
-      const config = options.config ?? normalizeValueGetter(initialConfigOrGetter)
-      const normalizedCacheKey = cacheKey ? normalizeValueGetter(cacheKey) : undefined
-
-      onBefore(refs)
-
-      loading.value = !options.silent
+      clearPolling()
 
       try {
-        cleanupCacheBuffer()
-        const response = (await getResponse()) as R
+        const resetValueOption = options.resetValue ?? initialResetValue ?? false
+        if (resetValueOption === true) {
+          resetValue(options)
+        }
 
-        if (shouldSetCacheResponse(normalizedCacheKey)) {
-          const cache = cacheBuffer.get(normalizedCacheKey!)!
+        uploadProgress.value = 0
+        downloadProgress.value = 0
+
+        const request = createRequest()
+
+        onBefore(refs)
+
+        if (!options.silent) {
+          loading.value = true
+        }
+
+        cleanupCacheBuffer()
+        const response = (await getResponse(request)) as R
+
+        if (shouldSetCacheResponse(request.cacheKey)) {
+          const cache = cacheBuffer.get(request.cacheKey!)!
           cache.response = response
           cache.expiredTime = Date.now() + cacheTime
         }
@@ -295,7 +291,18 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         return !abortPrevious || runId === latestRunId
       }
 
-      function getResponse() {
+      function createRequest() {
+        return {
+          url: options.url ?? normalizeValueGetter(initialUrlOrGetter),
+          params: options.params ?? normalizeValueGetter(initialParamsOrGetter),
+          config: options.config ?? normalizeValueGetter(initialConfigOrGetter),
+          cacheKey: cacheKey ? normalizeValueGetter(cacheKey) : undefined,
+        }
+      }
+
+      function getResponse(request: ReturnType<typeof createRequest>) {
+        const { cacheKey: normalizedCacheKey } = request
+
         if (shouldUseCache(normalizedCacheKey)) {
           return JSON.parse(JSON.stringify(cacheBuffer.get(normalizedCacheKey!)!.response))
         }
@@ -304,17 +311,17 @@ export function createUseAxle(options: CreateUseAxleOptions) {
           return cacheBuffer.get(normalizedCacheKey!)!.promise
         }
 
-        const promise = fetchResponse()
+        const promise = fetchResponse(request)
 
         if (shouldSetCachePromise(normalizedCacheKey)) {
           cacheBuffer.set(normalizedCacheKey!, { promise })
-          cachedRequest = { key: normalizedCacheKey!, promise }
+          pendingCaches = [...getPendingCaches(), { key: normalizedCacheKey!, promise }]
         }
 
         return promise
       }
 
-      function fetchResponse() {
+      function fetchResponse({ url, params, config }: ReturnType<typeof createRequest>) {
         return axle[method](url, params, {
           signal: runController.signal,
 
@@ -465,22 +472,16 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
     function abort() {
       controller.abort()
-
-      if (isCachedRequestPending()) {
-        cacheBuffer.delete(cachedRequest!.key)
-      }
-
-      cachedRequest = undefined
+      getPendingCaches().forEach(({ key }) => cacheBuffer.delete(key))
+      pendingCaches = []
     }
 
-    function isCachedRequestPending() {
-      if (!cachedRequest) {
-        return false
-      }
+    function getPendingCaches() {
+      return pendingCaches.filter(({ key, promise }) => {
+        const buffer = cacheBuffer.get(key)
 
-      const buffer = cacheBuffer.get(cachedRequest.key)
-
-      return buffer?.promise === cachedRequest.promise && buffer.response == null
+        return buffer?.promise === promise && buffer.response == null
+      })
     }
 
     function addWindowFocusListener() {

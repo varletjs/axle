@@ -132,21 +132,94 @@ describe('useAxle run', () => {
   })
 
   it('does not set loading for a silent run', async () => {
-    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
+    const { requests, useAxle } = createPendingAxle()
     const [value, run] = useAxle({ url: '/users', method: 'get' })
 
-    const loadingRun = run()
-    expect(run.loading.value).toBe(true)
-
     const silentRun = run({ silent: true })
-    await expect(loadingRun).rejects.toThrow(CanceledError)
     expect(run.loading.value).toBe(false)
 
-    requests[1].resolve('silent')
+    requests[0].resolve('silent')
     await silentRun
 
     expect(value.value).toBe('silent')
     expect(run.loading.value).toBe(false)
+  })
+
+  it('does not clear the loading of a pending run when a silent run starts', async () => {
+    const { requests, useAxle } = createPendingAxle()
+    const [, run] = useAxle({ url: '/users', method: 'get' })
+
+    const loadingRun = run()
+    const silentRun = run({ silent: true })
+    expect(run.loading.value).toBe(true)
+
+    requests[0].resolve('first')
+    requests[1].resolve('second')
+    await Promise.all([loadingRun, silentRun])
+    expect(run.loading.value).toBe(false)
+  })
+
+  it('cancels the shared cached request when the latest run is aborted', async () => {
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
+    const [value, run] = useAxle({ url: '/users', method: 'get', cacheKey: 'aborted-shared-users' })
+
+    const firstRun = run()
+    const secondRun = run()
+    run.abort()
+
+    await expect(firstRun).rejects.toThrow(CanceledError)
+    await expect(secondRun).rejects.toThrow(CanceledError)
+    expect(run.error.value).toBeInstanceOf(CanceledError)
+    expect(value.value).toBeUndefined()
+
+    const nextRun = run()
+    expect(requests).toHaveLength(2)
+    requests[1].resolve('users')
+    await nextRun
+    expect(value.value).toBe('users')
+  })
+
+  it('drops every pending cache owned by the instance when aborted', async () => {
+    const { requests, useAxle } = createPendingAxle()
+    let page = 1
+    const [, run] = useAxle({ url: '/users', method: 'get', cacheKey: () => `paged-users-${page}` })
+
+    const firstPageRun = run()
+    page = 2
+    const secondPageRun = run()
+    run.abort()
+
+    await expect(firstPageRun).rejects.toThrow(CanceledError)
+    await expect(secondPageRun).rejects.toThrow(CanceledError)
+
+    page = 1
+    const retryRun = run()
+    expect(requests).toHaveLength(3)
+    requests[2].resolve('page 1')
+    await expect(retryRun).resolves.toBe('page 1')
+  })
+
+  it('resets loading when a run fails before sending the request', async () => {
+    const { useAxle } = createPendingAxle({ abortPrevious: true })
+    let shouldThrow = false
+    const [, run] = useAxle({
+      url: '/users',
+      method: 'get',
+      onBefore() {
+        if (shouldThrow) {
+          throw new Error('before')
+        }
+      },
+    })
+
+    const firstRun = run()
+    shouldThrow = true
+    const secondRun = run()
+
+    await expect(firstRun).rejects.toThrow(CanceledError)
+    await expect(secondRun).rejects.toThrow('before')
+    expect(run.loading.value).toBe(false)
+    expect(run.error.value?.message).toBe('before')
   })
 
   it('shares the pending request when a run with the same cache key is superseded', async () => {
@@ -326,6 +399,26 @@ describe('useAxle polling', () => {
     expect(requests).toHaveLength(2)
 
     unmount()
+  })
+
+  it('does not let a scheduled poll interrupt a manual run', async () => {
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
+    const [value, run] = useAxle({ url: '/users', method: 'get', pollingInterval: 1000 })
+
+    const firstRun = run()
+    requests[0].resolve('first')
+    await firstRun
+
+    await vi.advanceTimersByTimeAsync(500)
+    const manualRun = run()
+    await vi.advanceTimersByTimeAsync(600)
+    expect(requests).toHaveLength(2)
+
+    requests[1].resolve('manual')
+    await expect(manualRun).resolves.toBe('manual')
+    expect(value.value).toBe('manual')
+
+    run.cancelPolling()
   })
 
   it('does not resume polling after cancelPolling until the next run', async () => {

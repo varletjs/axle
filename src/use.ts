@@ -55,11 +55,13 @@ export interface UseAxleOptions<V = any, R = any, P = Record<string, any>, D = R
   resetValue?: boolean
   cloneResetValue?: boolean | ((value: V) => V)
   abortOnUnmount?: boolean
+  abortPrevious?: boolean
   cacheKey?: string | (() => string)
   cacheTime?: number
   config?: AxleRequestConfig<D> | (() => AxleRequestConfig<D>)
   watch?: WatchOptions
   pollingInterval?: number | (() => number | null | undefined)
+  pollingSilent?: boolean
   pollingOnHidden?: boolean
   pollingOnDeactivated?: boolean
   refreshOnWindowFocus?: boolean
@@ -81,6 +83,8 @@ export interface CreateUseAxleOptions {
   axle: AxleInstance
   immediate?: boolean
   abortOnUnmount?: boolean
+  abortPrevious?: boolean
+  pollingSilent?: boolean
   cacheTime?: number
   onTransform?(response: any, refs: any): any
 }
@@ -129,6 +133,8 @@ export function createUseAxle(options: CreateUseAxleOptions) {
     onTransform: defaultOnTransform,
     immediate: defaultImmediate = true,
     abortOnUnmount: defaultAbortOnUnmount = true,
+    abortPrevious: defaultAbortPrevious = false,
+    pollingSilent: defaultPollingSilent = false,
     cacheTime: defaultCacheTime = Infinity,
   } = options
 
@@ -140,9 +146,11 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       method,
       immediate = defaultImmediate,
       abortOnUnmount = defaultAbortOnUnmount,
+      abortPrevious = defaultAbortPrevious,
       cacheTime = defaultCacheTime,
       cacheKey,
       pollingInterval,
+      pollingSilent = defaultPollingSilent,
       pollingOnHidden = true,
       pollingOnDeactivated = false,
       refreshOnWindowFocus = false,
@@ -203,15 +211,20 @@ export function createUseAxle(options: CreateUseAxleOptions) {
         return
       }
 
-      if (!isCachedRequestPending()) {
+      if (abortPrevious && !isCachedRequestPending()) {
         controller.abort()
       }
 
-      cachedRequest = undefined
+      if (abortPrevious) {
+        cachedRequest = undefined
+      }
+
+      if (abortPrevious || controller.signal.aborted) {
+        controller = new AbortController()
+      }
 
       const runId = ++latestRunId
-      const runController = new AbortController()
-      controller = runController
+      const runController = controller
       running = true
       pollingCanceled.value = false
 
@@ -279,7 +292,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
       }
 
       function isLatestRun() {
-        return runId === latestRunId
+        return !abortPrevious || runId === latestRunId
       }
 
       function getResponse() {
@@ -526,7 +539,7 @@ export function createUseAxle(options: CreateUseAxleOptions) {
 
       pollingTimer = setTimeout(() => {
         pollingTimer = null
-        runWithInitialConfig({ silent: true })
+        runWithInitialConfig({ silent: pollingSilent })
       }, interval)
     }
 

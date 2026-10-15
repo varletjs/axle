@@ -15,6 +15,10 @@ Axle provides the usage of Vue Composition API style, which encapsulates the `lo
     immediate: false,
     // Optional value: Default onTransform of the useAxle
     onTransform: (response) => response,
+    // Optional value: Default abortPrevious of the useAxle, defaults false
+    abortPrevious: true,
+    // Optional value: Default pollingSilent of the useAxle, defaults false
+    pollingSilent: true,
   })
 
   const id = ref('1')
@@ -135,6 +139,18 @@ After:
 </template>
 ```
 
+## Abort Previous
+
+With `abortPrevious` enabled, calling the runner while a previous run is still pending aborts the previous request. Only the latest run updates `value`, `loading` and `error` and triggers the lifecycle hooks, and the aborted run rejects with the abort error. It can be set on `createUseAxle` as the default and overridden by each `useAxle`.
+
+```js
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+  abortPrevious: true,
+})
+```
+
 ## Silent Run
 
 Pass `silent: true` to refresh data without setting `loading`, e.g. for background refreshes.
@@ -145,7 +161,7 @@ getUsers({ silent: true })
 
 ## Polling
 
-With `pollingInterval`, every finished run schedules another run after the interval. Runs triggered by polling don't set `loading`.
+With `pollingInterval`, every finished run schedules another run after the interval. With `pollingSilent` enabled, runs triggered by polling don't set `loading`.
 
 `pollingInterval` can also be a getter that returns the interval. Returning `null` or `undefined` stops polling. When the reactive data read by the getter changes, the next poll is rescheduled.
 
@@ -154,5 +170,6 @@ const [task, getTask] = useAxle({
   method: 'get',
   url: '/task',
   pollingInterval: () => (task.value?.status === 'pending' ? 2000 : null),
+  pollingSilent: true,
 })
 ```

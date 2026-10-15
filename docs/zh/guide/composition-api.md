@@ -15,6 +15,10 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
     immediate: false,
     // 可选项: useAxle 的默认 onTransform
     onTransform: (response) => response,
+    // 可选项: useAxle 的默认 abortPrevious, 默认值: false
+    abortPrevious: true,
+    // 可选项: useAxle 的默认 pollingSilent, 默认值: false
+    pollingSilent: true,
   })
 
   const id = ref('1')
@@ -134,6 +138,18 @@ Axle 提供了 Vue Composition API 风格的用法，封装了请求的 `加载�
 </template>
 ```
 
+## 中断上一次请求
+
+开启 `abortPrevious` 后，上一次请求尚未结束时再次调用请求触发器，会中断上一次请求。只有最新一次请求会更新 `value`、`loading`、`error` 并触发生命周期，被中断的请求会以中断错误 reject。可以在 `createUseAxle` 上设置默认值，并在每个 `useAxle` 上单独覆盖。
+
+```js
+const [users, getUsers] = useAxle({
+  method: 'get',
+  url: '/user',
+  abortPrevious: true,
+})
+```
+
 ## 静默请求
 
 传入 `silent: true` 时不设置 `loading`，适用于后台刷新等场景。
@@ -144,7 +160,7 @@ getUsers({ silent: true })
 
 ## 轮询
 
-设置 `pollingInterval` 后，每次请求结束都会在间隔后再次请求。轮询发起的请求不设置 `loading`。
+设置 `pollingInterval` 后，每次请求结束都会在间隔后再次请求。开启 `pollingSilent` 后，轮询发起的请求不设置 `loading`。
 
 `pollingInterval` 也可以是返回间隔的 getter 函数，返回 `null` 或 `undefined` 时停止轮询。getter 依赖的响应式数据变化时会重新安排下一次轮询。
 
@@ -153,5 +169,6 @@ const [task, getTask] = useAxle({
   method: 'get',
   url: '/task',
   pollingInterval: () => (task.value?.status === 'pending' ? 2000 : null),
+  pollingSilent: true,
 })
 ```

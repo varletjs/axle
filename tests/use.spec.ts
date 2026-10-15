@@ -1,14 +1,14 @@
 import { CanceledError } from 'axios'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vite-plus/test'
 import { createRenderer, nextTick, ref } from 'vue'
-import { createUseAxle } from '../src/use'
+import { createUseAxle, type CreateUseAxleOptions } from '../src/use'
 
 interface PendingRequest {
   params: any
   resolve(response: any): void
 }
 
-function createPendingAxle({ immediate = false }: { immediate?: boolean } = {}) {
+function createPendingAxle(options: Omit<CreateUseAxleOptions, 'axle'> = {}) {
   const requests: PendingRequest[] = []
   const axle = {
     get(_url: string, params: any, config: { signal: AbortSignal }) {
@@ -19,7 +19,7 @@ function createPendingAxle({ immediate = false }: { immediate?: boolean } = {}) 
     },
   }
 
-  return { requests, useAxle: createUseAxle({ axle: axle as any, immediate }) }
+  return { requests, useAxle: createUseAxle({ axle: axle as any, immediate: false, ...options }) }
 }
 
 function mountSetup<T>(setup: () => T) {
@@ -53,8 +53,38 @@ function flushPromises() {
 }
 
 describe('useAxle run', () => {
-  it('aborts the previous run and keeps only the latest response', async () => {
+  it('keeps concurrent runs by default', async () => {
     const { requests, useAxle } = createPendingAxle()
+    const [value, run] = useAxle({ url: '/users', method: 'get' })
+
+    const firstRun = run({ params: { id: 1 } })
+    const secondRun = run({ params: { id: 2 } })
+
+    requests[1].resolve('second')
+    await expect(secondRun).resolves.toBe('second')
+    expect(run.loading.value).toBe(false)
+
+    requests[0].resolve('first')
+    await expect(firstRun).resolves.toBe('first')
+    expect(value.value).toBe('first')
+  })
+
+  it('allows useAxle to turn off abortPrevious', async () => {
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
+    const [, run] = useAxle({ url: '/users', method: 'get', abortPrevious: false })
+
+    const firstRun = run()
+    const secondRun = run()
+
+    requests[0].resolve('first')
+    requests[1].resolve('second')
+
+    await expect(firstRun).resolves.toBe('first')
+    await expect(secondRun).resolves.toBe('second')
+  })
+
+  it('aborts the previous run and keeps only the latest response', async () => {
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
     const [value, run] = useAxle({ url: '/users', method: 'get' })
 
     const firstRun = run({ params: { id: 1 } })
@@ -73,7 +103,7 @@ describe('useAxle run', () => {
   })
 
   it('ignores a stale response whose onTransform settles after a newer run starts', async () => {
-    const { requests, useAxle } = createPendingAxle()
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
     const transforms: Array<() => void> = []
     const [value, run] = useAxle({
       url: '/users',
@@ -102,7 +132,7 @@ describe('useAxle run', () => {
   })
 
   it('does not set loading for a silent run', async () => {
-    const { requests, useAxle } = createPendingAxle()
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
     const [value, run] = useAxle({ url: '/users', method: 'get' })
 
     const loadingRun = run()
@@ -120,7 +150,7 @@ describe('useAxle run', () => {
   })
 
   it('shares the pending request when a run with the same cache key is superseded', async () => {
-    const { requests, useAxle } = createPendingAxle()
+    const { requests, useAxle } = createPendingAxle({ abortPrevious: true })
     const [value, run] = useAxle({ url: '/users', method: 'get', cacheKey: 'shared-users' })
     const [otherValue, otherRun] = useAxle({ url: '/users', method: 'get', cacheKey: 'shared-users' })
 
@@ -157,7 +187,7 @@ describe('useAxle run', () => {
   })
 
   it('does not leak a rejection when an immediate run is superseded', async () => {
-    const { requests, useAxle } = createPendingAxle({ immediate: true })
+    const { requests, useAxle } = createPendingAxle({ immediate: true, abortPrevious: true })
     const [value, run] = useAxle({ url: '/users', method: 'get' })
 
     const nextRun = run()
@@ -190,9 +220,9 @@ describe('useAxle polling', () => {
     vi.useRealTimers()
   })
 
-  it('polls silently after each run', async () => {
+  it('polls silently with pollingSilent', async () => {
     const { requests, useAxle } = createPendingAxle()
-    const [value, run] = useAxle({ url: '/users', method: 'get', pollingInterval: 1000 })
+    const [value, run] = useAxle({ url: '/users', method: 'get', pollingInterval: 1000, pollingSilent: true })
 
     const firstRun = run()
     requests[0].resolve('first')
@@ -205,6 +235,21 @@ describe('useAxle polling', () => {
     requests[1].resolve('second')
     await vi.advanceTimersByTimeAsync(0)
     expect(value.value).toBe('second')
+
+    run.cancelPolling()
+  })
+
+  it('sets loading for polling runs by default', async () => {
+    const { requests, useAxle } = createPendingAxle()
+    const [, run] = useAxle({ url: '/users', method: 'get', pollingInterval: 1000 })
+
+    const firstRun = run()
+    requests[0].resolve('first')
+    await firstRun
+
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(requests).toHaveLength(2)
+    expect(run.loading.value).toBe(true)
 
     run.cancelPolling()
   })
@@ -279,6 +324,39 @@ describe('useAxle polling', () => {
     await pendingRun
     await vi.advanceTimersByTimeAsync(1000)
     expect(requests).toHaveLength(2)
+
+    unmount()
+  })
+
+  it('does not resume polling after cancelPolling until the next run', async () => {
+    const { requests, useAxle } = createPendingAxle()
+    const enabled = ref(true)
+    const { result: run, unmount } = mountSetup(() => {
+      const [, run] = useAxle({ url: '/users', method: 'get', pollingInterval: () => (enabled.value ? 1000 : null) })
+
+      return run
+    })
+
+    const firstRun = run()
+    requests[0].resolve('first')
+    await firstRun
+
+    run.cancelPolling()
+    await vi.advanceTimersByTimeAsync(3000)
+    expect(requests).toHaveLength(1)
+
+    enabled.value = false
+    await nextTick()
+    enabled.value = true
+    await nextTick()
+    await vi.advanceTimersByTimeAsync(3000)
+    expect(requests).toHaveLength(1)
+
+    const nextRun = run()
+    requests[1].resolve('second')
+    await nextRun
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(requests).toHaveLength(3)
 
     unmount()
   })
